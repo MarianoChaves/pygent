@@ -55,8 +55,8 @@ class Agent:
             console.print(assistant_msg.content)
 
 
-def run_interactive() -> None:  # pragma: no cover
-    agent = Agent()
+def run_interactive(use_docker: bool | None = None) -> None:  # pragma: no cover
+    agent = Agent(runtime=Runtime(use_docker=use_docker))
     console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
     try:
         while True:
