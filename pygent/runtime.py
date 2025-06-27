@@ -1,4 +1,4 @@
-"""Executa comandos em um container Docker, caindo para execução local se necessário."""
+"""Run commands in a Docker container, falling back to local execution if needed."""
 from __future__ import annotations
 
 import os
@@ -16,7 +16,7 @@ except Exception:  # pragma: no cover - optional dependency
 
 
 class Runtime:
-    """Executa comandos em um container Docker ou localmente se Docker faltar."""
+    """Executes commands in a Docker container or locally if Docker is unavailable."""
 
     def __init__(self, image: str | None = None, use_docker: bool | None = None) -> None:
         self.base_dir = Path(tempfile.mkdtemp(prefix="pygent_"))
@@ -48,7 +48,7 @@ class Runtime:
 
     # ---------------- public API ----------------
     def bash(self, cmd: str, timeout: int = 30) -> str:
-        """Roda comando no container ou localmente e devolve a saída."""
+        """Run a command in the container or locally and return the output."""
         if self._use_docker and self.container is not None:
             res = self.container.exec_run(
                 cmd,

@@ -1,4 +1,4 @@
-"""Pacote Pygent."""
+"""Pygent package."""
 from importlib import metadata as _metadata
 
 try:

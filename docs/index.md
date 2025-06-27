@@ -1,31 +1,31 @@
 # Pygent
 
-Pygent é um assistente de código minimalista que executa tarefas dentro de um container Docker isolado sempre que disponível. Caso o Docker não esteja configurado, os comandos são executados localmente. Este manual resume os principais comandos e opções de configuração.
+Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options.
 
-## Instalação
+## Installation
 
 ```bash
 pip install -e .
 ```
 
-É necessário possuir Python ≥ 3.9. As dependências principais não incluem Docker. Para habilitar a execução em containers instale `pygent[docker]`. Ajuste as variáveis `OPENAI_API_KEY`, `PYGENT_MODEL`, `PYGENT_IMAGE` e `PYGENT_USE_DOCKER` conforme necessidade.
+Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enable container execution. Adjust the `OPENAI_API_KEY`, `PYGENT_MODEL`, `PYGENT_IMAGE` and `PYGENT_USE_DOCKER` variables as needed.
 
-## Uso básico
+## Basic usage
 
-Para iniciar uma sessão interativa execute `pygent` no terminal. Utilize a opção `--docker` caso queira rodar os comandos em um container (requer `pygent[docker]`). Caso contrário a execução ocorre localmente. Use `/exit` para encerrar.
+Start an interactive session by running `pygent` in the terminal. Use the `--docker` option to run commands in a container (requires `pygent[docker]`); otherwise they execute locally. Use `/exit` to quit.
 
-Também é possível utilizar a API Python:
+You can also use the Python API:
 
 ```python
 from pygent import Agent
 ag = Agent()
-ag.step("echo teste")
+ag.step("echo test")
 ag.runtime.cleanup()
 ```
 
-## Desenvolvimento
+## Development
 
-Instale as dependências opcionais com `pip install -e .[test,docs]` e rode `pytest` para executar os testes. Para gerar esta documentação localmente utilize `mkdocs serve`.
+Install optional dependencies with `pip install -e .[test,docs]` and run `pytest` to execute the tests. Use `mkdocs serve` to build this documentation locally.
 
-Consulte o arquivo README para informações mais detalhadas.
+See the README file for more detailed information.
 
