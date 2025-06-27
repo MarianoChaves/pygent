@@ -16,12 +16,12 @@ class Runtime:
     """Cada instância corresponde a um diretório + container dedicados."""
 
     def __init__(self, image: str | None = None) -> None:
-        self.base_dir = Path(tempfile.mkdtemp(prefix="clite_"))
-        self.image = image or os.getenv("CODEX_LITE_IMAGE", "python:3.12-slim")
+        self.base_dir = Path(tempfile.mkdtemp(prefix="pygent_"))
+        self.image = image or os.getenv("PYGENT_IMAGE", "python:3.12-slim")
         self.client = docker.from_env()
         self.container = self.client.containers.run(
             self.image,
-            name=f"clite-{uuid.uuid4().hex[:8]}",
+            name=f"pygent-{uuid.uuid4().hex[:8]}",
             command="sleep infinity",
             volumes={str(self.base_dir): {"bind": "/workspace", "mode": "rw"}},
             working_dir="/workspace",

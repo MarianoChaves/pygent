@@ -1,4 +1,4 @@
-"""Pacote Codex-Lite."""
+"""Pacote Pygent."""
 from importlib import metadata as _metadata
 
 __version__: str = _metadata.version(__name__)
