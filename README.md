@@ -26,6 +26,9 @@ To run commands in Docker containers also install `pygent[docker]`.
 Behaviour can be adjusted via environment variables:
 
 * `OPENAI_API_KEY` &ndash; key used to access the OpenAI API.
+  Set this to your API key or a key from any compatible provider.
+* `OPENAI_BASE_URL` &ndash; base URL for OpenAI-compatible APIs
+  (defaults to ``https://api.openai.com/v1``).
 * `PYGENT_MODEL` &ndash; model name used for requests (default `gpt-4o-mini-preview`).
 * `PYGENT_IMAGE` &ndash; Docker image to create the container (default `python:3.12-slim`).
 * `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
@@ -58,6 +61,22 @@ ag.runtime.cleanup()
 ```
 
 See the `examples/` folder for more complete scripts.
+
+### Using OpenAI and other providers
+
+Set your OpenAI key:
+
+```bash
+export OPENAI_API_KEY="sk-..."
+```
+
+To use a different provider, set `OPENAI_BASE_URL` to the provider
+endpoint and keep `OPENAI_API_KEY` pointing to the correct key:
+
+```bash
+export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
+export OPENAI_API_KEY="your-provider-key"
+```
 
 ## Development
 

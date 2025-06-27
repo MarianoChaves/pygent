@@ -8,21 +8,28 @@ This section summarises the most relevant classes and functions.
 from pygent import Agent
 ```
 
-The main entry point for interacting with Pygent. It keeps a conversation history and exposes a `step()` method to process user messages. Tool calls are automatically executed and their output appended to the history. Each `Agent` owns a `Runtime` instance stored in `agent.runtime`.
+Manages the conversation with the model. Each instance owns a
+`Runtime` accessible via ``agent.runtime``.
 
-### `Agent.step(user_msg: str) -> None`
-Adds the message to the conversation, queries the model and prints any tool output.
+**Methods**
 
-### `run_interactive(use_docker: bool | None = None) -> None`
-Launches an interactive shell similar to the command line interface.
+- `step(user_msg: str) -> None` – add a message, run tools and print
+  their output.
+- `run_interactive(use_docker: bool | None = None) -> None` – start an
+  interactive session.
 
 ## `Runtime`
 
-Handles command execution either in a Docker container or locally. Important methods include:
+Executes commands either in a Docker container or locally.
 
-- `bash(cmd: str, timeout: int = 30) -> str` &ndash; run a shell command and return its combined output.
-- `write_file(path: str, content: str) -> str` &ndash; create or replace a file inside the working directory.
-- `cleanup() -> None` &ndash; destroy the temporary workspace and stop the container if used.
+**Methods**
+
+- `bash(cmd: str, timeout: int = 30) -> str` – run a shell command and
+  return its output.
+- `write_file(path: str, content: str) -> str` – create or replace a
+  file in the working directory.
+- `cleanup() -> None` – destroy the temporary workspace and stop the
+  container if used.
 
 ## Tools
 

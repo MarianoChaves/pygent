@@ -37,3 +37,20 @@ ag.runtime.cleanup()
 ```
 
 Check the `examples/` directory for more advanced scripts.
+
+## Model configuration
+
+Pygent communicates with the model through an OpenAI-compatible API.
+Set your key via the ``OPENAI_API_KEY`` environment variable:
+
+```bash
+export OPENAI_API_KEY="sk-..."
+```
+
+To use a different provider, set ``OPENAI_BASE_URL`` to the provider's
+endpoint and keep ``OPENAI_API_KEY`` pointing to its key:
+
+```bash
+export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
+export OPENAI_API_KEY="your-provider-key"
+```
