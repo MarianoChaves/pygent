@@ -17,6 +17,8 @@ Manages the conversation with the model. Each instance owns a
   their output.
 - `run_interactive(use_docker: bool | None = None) -> None` – start an
   interactive session.
+- `run_gui(use_docker: bool | None = None) -> None` – start a simple
+  web interface.
 
 ## `Runtime`
 

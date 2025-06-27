@@ -1,0 +1,36 @@
+from .agent import Agent, _chat
+from .runtime import Runtime
+from .tools import execute_tool
+
+
+def run_gui(use_docker: bool | None = None) -> None:
+    """Launch a simple Gradio chat interface."""
+    try:
+        import gradio as gr
+    except ModuleNotFoundError as exc:  # pragma: no cover - optional
+        raise SystemExit(
+            "Gradio is required for the GUI. Install with 'pip install pygent[ui]'"
+        ) from exc
+
+    agent = Agent(runtime=Runtime(use_docker=use_docker))
+
+    def _respond(message: str, history: list[tuple[str, str]] | None) -> str:
+        agent.history.append({"role": "user", "content": message})
+        assistant_msg = _chat(agent.history)
+        agent.history.append(assistant_msg)
+        reply = assistant_msg.content or ""
+        if assistant_msg.tool_calls:
+            for call in assistant_msg.tool_calls:
+                output = execute_tool(call, agent.runtime)
+                agent.history.append({"role": "tool", "content": output, "tool_call_id": call.id})
+                reply += f"\n\n[tool:{call.function.name}]\n{output}"
+        return reply
+
+    try:
+        gr.ChatInterface(_respond, title="Pygent").launch()
+    finally:
+        agent.runtime.cleanup()
+
+
+def main() -> None:  # pragma: no cover
+    run_gui()

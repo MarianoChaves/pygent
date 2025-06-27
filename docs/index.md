@@ -10,11 +10,12 @@ See [Getting Started](getting-started.md) for a quick tutorial or jump to the [A
 pip install -e .
 ```
 
-Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enable container execution. Adjust the `OPENAI_API_KEY`, `PYGENT_MODEL`, `PYGENT_IMAGE` and `PYGENT_USE_DOCKER` variables as needed.
+Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enable container execution. Adjust the `OPENAI_API_KEY`, `PYGENT_MODEL`, `PYGENT_IMAGE` and `PYGENT_USE_DOCKER` variables as needed. By default the assistant uses the `gpt-4.1-mini` model.
 
 ## Basic usage
 
 Start an interactive session by running `pygent` in the terminal. Use the `--docker` option to run commands in a container (requires `pygent[docker]`); otherwise they execute locally. Use `/exit` to quit.
+Alternatively run `pygent-ui` for a simple web interface (requires `pygent[ui]`).
 
 You can also use the Python API:
 

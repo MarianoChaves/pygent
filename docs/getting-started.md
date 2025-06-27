@@ -22,6 +22,8 @@ vc> echo "Hello"
 ```
 
 Use `/exit` to leave the session.
+Alternatively, run `pygent-ui` for a small web interface (requires
+`pygent[ui]`).
 
 ## Using the API
 
@@ -40,8 +42,10 @@ Check the `examples/` directory for more advanced scripts.
 
 ## Model configuration
 
-Pygent communicates with the model through an OpenAI-compatible API.
-Set your key via the ``OPENAI_API_KEY`` environment variable:
+Pygent communicates with the model through an OpenAI-compatible API. The
+default model is ``gpt-4.1-mini``; override it by setting the
+``PYGENT_MODEL`` environment variable. Set your key via the
+``OPENAI_API_KEY`` environment variable:
 
 ```bash
 export OPENAI_API_KEY="sk-..."
