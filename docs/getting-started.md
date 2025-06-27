@@ -58,3 +58,7 @@ endpoint and keep ``OPENAI_API_KEY`` pointing to its key:
 export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
 export OPENAI_API_KEY="your-provider-key"
 ```
+
+For complete control you can also supply a custom model implementation. Create a
+class with a ``chat(messages, model, tools)`` method and pass an instance to
+``Agent``.

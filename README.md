@@ -64,7 +64,10 @@ ag.step("echo 'Hello World'")
 ag.runtime.cleanup()
 ```
 
-See the `examples/` folder for more complete scripts.
+See the `examples/` folder for more complete scripts. Models can be swapped by
+passing an object implementing the ``Model`` interface when creating the
+``Agent``. The default uses an OpenAI-compatible API, but custom models are
+easy to plug in.
 
 ### Using OpenAI and other providers
 

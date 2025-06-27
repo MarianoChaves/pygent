@@ -1,6 +1,6 @@
-from .agent import Agent, _chat
+from .agent import Agent
 from .runtime import Runtime
-from .tools import execute_tool
+from .tools import execute_tool, TOOL_SCHEMAS
 
 
 def run_gui(use_docker: bool | None = None) -> None:
@@ -16,7 +16,7 @@ def run_gui(use_docker: bool | None = None) -> None:
 
     def _respond(message: str, history: list[tuple[str, str]] | None) -> str:
         agent.history.append({"role": "user", "content": message})
-        assistant_msg = _chat(agent.history)
+        assistant_msg = agent.model.chat(agent.history, agent.model_name, TOOL_SCHEMAS)
         agent.history.append(assistant_msg)
         reply = assistant_msg.content or ""
         if assistant_msg.tool_calls:
