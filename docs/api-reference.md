@@ -41,3 +41,10 @@ The agent can call two built-in tools:
 - **write_file** &ndash; writes files through `Runtime.write_file`.
 
 Refer to the `tools.py` module for the implementation details.
+
+## Custom models
+
+The `Agent` relies on a model object with a ``chat`` method. The default is
+``OpenAIModel`` which calls an OpenAI-compatible API. To plug in a different
+backend, implement the ``Model`` protocol and pass an instance when creating the
+agent.

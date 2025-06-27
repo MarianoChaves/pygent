@@ -26,6 +26,9 @@ ag.step("echo test")
 ag.runtime.cleanup()
 ```
 
+Custom models are supported by implementing the ``Model`` protocol and passing
+the instance to ``Agent``.
+
 ## Development
 
 Install optional dependencies with `pip install -e .[test,docs]` and run `pytest` to execute the tests. Use `mkdocs serve` to build this documentation locally.
