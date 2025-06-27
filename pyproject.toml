@@ -1,6 +1,6 @@
 [project]
 name = "pygent"
-version = "0.1.0"
+version = "0.1.1"
 description = "Pygent é um assistente de código minimalista que executa comandos em contêiner Docker quando disponível, com fallback para execução local. Veja https://marianochaves.github.io/pygent para a documentação e https://github.com/marianochaves/pygent para o código-fonte."
 authors = [ { name = "Mariano Chaves", email = "mchaves.software@gmail.com" } ]
 requires-python = ">=3.9"
