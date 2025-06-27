@@ -56,6 +56,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#custom-models">Custom models</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -117,6 +119,11 @@
 <li><strong>write_file</strong> &ndash; writes files through <code>Runtime.write_file</code>.</li>
 </ul>
 <p>Refer to the <code>tools.py</code> module for the implementation details.</p>
+<h2 id="custom-models">Custom models</h2>
+<p>The <code>Agent</code> relies on a model object with a <code>chat</code> method. The default is
+<code>OpenAIModel</code> which calls an OpenAI-compatible API. To plug in a different
+backend, implement the <code>Model</code> protocol and pass an instance when creating the
+agent.</p>
               
             </div>
           </div><footer>

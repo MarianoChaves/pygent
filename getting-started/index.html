@@ -122,6 +122,9 @@ endpoint and keep <code>OPENAI_API_KEY</code> pointing to its key:</p>
 <pre><code class="language-bash">export OPENAI_BASE_URL=&quot;https://openrouter.ai/api/v1&quot;
 export OPENAI_API_KEY=&quot;your-provider-key&quot;
 </code></pre>
+<p>For complete control you can also supply a custom model implementation. Create a
+class with a <code>chat(messages, model, tools)</code> method and pass an instance to
+<code>Agent</code>.</p>
               
             </div>
           </div><footer>
