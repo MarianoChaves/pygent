@@ -4,27 +4,27 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
-        <link rel="canonical" href="https://example.com/">
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>Pygent</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/fontawesome.min.css" rel="stylesheet">
-        <link href="css/brands.min.css" rel="stylesheet">
-        <link href="css/solid.min.css" rel="stylesheet">
-        <link href="css/v4-font-face.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="canonical" href="https://example.com/api-reference/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>API Reference - Pygent</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
         <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href=".">Pygent</a>
+                <a class="navbar-brand" href="..">Pygent</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -35,13 +35,13 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href="." class="nav-link active" aria-current="page">Home</a>
+                                <a href=".." class="nav-link">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a href="getting-started/" class="nav-link">Getting Started</a>
+                                <a href="../getting-started/" class="nav-link">Getting Started</a>
                             </li>
                             <li class="nav-item">
-                                <a href="api-reference/" class="nav-link">API Reference</a>
+                                <a href="./" class="nav-link active" aria-current="page">API Reference</a>
                             </li>
                         </ul>
 
@@ -52,17 +52,17 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" class="nav-link disabled">
+                                <a rel="prev" href="../getting-started/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="getting-started/" class="nav-link">
+                                <a rel="next" class="nav-link disabled">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="https://github.com/marianochaves/pygent/edit/master/docs/index.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
+                                <a href="https://github.com/marianochaves/pygent/edit/master/docs/api-reference.md" class="nav-link"><i class="fa-brands fa-github"></i> Edit on GitHub</a>
                             </li>
                     </ul>
                 </div>
@@ -82,17 +82,17 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#pygent" class="nav-link">Pygent</a>
+            <li class="nav-item" data-bs-level="1"><a href="#api-reference" class="nav-link">API Reference</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#installation" class="nav-link">Installation</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#basic-usage" class="nav-link">Basic usage</a>
+            <li class="nav-item" data-bs-level="2"><a href="#agent" class="nav-link">Agent</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#development" class="nav-link">Development</a>
+            <li class="nav-item" data-bs-level="2"><a href="#runtime" class="nav-link">Runtime</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#tools" class="nav-link">Tools</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -103,24 +103,30 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="pygent">Pygent</h1>
-<p>Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options.</p>
-<p>See <a href="getting-started/">Getting Started</a> for a quick tutorial or jump to the <a href="api-reference/">API Reference</a> for details about the available classes.</p>
-<h2 id="installation">Installation</h2>
-<pre><code class="language-bash">pip install -e .
-</code></pre>
-<p>Python ≥ 3.9 is required. Docker is optional; install <code>pygent[docker]</code> to enable container execution. Adjust the <code>OPENAI_API_KEY</code>, <code>PYGENT_MODEL</code>, <code>PYGENT_IMAGE</code> and <code>PYGENT_USE_DOCKER</code> variables as needed.</p>
-<h2 id="basic-usage">Basic usage</h2>
-<p>Start an interactive session by running <code>pygent</code> in the terminal. Use the <code>--docker</code> option to run commands in a container (requires <code>pygent[docker]</code>); otherwise they execute locally. Use <code>/exit</code> to quit.</p>
-<p>You can also use the Python API:</p>
+<h1 id="api-reference">API Reference</h1>
+<p>This section summarises the most relevant classes and functions.</p>
+<h2 id="agent"><code>Agent</code></h2>
 <pre><code class="language-python">from pygent import Agent
-ag = Agent()
-ag.step(&quot;echo test&quot;)
-ag.runtime.cleanup()
 </code></pre>
-<h2 id="development">Development</h2>
-<p>Install optional dependencies with <code>pip install -e .[test,docs]</code> and run <code>pytest</code> to execute the tests. Use <code>mkdocs serve</code> to build this documentation locally.</p>
-<p>See the README file for more detailed information.</p></div>
+<p>The main entry point for interacting with Pygent. It keeps a conversation history and exposes a <code>step()</code> method to process user messages. Tool calls are automatically executed and their output appended to the history. Each <code>Agent</code> owns a <code>Runtime</code> instance stored in <code>agent.runtime</code>.</p>
+<h3 id="agentstepuser_msg-str-none"><code>Agent.step(user_msg: str) -&gt; None</code></h3>
+<p>Adds the message to the conversation, queries the model and prints any tool output.</p>
+<h3 id="run_interactiveuse_docker-bool-none-none-none"><code>run_interactive(use_docker: bool | None = None) -&gt; None</code></h3>
+<p>Launches an interactive shell similar to the command line interface.</p>
+<h2 id="runtime"><code>Runtime</code></h2>
+<p>Handles command execution either in a Docker container or locally. Important methods include:</p>
+<ul>
+<li><code>bash(cmd: str, timeout: int = 30) -&gt; str</code> &ndash; run a shell command and return its combined output.</li>
+<li><code>write_file(path: str, content: str) -&gt; str</code> &ndash; create or replace a file inside the working directory.</li>
+<li><code>cleanup() -&gt; None</code> &ndash; destroy the temporary workspace and stop the container if used.</li>
+</ul>
+<h2 id="tools">Tools</h2>
+<p>The agent can call two built-in tools:</p>
+<ul>
+<li><strong>bash</strong> &ndash; executes shell commands via <code>Runtime.bash</code>.</li>
+<li><strong>write_file</strong> &ndash; writes files through <code>Runtime.write_file</code>.</li>
+</ul>
+<p>Refer to the <code>tools.py</code> module for the implementation details.</p></div>
             </div>
         </div>
 
@@ -128,13 +134,13 @@ ag.runtime.cleanup()
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
-            var base_url = ".",
+            var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="js/base.js"></script>
-        <script src="search/main.js"></script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -199,8 +205,3 @@ ag.runtime.cleanup()
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.6.1
-Build Date UTC : 2025-06-27 22:48:11.784608+00:00
--->

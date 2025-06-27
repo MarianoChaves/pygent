@@ -4,4 +4,12 @@
          <loc>https://example.com/</loc>
          <lastmod>2025-06-27</lastmod>
     </url>
+    <url>
+         <loc>https://example.com/api-reference/</loc>
+         <lastmod>2025-06-27</lastmod>
+    </url>
+    <url>
+         <loc>https://example.com/getting-started/</loc>
+         <lastmod>2025-06-27</lastmod>
+    </url>
 </urlset>
