@@ -1,7 +1,7 @@
-"""Exemplo simples de uso do Pygent via API."""
+"""Simple example of using Pygent via the API."""
 from pygent import Agent
 
 ag = Agent()
-ag.step("echo 'Ola Mundo'")
+ag.step("echo 'Hello World'")
 ag.runtime.cleanup()
 

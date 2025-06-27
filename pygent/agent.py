@@ -1,4 +1,4 @@
-"""Camada de orquestração: recebe mensagens, chama OpenAI, delega ferramentas."""
+"""Orchestration layer: receives messages, calls the OpenAI-compatible backend and dispatches tools."""
 
 import json
 import os
@@ -8,7 +8,10 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List
 
-import openai
+try:
+    import openai  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover - fallback to bundled client
+    from . import openai_compat as openai
 from rich.console import Console
 from rich.panel import Panel
 

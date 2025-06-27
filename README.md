@@ -1,79 +1,81 @@
 # Pygent
 
-Pygent é um assistente de código que executa cada solicitação em um container Docker isolado sempre que possível. Caso Docker não esteja disponível (por exemplo em algumas instalações do Windows), o Pygent ainda funciona executando os comandos localmente.
+Pygent is a coding assistant that executes each request inside an isolated Docker container whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead.
 
-## Recursos
+## Features
 
-* Execução de comandos em containers efêmeros (imagem padrão `python:3.12-slim`).
-* Integração com modelos da OpenAI para orquestração das etapas.
-* Histórico persistente das interações durante a sessão.
-* API Python simples para integração em outros projetos.
+* Runs commands in ephemeral containers (default image `python:3.12-slim`).
+* Integrates with OpenAI-compatible models to orchestrate each step.
+* Persists the conversation history during the session.
+* Provides a small Python API for use in other projects.
 
-## Instalação
+## Installation
 
-Recomenda-se instalar a partir do código fonte:
+Installing from source is recommended:
 
 ```bash
 pip install -e .
 ```
 
-É necessário possuir Python ≥ 3.9. As dependências de runtime são `openai` e `rich`. Para executar dentro de containers Docker instale também `pygent[docker]`.
+Python ≥ 3.9 is required. The only runtime dependency is `rich`.
+Install any OpenAI-compatible library such as `openai` or `litellm` separately to enable model access.
+To run commands in Docker containers also install `pygent[docker]`.
 
-## Configuração
+## Configuration
 
-O comportamento pode ser ajustado via variáveis de ambiente:
+Behaviour can be adjusted via environment variables:
 
-* `OPENAI_API_KEY` &ndash; chave para acesso à API da OpenAI.
-* `PYGENT_MODEL` &ndash; modelo utilizado nas chamadas (padrão `gpt-4o-mini-preview`).
-* `PYGENT_IMAGE` &ndash; imagem Docker para criar o container (padrão `python:3.12-slim`).
-* `PYGENT_USE_DOCKER` &ndash; defina `0` para desabilitar Docker e executar localmente.
+* `OPENAI_API_KEY` &ndash; key used to access the OpenAI API.
+* `PYGENT_MODEL` &ndash; model name used for requests (default `gpt-4o-mini-preview`).
+* `PYGENT_IMAGE` &ndash; Docker image to create the container (default `python:3.12-slim`).
+* `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
 
-## Uso via CLI
+## CLI usage
 
-Após instalar, execute:
+After installing run:
 
 ```bash
 pygent
 ```
 
-Use `--docker` para executar os comandos dentro de um container (requere
-`pygent[docker]`). Utilize `--no-docker` ou defina `PYGENT_USE_DOCKER=0`
-para forçar a execução local.
+Use `--docker` to run commands inside a container (requires
+`pygent[docker]`). Use `--no-docker` or set `PYGENT_USE_DOCKER=0`
+to force local execution.
 
-Digite mensagens normalmente; utilize `/exit` para encerrar a sessão. Todo comando é executado dentro do container e o resultado é exibido no terminal.
+Type messages normally; use `/exit` to end the session. Each command is executed in the container and the result shown in the terminal.
 
-## Uso via API
+## API usage
 
-Também é possível interagir diretamente com o código Python:
+You can also interact directly with the Python code:
 
 ```python
 from pygent import Agent
 
 ag = Agent()
-ag.step("echo 'Ola Mundo'")
-# ... demias passos
+ag.step("echo 'Hello World'")
+# ... more steps
 ag.runtime.cleanup()
 ```
 
-Confira a pasta `examples/` para scripts mais completos.
+See the `examples/` folder for more complete scripts.
 
-## Desenvolvimento
+## Development
 
-1. Instale as dependências de teste:
+1. Install the test dependencies:
 
 ```bash
 pip install -e .[test]
 ```
 
-2. Rode o conjunto de testes:
+2. Run the test suite:
 
 ```bash
 pytest
 ```
 
-Para gerar a documentação localmente utilize `mkdocs serve`.
+Use `mkdocs serve` to build the documentation locally.
 
-## Licença
+## License
 
-Este projeto é distribuído sob a licença MIT. Consulte o arquivo `LICENSE` para mais detalhes.
+This project is released under the MIT license. See the `LICENSE` file for details.
 

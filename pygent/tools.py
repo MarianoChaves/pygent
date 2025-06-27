@@ -1,4 +1,4 @@
-"""Mapa de ferramentas disponíveis para o agente."""
+"""Map of tools available to the agent."""
 from __future__ import annotations
 import json
 from typing import Any, Dict
