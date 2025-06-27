@@ -1,5 +1,5 @@
 [project]
-name = "codex_lite"
+name = "pygent"
 version = "0.1.0"
 description = "A minimal agentic coding assistant that runs each task in a secure container."
 authors = [ { name = "Seu Nome", email = "email@example.com" } ]
@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.scripts]
-clite = "codex_lite.cli:main"
+pygent = "pygent.cli:main"
 
 [tool.setuptools.package-data]
-"codex_lite" = ["py.typed"]
+"pygent" = ["py.typed"]

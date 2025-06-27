@@ -15,9 +15,9 @@ from rich.panel import Panel
 from .runtime import Runtime
 from .tools import TOOL_SCHEMAS, execute_tool
 
-MODEL = os.getenv("CODEX_LITE_MODEL", "gpt-4o-mini-preview")
+MODEL = os.getenv("PYGENT_MODEL", "gpt-4o-mini-preview")
 SYSTEM_MSG = (
-    "You are Codex-Lite, a sandboxed coding assistant.\n"
+    "You are Pygent, a sandboxed coding assistant.\n"
     "Respond with JSON when you need to use a tool."
 )
 
@@ -57,7 +57,7 @@ class Agent:
 
 def run_interactive() -> None:  # pragma: no cover
     agent = Agent()
-    console.print("[bold green]Codex-Lite[/] iniciado. (digite /exit para sair)")
+    console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
     try:
         while True:
             user_msg = console.input("[cyan]vc> [/]" )
