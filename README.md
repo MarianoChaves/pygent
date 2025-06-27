@@ -8,6 +8,7 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Integrates with OpenAI-compatible models to orchestrate each step.
 * Persists the conversation history during the session.
 * Provides a small Python API for use in other projects.
+* Optional web interface via `pygent-ui`.
 
 ## Installation
 
@@ -29,7 +30,7 @@ Behaviour can be adjusted via environment variables:
   Set this to your API key or a key from any compatible provider.
 * `OPENAI_BASE_URL` &ndash; base URL for OpenAI-compatible APIs
   (defaults to ``https://api.openai.com/v1``).
-* `PYGENT_MODEL` &ndash; model name used for requests (default `gpt-4o-mini-preview`).
+* `PYGENT_MODEL` &ndash; model name used for requests (default `gpt-4.1-mini`).
 * `PYGENT_IMAGE` &ndash; Docker image to create the container (default `python:3.12-slim`).
 * `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
 
@@ -45,7 +46,10 @@ Use `--docker` to run commands inside a container (requires
 `pygent[docker]`). Use `--no-docker` or set `PYGENT_USE_DOCKER=0`
 to force local execution.
 
-Type messages normally; use `/exit` to end the session. Each command is executed in the container and the result shown in the terminal.
+Type messages normally; use `/exit` to end the session. Each command is executed
+in the container and the result shown in the terminal.
+For a minimal web interface run `pygent-ui` instead (requires `pygent[ui]`).
+
 
 ## API usage
 

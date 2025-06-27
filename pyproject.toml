@@ -13,6 +13,7 @@ llm = ["openai>=1.0.0"]  # OpenAI-compatible library (optional)
 test = ["pytest"]
 docs = ["mkdocs"]
 docker = ["docker>=7.0.0"]
+ui = ["gradio"]
 
 [project.urls]
 Documentation = "https://marianochaves.github.io/pygent"
@@ -20,6 +21,7 @@ Repository = "https://github.com/marianochaves/pygent"
 
 [project.scripts]
 pygent = "pygent.cli:main"
+pygent-ui = "pygent.ui:main"
 
 
 [tool.setuptools.package-data]

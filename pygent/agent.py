@@ -18,7 +18,7 @@ from rich.panel import Panel
 from .runtime import Runtime
 from .tools import TOOL_SCHEMAS, execute_tool
 
-MODEL = os.getenv("PYGENT_MODEL", "gpt-4o-mini-preview")
+MODEL = os.getenv("PYGENT_MODEL", "gpt-4.1-mini")
 SYSTEM_MSG = (
     "You are Pygent, a sandboxed coding assistant.\n"
     "Respond with JSON when you need to use a tool."
