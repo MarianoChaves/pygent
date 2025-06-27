@@ -1,6 +1,6 @@
 # Pygent
 
-Pygent é um assistente de código que executa cada solicitação em um container Docker isolado. A ferramenta é voltada a execução de comandos de forma segura e reprodutível, mantendo todo o histórico de mensagens.
+Pygent é um assistente de código que executa cada solicitação em um container Docker isolado sempre que possível. Caso Docker não esteja disponível (por exemplo em algumas instalações do Windows), o Pygent ainda funciona executando os comandos localmente.
 
 ## Recursos
 
@@ -17,7 +17,7 @@ Recomenda-se instalar a partir do código fonte:
 pip install -e .
 ```
 
-É necessário possuir Python ≥ 3.9 e Docker instalado. As dependências de runtime são `openai`, `docker` e `rich`.
+É necessário possuir Python ≥ 3.9. As dependências de runtime são `openai` e `rich`. Para executar dentro de containers Docker instale também `pygent[docker]`.
 
 ## Configuração
 
@@ -26,6 +26,7 @@ O comportamento pode ser ajustado via variáveis de ambiente:
 * `OPENAI_API_KEY` &ndash; chave para acesso à API da OpenAI.
 * `PYGENT_MODEL` &ndash; modelo utilizado nas chamadas (padrão `gpt-4o-mini-preview`).
 * `PYGENT_IMAGE` &ndash; imagem Docker para criar o container (padrão `python:3.12-slim`).
+* `PYGENT_USE_DOCKER` &ndash; defina `0` para desabilitar Docker e executar localmente.
 
 ## Uso via CLI
 
@@ -34,6 +35,10 @@ Após instalar, execute:
 ```bash
 pygent
 ```
+
+Use `--docker` para executar os comandos dentro de um container (requere
+`pygent[docker]`). Utilize `--no-docker` ou defina `PYGENT_USE_DOCKER=0`
+para forçar a execução local.
 
 Digite mensagens normalmente; utilize `/exit` para encerrar a sessão. Todo comando é executado dentro do container e o resultado é exibido no terminal.
 
