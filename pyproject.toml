@@ -13,5 +13,9 @@ dependencies = [
 [project.scripts]
 pygent = "pygent.cli:main"
 
+[project.optional-dependencies]
+test = ["pytest"]
+docs = ["mkdocs"]
+
 [tool.setuptools.package-data]
 "pygent" = ["py.typed"]

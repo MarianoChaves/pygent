@@ -1,7 +1,10 @@
 """Pacote Pygent."""
 from importlib import metadata as _metadata
 
-__version__: str = _metadata.version(__name__)
+try:
+    __version__: str = _metadata.version(__name__)
+except _metadata.PackageNotFoundError:  # pragma: no cover - fallback for tests
+    __version__ = "0.0.0"
 
 from .agent import Agent, run_interactive  # noqa: E402,F401, must come after __version__
 
