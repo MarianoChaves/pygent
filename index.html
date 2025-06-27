@@ -62,6 +62,18 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#pygent" class="nav-link">Pygent</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#instalacao" class="nav-link">Instalação</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#uso-basico" class="nav-link">Uso básico</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#desenvolvimento" class="nav-link">Desenvolvimento</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -70,9 +82,22 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="pygent">Pygent</h1>
-<p>Bem-vindo à documentação do Pygent.</p>
-<p>Este projeto oferece um assistente de código que executa comandos de forma isolada em containers.</p>
-<p>Consulte o arquivo README para instruções de instalação e uso básico.</p></div>
+<p>Pygent é um assistente de código minimalista que executa tarefas dentro de um container Docker isolado. Este manual resume os principais comandos e opções de configuração.</p>
+<h2 id="instalacao">Instalação</h2>
+<pre><code class="language-bash">pip install -e .
+</code></pre>
+<p>É necessário possuir Python ≥ 3.9 e Docker configurado. Ajuste as variáveis <code>OPENAI_API_KEY</code>, <code>PYGENT_MODEL</code> e <code>PYGENT_IMAGE</code> conforme necessidade.</p>
+<h2 id="uso-basico">Uso básico</h2>
+<p>Para iniciar uma sessão interativa execute <code>pygent</code> no terminal. Cada comando informado é executado no container e o resultado é impresso em seguida. Utilize <code>/exit</code> para encerrar.</p>
+<p>Também é possível utilizar a API Python:</p>
+<pre><code class="language-python">from pygent import Agent
+ag = Agent()
+ag.step(&quot;echo teste&quot;)
+ag.runtime.cleanup()
+</code></pre>
+<h2 id="desenvolvimento">Desenvolvimento</h2>
+<p>Instale as dependências opcionais com <code>pip install -e .[test,docs]</code> e rode <code>pytest</code> para executar os testes. Para gerar esta documentação localmente utilize <code>mkdocs serve</code>.</p>
+<p>Consulte o arquivo README para informações mais detalhadas.</p></div>
             </div>
         </div>
 
@@ -154,5 +179,5 @@
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-06-27 08:17:28.105744+00:00
+Build Date UTC : 2025-06-27 12:20:06.907994+00:00
 -->
