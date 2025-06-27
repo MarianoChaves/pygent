@@ -2,6 +2,8 @@
 
 Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options.
 
+See [Getting Started](getting-started.md) for a quick tutorial or jump to the [API Reference](api-reference.md) for details about the available classes.
+
 ## Installation
 
 ```bash
@@ -28,4 +30,3 @@ ag.runtime.cleanup()
 Install optional dependencies with `pip install -e .[test,docs]` and run `pytest` to execute the tests. Use `mkdocs serve` to build this documentation locally.
 
 See the README file for more detailed information.
-
