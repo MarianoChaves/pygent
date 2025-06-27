@@ -1,0 +1,17 @@
+[project]
+name = "codex_lite"
+version = "0.1.0"
+description = "A minimal agentic coding assistant that runs each task in a secure container."
+authors = [ { name = "Seu Nome", email = "email@example.com" } ]
+requires-python = ">=3.9"
+dependencies = [
+    "openai>=1.0.0",   # interface com modelos da OpenAI
+    "docker>=7.0.0",    # manipular containers
+    "rich>=13.7.0"      # saídas coloridas (opcional)
+]
+
+[project.scripts]
+clite = "codex_lite.cli:main"
+
+[tool.setuptools.package-data]
+"codex_lite" = ["py.typed"]
