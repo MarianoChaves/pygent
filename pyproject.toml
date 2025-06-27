@@ -1,6 +1,6 @@
 [project]
 name = "pygent"
-version = "0.1.1"
+version = "0.1.2"
 description = "Pygent is a minimalist coding assistant that runs commands in a Docker container when available and falls back to local execution. See https://marianochaves.github.io/pygent for documentation and https://github.com/marianochaves/pygent for the source code."
 authors = [ { name = "Mariano Chaves", email = "mchaves.software@gmail.com" } ]
 requires-python = ">=3.9"
