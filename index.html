@@ -89,9 +89,10 @@
 <h2 id="installation">Installation</h2>
 <pre><code class="language-bash">pip install -e .
 </code></pre>
-<p>Python ≥ 3.9 is required. Docker is optional; install <code>pygent[docker]</code> to enable container execution. Adjust the <code>OPENAI_API_KEY</code>, <code>PYGENT_MODEL</code>, <code>PYGENT_IMAGE</code> and <code>PYGENT_USE_DOCKER</code> variables as needed.</p>
+<p>Python ≥ 3.9 is required. Docker is optional; install <code>pygent[docker]</code> to enable container execution. Adjust the <code>OPENAI_API_KEY</code>, <code>PYGENT_MODEL</code>, <code>PYGENT_IMAGE</code> and <code>PYGENT_USE_DOCKER</code> variables as needed. By default the assistant uses the <code>gpt-4.1-mini</code> model.</p>
 <h2 id="basic-usage">Basic usage</h2>
-<p>Start an interactive session by running <code>pygent</code> in the terminal. Use the <code>--docker</code> option to run commands in a container (requires <code>pygent[docker]</code>); otherwise they execute locally. Use <code>/exit</code> to quit.</p>
+<p>Start an interactive session by running <code>pygent</code> in the terminal. Use the <code>--docker</code> option to run commands in a container (requires <code>pygent[docker]</code>); otherwise they execute locally. Use <code>/exit</code> to quit.
+Alternatively run <code>pygent-ui</code> for a simple web interface (requires <code>pygent[ui]</code>).</p>
 <p>You can also use the Python API:</p>
 <pre><code class="language-python">from pygent import Agent
 ag = Agent()
@@ -153,5 +154,5 @@ ag.runtime.cleanup()
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-06-27 23:03:06.262001+00:00
+Build Date UTC : 2025-06-27 23:18:30.755135+00:00
 -->

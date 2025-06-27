@@ -97,7 +97,9 @@
 <pre><code class="language-bash">$ pygent --docker
 vc&gt; echo &quot;Hello&quot;
 </code></pre>
-<p>Use <code>/exit</code> to leave the session.</p>
+<p>Use <code>/exit</code> to leave the session.
+Alternatively, run <code>pygent-ui</code> for a small web interface (requires
+<code>pygent[ui]</code>).</p>
 <h2 id="using-the-api">Using the API</h2>
 <p>The <code>Agent</code> class exposes the same functionality programmatically. Here is a minimal example:</p>
 <pre><code class="language-python">from pygent import Agent
@@ -109,8 +111,10 @@ ag.runtime.cleanup()
 </code></pre>
 <p>Check the <code>examples/</code> directory for more advanced scripts.</p>
 <h2 id="model-configuration">Model configuration</h2>
-<p>Pygent communicates with the model through an OpenAI-compatible API.
-Set your key via the <code>OPENAI_API_KEY</code> environment variable:</p>
+<p>Pygent communicates with the model through an OpenAI-compatible API. The
+default model is <code>gpt-4.1-mini</code>; override it by setting the
+<code>PYGENT_MODEL</code> environment variable. Set your key via the
+<code>OPENAI_API_KEY</code> environment variable:</p>
 <pre><code class="language-bash">export OPENAI_API_KEY=&quot;sk-...&quot;
 </code></pre>
 <p>To use a different provider, set <code>OPENAI_BASE_URL</code> to the provider's
