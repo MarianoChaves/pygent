@@ -1,6 +1,6 @@
 # Pygent
 
-Pygent is a coding assistant that executes each request inside an isolated Docker container whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead.
+Pygent is a coding assistant that executes each request inside an isolated Docker container whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead. Full documentation is available in the `docs/` directory and at [marianochaves.github.io/pygent](https://marianochaves.github.io/pygent/).
 
 ## Features
 
@@ -23,7 +23,7 @@ To run commands in Docker containers also install `pygent[docker]`.
 
 ## Configuration
 
-Behaviour can be adjusted via environment variables:
+Behaviour can be adjusted via environment variables (see `docs/configuration.md` for a complete list):
 
 * `OPENAI_API_KEY` &ndash; key used to access the OpenAI API.
   Set this to your API key or a key from any compatible provider.
@@ -63,7 +63,7 @@ ag.step("echo 'Hello World'")
 ag.runtime.cleanup()
 ```
 
-See the `examples/` folder for more complete scripts. Models can be swapped by
+See the [examples](https://github.com/marianochaves/pygent/tree/main/examples) folder for more complete scripts. Models can be swapped by
 passing an object implementing the ``Model`` interface when creating the
 ``Agent``. The default uses an OpenAI-compatible API, but custom models are
 easy to plug in.

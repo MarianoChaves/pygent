@@ -54,30 +54,24 @@ ag.step("echo 'Hello World'")
 ag.runtime.cleanup()
 ```
 
-See `examples/api_example.py` for a complete script. Additional examples show
-how to implement a custom model and how to interact with the `Runtime` class
-directly.
+See [api_example.py](https://github.com/marianochaves/pygent/blob/main/examples/api_example.py)
+for a complete script. Additional examples show how to implement a custom model
+and how to interact with the `Runtime` class directly.
 
 ## Configuration
 
-Pygent talks to the language model through an OpenAI‑compatible API. Set your
-credentials as environment variables:
+Pygent communicates with the model through an OpenAI‑compatible API. Export your
+API key before running the assistant. A full list of environment variables is
+available in the [Configuration](configuration.md) page.
 
-```bash
-export OPENAI_API_KEY="sk-..."
-export OPENAI_BASE_URL="https://api.openai.com/v1"  # change if using another provider
-```
-
-The model can be changed with `PYGENT_MODEL` and the Docker image with
-`PYGENT_IMAGE`. Set `PYGENT_USE_DOCKER=0` to always disable containers.
-
-For full control you may pass a custom model implementation to `Agent`. The
-file `examples/custom_model.py` contains a minimal echo model example.
+For full control you may pass a custom model implementation to `Agent`. The file
+[custom_model.py](https://github.com/marianochaves/pygent/blob/main/examples/custom_model.py)
+contains a minimal echo model example.
 
 ## Additional examples
 
 Several scripts in the `examples/` directory showcase different parts of the
-package:
+package (see the dedicated [Examples](examples.md) page):
 
 - **api_example.py** &ndash; minimal use of the :class:`~pygent.agent.Agent` API.
 - **runtime_example.py** &ndash; running commands through the
