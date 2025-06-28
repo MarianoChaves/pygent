@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" /><link rel="canonical" href="https://example.com/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" /><link rel="canonical" href="https://marianochaves.github.io/pygent/" />
       <link rel="shortcut icon" href="img/favicon.ico" />
     <title>Pygent</title>
     <link rel="stylesheet" href="css/theme.css" />
@@ -14,7 +14,7 @@
         // Current page data
         var mkdocs_page_name = "Home";
         var mkdocs_page_input_path = "index.md";
-        var mkdocs_page_url = "/";
+        var mkdocs_page_url = "/pygent/";
       </script>
     
     <!--[if lt IE 9]>
@@ -56,6 +56,14 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="configuration/">Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="examples/">Examples</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="api-reference/">API Reference</a>
                 </li>
               </ul>
@@ -84,12 +92,14 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="pygent">Pygent</h1>
-<p>Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options.</p>
+<p>Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options. See <a href="configuration/">Configuration</a> for a list of environment variables.</p>
+<p>The latest version of this guide is published online at <a href="https://marianochaves.github.io/pygent/">marianochaves.github.io/pygent</a>.
+See the <a href="examples/">Examples</a> section for runnable scripts.</p>
 <p>See <a href="getting-started/">Getting Started</a> for a quick tutorial or jump to the <a href="api-reference/">API Reference</a> for details about the available classes.</p>
 <h2 id="installation">Installation</h2>
 <pre><code class="language-bash">pip install pygent
 </code></pre>
-<p>Python ≥ 3.9 is required. Docker is optional; install <code>pygent[docker]</code> to enable container execution. Adjust the <code>OPENAI_API_KEY</code>, <code>PYGENT_MODEL</code>, <code>PYGENT_IMAGE</code> and <code>PYGENT_USE_DOCKER</code> variables as needed. By default the assistant uses the <code>gpt-4.1-mini</code> model.</p>
+<p>Python ≥ 3.9 is required. Docker is optional; install <code>pygent[docker]</code> to enable container execution. The default model is <code>gpt-4.1-mini</code>.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <p>Start an interactive session by running <code>pygent</code> in the terminal. Use the <code>--docker</code> option to run commands in a container (requires <code>pygent[docker]</code>); otherwise they execute locally. Use <code>/exit</code> to quit.
 Alternatively run <code>pygent-ui</code> for a simple web interface (requires <code>pygent[ui]</code>).</p>
@@ -156,5 +166,5 @@ the instance to <code>Agent</code>.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-06-28 02:10:55.709424+00:00
+Build Date UTC : 2025-06-28 02:30:41.513877+00:00
 -->

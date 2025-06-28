@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://marianochaves.github.io/pygent/api-reference/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://marianochaves.github.io/pygent/examples/" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>API Reference - Pygent</title>
+    <title>Examples - Pygent</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "API Reference";
-        var mkdocs_page_input_path = "api-reference.md";
-        var mkdocs_page_url = "/pygent/api-reference/";
+        var mkdocs_page_name = "Examples";
+        var mkdocs_page_input_path = "examples.md";
+        var mkdocs_page_url = "/pygent/examples/";
       </script>
     
     <!--[if lt IE 9]>
@@ -51,22 +51,14 @@
                 <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Examples</a>
+    <ul class="current">
+    </ul>
                 </li>
               </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">API Reference</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#agent">Agent</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#runtime">Runtime</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#custom-models">Custom models</a>
-    </li>
-    </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../api-reference/">API Reference</a>
                 </li>
               </ul>
       </div>
@@ -83,9 +75,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">API Reference</li>
+      <li class="breadcrumb-item active">Examples</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/marianochaves/pygent/edit/master/docs/api-reference.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/marianochaves/pygent/edit/master/docs/examples.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -93,50 +85,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="api-reference">API Reference</h1>
-<p>This section summarises the most relevant classes and functions.</p>
-<h2 id="agent"><code>Agent</code></h2>
-<pre><code class="language-python">from pygent import Agent
-</code></pre>
-<p>Manages the conversation with the model. Each instance owns a
-<code>Runtime</code> accessible via <code>agent.runtime</code>.</p>
-<p><strong>Methods</strong></p>
+                <h1 id="examples">Examples</h1>
+<p>This page collects small scripts demonstrating different aspects of Pygent. Each link points to the source file on GitHub.</p>
 <ul>
-<li><code>step(user_msg: str) -&gt; None</code> – add a message, run tools and print
-  their output.</li>
-<li><code>run_interactive(use_docker: bool | None = None) -&gt; None</code> – start an
-  interactive session.</li>
-<li><code>run_gui(use_docker: bool | None = None) -&gt; None</code> – start a simple
-  web interface.</li>
+<li><a href="https://github.com/marianochaves/pygent/blob/main/examples/api_example.py">api_example.py</a> &ndash; minimal use of the :class:<code>~pygent.agent.Agent</code> API.</li>
+<li><a href="https://github.com/marianochaves/pygent/blob/main/examples/runtime_example.py">runtime_example.py</a> &ndash; using the :class:<code>~pygent.runtime.Runtime</code> class directly.</li>
+<li><a href="https://github.com/marianochaves/pygent/blob/main/examples/write_file_demo.py">write_file_demo.py</a> &ndash; calling the built-in tools from Python code.</li>
+<li><a href="https://github.com/marianochaves/pygent/blob/main/examples/custom_model.py">custom_model.py</a> &ndash; implementing a simple custom model.</li>
 </ul>
-<h2 id="runtime"><code>Runtime</code></h2>
-<p>Executes commands either in a Docker container or locally.</p>
-<p><strong>Methods</strong></p>
-<ul>
-<li><code>bash(cmd: str, timeout: int = 30) -&gt; str</code> – run a shell command and
-  return its output.</li>
-<li><code>write_file(path: str, content: str) -&gt; str</code> – create or replace a
-  file in the working directory.</li>
-<li><code>cleanup() -&gt; None</code> – destroy the temporary workspace and stop the
-  container if used.</li>
-</ul>
-<h2 id="tools">Tools</h2>
-<p>The agent can call two built-in tools:</p>
-<ul>
-<li><strong>bash</strong> &ndash; executes shell commands via <code>Runtime.bash</code>.</li>
-<li><strong>write_file</strong> &ndash; writes files through <code>Runtime.write_file</code>.</li>
-</ul>
-<p>Refer to the <code>tools.py</code> module for the implementation details.</p>
-<h2 id="custom-models">Custom models</h2>
-<p>The <code>Agent</code> relies on a model object with a <code>chat</code> method. The default is
-<code>OpenAIModel</code> which calls an OpenAI-compatible API. To plug in a different
-backend, implement the <code>Model</code> protocol and pass an instance when creating the
-agent.</p>
+<p>Run these with <code>python &lt;script&gt;</code> from the project root. They expect the environment variables described in the <a href="../configuration/">Configuration</a> page.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../examples/" class="btn btn-neutral float-left" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configuration/" class="btn btn-neutral float-left" title="Configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../api-reference/" class="btn btn-neutral float-right" title="API Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -163,8 +126,10 @@ agent.</p>
         </span>
     
     
-      <span><a href="../examples/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../configuration/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
+    
+      <span><a href="../api-reference/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
