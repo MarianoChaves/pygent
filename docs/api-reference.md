@@ -29,7 +29,7 @@ Executes commands either in a Docker container or locally.
 - `bash(cmd: str, timeout: int = 30) -> str` – run a shell command and
   return its output.
 - `write_file(path: str, content: str) -> str` – create or replace a
-  file in the working directory.
+  UTF-8 encoded text file in the working directory.
 - `cleanup() -> None` – destroy the temporary workspace and stop the
   container if used.
 
