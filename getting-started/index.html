@@ -49,10 +49,16 @@
     <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#interactive-session">Interactive session</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#tool-usage">Tool usage</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-the-api">Using the API</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#model-configuration">Model configuration</a>
+    <li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#additional-examples">Additional examples</a>
     </li>
     </ul>
                 </li>
@@ -86,45 +92,78 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="getting-started">Getting Started</h1>
-<p>This tutorial shows how to install Pygent and run a few basic commands. It also demonstrates how to use the Python API directly.</p>
+<p>Pygent is a minimalist coding assistant that runs shell commands inside a
+sandboxed environment. By default a Docker container is used, but if Docker
+is unavailable the commands run locally instead. This page shows how to install
+the package and gives a few examples covering the main features.</p>
 <h2 id="installation">Installation</h2>
-<p>Install from source in editable mode so the command line and Python modules are available:</p>
-<pre><code class="language-bash">pip install -e .[docker]
+<p>Install from source in editable mode so the CLI and Python modules are
+available. Include the optional extras to enable Docker support and the web UI:</p>
+<pre><code class="language-bash">pip install -e .[llm,docker,ui]
 </code></pre>
-<p>Docker is optional. If it is not available omit the <code>[docker]</code> extras and commands will run locally.</p>
+<p>Python 3.9 or newer is required. If Docker is not installed omit the
+<code>[docker]</code> extras and commands will run on the host system.</p>
 <h2 id="interactive-session">Interactive session</h2>
-<p>Start the CLI by running <code>pygent</code>. Type normal instructions and each command will be executed in a sandboxed environment.</p>
+<p>Start an interactive session by running <code>pygent</code> in a terminal. Use the
+<code>--docker</code> flag to force container execution or <code>--no-docker</code> to run locally.</p>
 <pre><code class="language-bash">$ pygent --docker
 vc&gt; echo &quot;Hello&quot;
 </code></pre>
-<p>Use <code>/exit</code> to leave the session.
-Alternatively, run <code>pygent-ui</code> for a small web interface (requires
-<code>pygent[ui]</code>).</p>
+<p>Each message is executed in the sandbox and the output printed. Use <code>/exit</code>
+to leave the session. You can also launch a simple web interface with
+<code>pygent-ui</code> (requires the <code>ui</code> extra).</p>
+<h3 id="tool-usage">Tool usage</h3>
+<p>During the conversation the assistant can call two built-in tools: <code>bash</code> to
+run shell commands and <code>write_file</code> to create files inside the workspace. For
+example:</p>
+<pre><code class="language-text">vc&gt; write_file path=&quot;hello.txt&quot; content=&quot;Hello from Pygent&quot;
+vc&gt; bash cmd=&quot;cat hello.txt&quot;
+</code></pre>
 <h2 id="using-the-api">Using the API</h2>
-<p>The <code>Agent</code> class exposes the same functionality programmatically. Here is a minimal example:</p>
+<p>The same functionality is accessible programmatically via the <code>Agent</code> class:</p>
 <pre><code class="language-python">from pygent import Agent
 
 ag = Agent()
 ag.step(&quot;echo 'Hello World'&quot;)
-# additional steps...
 ag.runtime.cleanup()
 </code></pre>
-<p>Check the <code>examples/</code> directory for more advanced scripts.</p>
-<h2 id="model-configuration">Model configuration</h2>
-<p>Pygent communicates with the model through an OpenAI-compatible API. The
-default model is <code>gpt-4.1-mini</code>; override it by setting the
-<code>PYGENT_MODEL</code> environment variable. Set your key via the
-<code>OPENAI_API_KEY</code> environment variable:</p>
+<p>See <code>examples/api_example.py</code> for a complete script. Additional examples show
+how to implement a custom model and how to interact with the <code>Runtime</code> class
+directly.</p>
+<h2 id="configuration">Configuration</h2>
+<p>Pygent talks to the language model through an OpenAI‑compatible API. Set your
+credentials as environment variables:</p>
 <pre><code class="language-bash">export OPENAI_API_KEY=&quot;sk-...&quot;
+export OPENAI_BASE_URL=&quot;https://api.openai.com/v1&quot;  # change if using another provider
 </code></pre>
-<p>To use a different provider, set <code>OPENAI_BASE_URL</code> to the provider's
-endpoint and keep <code>OPENAI_API_KEY</code> pointing to its key:</p>
-<pre><code class="language-bash">export OPENAI_BASE_URL=&quot;https://openrouter.ai/api/v1&quot;
-export OPENAI_API_KEY=&quot;your-provider-key&quot;
+<p>The model can be changed with <code>PYGENT_MODEL</code> and the Docker image with
+<code>PYGENT_IMAGE</code>. Set <code>PYGENT_USE_DOCKER=0</code> to always disable containers.</p>
+<p>For full control you may pass a custom model implementation to <code>Agent</code>. The
+file <code>examples/custom_model.py</code> contains a minimal echo model example.</p>
+<h2 id="additional-examples">Additional examples</h2>
+<p>Several scripts in the <code>examples/</code> directory showcase different parts of the
+package:</p>
+<ul>
+<li><strong>api_example.py</strong> &ndash; minimal use of the :class:<code>~pygent.agent.Agent</code> API.</li>
+<li><strong>runtime_example.py</strong> &ndash; running commands through the
+  :class:<code>~pygent.runtime.Runtime</code> class directly.</li>
+<li><strong>write_file_demo.py</strong> &ndash; calling the built-in tools from Python code.</li>
+<li><strong>custom_model.py</strong> &ndash; plugging in a custom model.</li>
+</ul>
+<p>Below is the custom model snippet for reference:</p>
+<pre><code class="language-python">from pygent import Agent, openai_compat
+
+class EchoModel:
+    def chat(self, messages, model, tools):
+        last = messages[-1][&quot;content&quot;]
+        return openai_compat.Message(role=&quot;assistant&quot;, content=f&quot;Echo: {last}&quot;)
+
+ag = Agent(model=EchoModel())
+ag.step(&quot;test&quot;)
+ag.runtime.cleanup()
 </code></pre>
-<p>For complete control you can also supply a custom model implementation. Create a
-class with a <code>chat(messages, model, tools)</code> method and pass an instance to
-<code>Agent</code>.</p>
+<p>See the <a href="../api-reference/">API reference</a> for the complete list of classes and
+configuration options.</p>
               
             </div>
           </div><footer>
