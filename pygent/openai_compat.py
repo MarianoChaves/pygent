@@ -2,7 +2,9 @@ import os
 import json
 from dataclasses import dataclass
 from typing import Any, Dict, List
-from urllib import request
+from urllib import request, error
+
+from .errors import APIError
 
 OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
@@ -39,8 +41,15 @@ def _post(path: str, payload: Dict[str, Any]) -> Dict[str, Any]:
     if OPENAI_API_KEY:
         headers["Authorization"] = f"Bearer {OPENAI_API_KEY}"
     req = request.Request(f"{OPENAI_BASE_URL}{path}", data=data, headers=headers)
-    with request.urlopen(req) as resp:
-        return json.loads(resp.read().decode())
+    try:
+        with request.urlopen(req) as resp:
+            return json.loads(resp.read().decode())
+    except error.HTTPError as exc:  # pragma: no cover - network dependent
+        raise APIError(f"HTTP error {exc.code}: {exc.reason}") from exc
+    except error.URLError as exc:  # pragma: no cover - network dependent
+        raise APIError(f"Connection error: {exc.reason}") from exc
+    except Exception as exc:  # pragma: no cover - fallback
+        raise APIError(str(exc)) from exc
 
 
 class _ChatCompletions:

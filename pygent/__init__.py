@@ -8,5 +8,6 @@ except _metadata.PackageNotFoundError:  # pragma: no cover - fallback for tests
 
 from .agent import Agent, run_interactive  # noqa: E402,F401, must come after __version__
 from .models import Model, OpenAIModel  # noqa: E402,F401
+from .errors import PygentError, APIError  # noqa: E402,F401
 
-__all__ = ["Agent", "run_interactive", "Model", "OpenAIModel"]
+__all__ = ["Agent", "run_interactive", "Model", "OpenAIModel", "PygentError", "APIError"]
