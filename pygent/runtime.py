@@ -48,7 +48,11 @@ class Runtime:
 
     # ---------------- public API ----------------
     def bash(self, cmd: str, timeout: int = 30) -> str:
-        """Run a command in the container or locally and return the output."""
+        """Run a command in the container or locally and return the output.
+
+        The executed command is always included in the returned string so the
+        caller can display what was run.
+        """
         if self._use_docker and self.container is not None:
             res = self.container.exec_run(
                 cmd,
@@ -60,7 +64,8 @@ class Runtime:
             stdout, stderr = (
                 res.output if isinstance(res.output, tuple) else (res.output, b"")
             )
-            return (stdout or b"").decode() + (stderr or b"").decode()
+            output = (stdout or b"").decode() + (stderr or b"").decode()
+            return f"$ {cmd}\n{output}"
         proc = subprocess.run(
             cmd,
             shell=True,
@@ -69,7 +74,7 @@ class Runtime:
             text=True,
             timeout=timeout,
         )
-        return proc.stdout + proc.stderr
+        return f"$ {cmd}\n{proc.stdout + proc.stderr}"
 
     def write_file(self, path: Union[str, Path], content: str) -> str:
         p = self.base_dir / path
