@@ -81,7 +81,7 @@ class Runtime:
     def write_file(self, path: Union[str, Path], content: str) -> str:
         p = self.base_dir / path
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(content)
+        p.write_text(content, encoding="utf-8")
         return f"Wrote {p.relative_to(self.base_dir)}"
 
     def cleanup(self) -> None:
