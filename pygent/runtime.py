@@ -71,8 +71,8 @@ class Runtime:
         )
         return proc.stdout + proc.stderr
 
-    def write_file(self, rel_path: Union[str, Path], content: str) -> str:
-        p = self.base_dir / rel_path
+    def write_file(self, path: Union[str, Path], content: str) -> str:
+        p = self.base_dir / path
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(content)
         return f"Wrote {p.relative_to(self.base_dir)}"
