@@ -1,6 +1,6 @@
 # Pygent
 
-Pygent is a coding assistant that executes each request inside an isolated Docker container whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead.
+Pygent is a coding assistant that executes each request inside an isolated Docker container whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead. Full documentation is available in the `docs/` directory and at the project site.
 
 ## Features
 
@@ -23,7 +23,7 @@ To run commands in Docker containers also install `pygent[docker]`.
 
 ## Configuration
 
-Behaviour can be adjusted via environment variables:
+Behaviour can be adjusted via environment variables (see `docs/configuration.md` for a complete list):
 
 * `OPENAI_API_KEY` &ndash; key used to access the OpenAI API.
   Set this to your API key or a key from any compatible provider.

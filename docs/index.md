@@ -1,6 +1,6 @@
 # Pygent
 
-Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options.
+Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options. See [Configuration](configuration.md) for a list of environment variables.
 
 See [Getting Started](getting-started.md) for a quick tutorial or jump to the [API Reference](api-reference.md) for details about the available classes.
 
@@ -10,7 +10,7 @@ See [Getting Started](getting-started.md) for a quick tutorial or jump to the [A
 pip install pygent
 ```
 
-Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enable container execution. Adjust the `OPENAI_API_KEY`, `PYGENT_MODEL`, `PYGENT_IMAGE` and `PYGENT_USE_DOCKER` variables as needed. By default the assistant uses the `gpt-4.1-mini` model.
+Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enable container execution. The default model is `gpt-4.1-mini`.
 
 ## Basic usage
 

@@ -60,19 +60,12 @@ directly.
 
 ## Configuration
 
-Pygent talks to the language model through an OpenAI‑compatible API. Set your
-credentials as environment variables:
+Pygent communicates with the model through an OpenAI‑compatible API. Export your
+API key before running the assistant. A full list of environment variables is
+available in the [Configuration](configuration.md) page.
 
-```bash
-export OPENAI_API_KEY="sk-..."
-export OPENAI_BASE_URL="https://api.openai.com/v1"  # change if using another provider
-```
-
-The model can be changed with `PYGENT_MODEL` and the Docker image with
-`PYGENT_IMAGE`. Set `PYGENT_USE_DOCKER=0` to always disable containers.
-
-For full control you may pass a custom model implementation to `Agent`. The
-file `examples/custom_model.py` contains a minimal echo model example.
+For full control you may pass a custom model implementation to `Agent`. The file
+`examples/custom_model.py` contains a minimal echo model example.
 
 ## Additional examples
 
