@@ -2,6 +2,8 @@
 
 Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options. See [Configuration](configuration.md) for a list of environment variables.
 
+The latest version of this guide is published online at [marianochaves.github.io/pygent](https://marianochaves.github.io/pygent/).
+
 See [Getting Started](getting-started.md) for a quick tutorial or jump to the [API Reference](api-reference.md) for details about the available classes.
 
 ## Installation
