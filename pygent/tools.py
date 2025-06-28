@@ -35,6 +35,14 @@ TOOL_SCHEMAS = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "stop",
+            "description": "Stop the autonomous loop.",
+            "parameters": {"type": "object", "properties": {}},
+        },
+    },
 ]
 
 # --------------- dispatcher ---------------
@@ -47,4 +55,6 @@ def execute_tool(call: Any, rt: Runtime) -> str:  # pragma: no cover, Any→open
         return rt.bash(**args)
     if name == "write_file":
         return rt.write_file(**args)
+    if name == "stop":
+        return "Stopping."
     return f"⚠️ unknown tool {name}"

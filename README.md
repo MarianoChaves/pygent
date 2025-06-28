@@ -18,8 +18,7 @@ Installing from source is recommended:
 pip install -e .
 ```
 
-Python ≥ 3.9 is required. The only runtime dependency is `rich`.
-Install any OpenAI-compatible library such as `openai` or `litellm` separately to enable model access.
+Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
 To run commands in Docker containers also install `pygent[docker]`.
 
 ## Configuration

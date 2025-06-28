@@ -35,7 +35,7 @@ class Agent:
         {"role": "system", "content": SYSTEM_MSG}
     ])
 
-    def step(self, user_msg: str) -> None:
+    def step(self, user_msg: str):
         self.history.append({"role": "user", "content": user_msg})
         assistant_msg = self.model.chat(self.history, self.model_name, TOOL_SCHEMAS)
         self.history.append(assistant_msg)
@@ -47,6 +47,18 @@ class Agent:
                 console.print(Panel(output, title=f"tool:{call.function.name}"))
         else:
             console.print(assistant_msg.content)
+        return assistant_msg
+
+    def run_until_stop(self, user_msg: str, max_steps: int = 10) -> None:
+        """Run steps automatically until the model calls the ``stop`` tool or
+        the step limit is reached."""
+        msg = user_msg
+        for _ in range(max_steps):
+            assistant_msg = self.step(msg)
+            calls = assistant_msg.tool_calls or []
+            if any(c.function.name == "stop" for c in calls):
+                break
+            msg = "continue"
 
 
 def run_interactive(use_docker: bool | None = None) -> None:  # pragma: no cover
