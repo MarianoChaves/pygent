@@ -54,9 +54,9 @@ ag.step("echo 'Hello World'")
 ag.runtime.cleanup()
 ```
 
-See `examples/api_example.py` for a complete script. Additional examples show
-how to implement a custom model and how to interact with the `Runtime` class
-directly.
+See [api_example.py](https://github.com/marianochaves/pygent/blob/main/examples/api_example.py)
+for a complete script. Additional examples show how to implement a custom model
+and how to interact with the `Runtime` class directly.
 
 ## Configuration
 
@@ -65,12 +65,13 @@ API key before running the assistant. A full list of environment variables is
 available in the [Configuration](configuration.md) page.
 
 For full control you may pass a custom model implementation to `Agent`. The file
-`examples/custom_model.py` contains a minimal echo model example.
+[custom_model.py](https://github.com/marianochaves/pygent/blob/main/examples/custom_model.py)
+contains a minimal echo model example.
 
 ## Additional examples
 
 Several scripts in the `examples/` directory showcase different parts of the
-package:
+package (see the dedicated [Examples](examples.md) page):
 
 - **api_example.py** &ndash; minimal use of the :class:`~pygent.agent.Agent` API.
 - **runtime_example.py** &ndash; running commands through the
