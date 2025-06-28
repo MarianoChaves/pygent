@@ -11,7 +11,7 @@ Install from source in editable mode so the CLI and Python modules are
 available. Include the optional extras to enable Docker support and the web UI:
 
 ```bash
-pip install -e .[llm,docker,ui]
+pip install pygent[llm,docker,ui]
 ```
 
 Python 3.9 or newer is required. If Docker is not installed omit the
