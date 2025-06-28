@@ -7,7 +7,7 @@ See [Getting Started](getting-started.md) for a quick tutorial or jump to the [A
 ## Installation
 
 ```bash
-pip install -e .
+pip install pygent
 ```
 
 Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enable container execution. Adjust the `OPENAI_API_KEY`, `PYGENT_MODEL`, `PYGENT_IMAGE` and `PYGENT_USE_DOCKER` variables as needed. By default the assistant uses the `gpt-4.1-mini` model.
