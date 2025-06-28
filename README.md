@@ -47,6 +47,8 @@ to force local execution.
 
 Type messages normally; use `/exit` to end the session. Each command is executed
 in the container and the result shown in the terminal.
+Interactive programs that expect input (e.g. running `python` without a script)
+are not supported and will exit immediately.
 For a minimal web interface run `pygent-ui` instead (requires `pygent[ui]`).
 
 

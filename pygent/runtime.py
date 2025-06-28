@@ -59,6 +59,7 @@ class Runtime:
                 workdir="/workspace",
                 demux=True,
                 tty=False,
+                stdin=False,
                 timeout=timeout,
             )
             stdout, stderr = (
@@ -72,6 +73,7 @@ class Runtime:
             cwd=self.base_dir,
             capture_output=True,
             text=True,
+            stdin=subprocess.DEVNULL,
             timeout=timeout,
         )
         return f"$ {cmd}\n{proc.stdout + proc.stderr}"
