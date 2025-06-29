@@ -35,6 +35,12 @@ Behaviour can be adjusted via environment variables (see `docs/configuration.md`
 * `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
 * `PYGENT_MAX_TASKS` &ndash; maximum number of concurrent delegated tasks (default `3`).
 
+Settings can also be read from a `pygent.toml` file. See
+[examples/sample_config.toml](https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml)
+and the accompanying
+[config_file_example.py](https://github.com/marianochaves/pygent/blob/main/examples/config_file_example.py)
+script for a working demonstration that generates tests using a delegated agent.
+
 ## CLI usage
 
 After installing run:
