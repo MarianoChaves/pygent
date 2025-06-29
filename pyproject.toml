@@ -5,7 +5,7 @@ description = "Pygent is a minimalist coding assistant that runs commands in a D
 authors = [ { name = "Mariano Chaves", email = "mchaves.software@gmail.com" } ]
 requires-python = ">=3.9"
 dependencies = [
-    "rich>=13.7.0",      # colored output (optional)
+    "rich>=13.7.0",
     "openai>=1.0.0",
 ]
 
