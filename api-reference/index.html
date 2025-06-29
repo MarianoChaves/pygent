@@ -64,6 +64,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#custom-prompts">Custom prompts</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#custom-models">Custom models</a>
     </li>
     </ul>
@@ -121,12 +123,32 @@
   container if used.</li>
 </ul>
 <h2 id="tools">Tools</h2>
-<p>The agent can call two built-in tools:</p>
+<p>Two tools are available by default:</p>
 <ul>
 <li><strong>bash</strong> &ndash; executes shell commands via <code>Runtime.bash</code>.</li>
 <li><strong>write_file</strong> &ndash; writes files through <code>Runtime.write_file</code>.</li>
 </ul>
-<p>Refer to the <code>tools.py</code> module for the implementation details.</p>
+<p>Additional tools can be registered programmatically using
+<code>pygent.register_tool</code> or the <code>pygent.tool</code> decorator. Each tool receives the
+active <code>Runtime</code> instance and must return a string.</p>
+<pre><code class="language-python">from pygent import register_tool
+
+def hello(rt, name: str) -&gt; str:
+    return f&quot;Hello {name}!&quot;
+
+register_tool(
+    &quot;hello&quot;,
+    &quot;Greet the user&quot;,
+    {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;name&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;name&quot;]},
+    hello,
+)
+</code></pre>
+<p>Refer to the <code>tools.py</code> module for more details.</p>
+<h2 id="custom-prompts">Custom prompts</h2>
+<p>Pass a custom string to the <code>Agent</code> constructor to override the system prompt:</p>
+<pre><code class="language-python">from pygent import Agent
+ag = Agent(system_msg=&quot;You are a friendly bot&quot;)
+</code></pre>
 <h2 id="custom-models">Custom models</h2>
 <p>The <code>Agent</code> relies on a model object with a <code>chat</code> method. The default is
 <code>OpenAIModel</code> which calls an OpenAI-compatible API. To plug in a different
