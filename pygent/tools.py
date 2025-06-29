@@ -92,7 +92,7 @@ def _write_file(rt: Runtime, path: str, content: str) -> str:
 
 @tool(
     name="stop",
-    description="Stop the autonomous loop.",
+    description="Stop the autonomous loop. This is a side-effect free tool that does not return any output. Use when finished some task or when you want to stop the agent.",
     parameters={"type": "object", "properties": {}},
 )
 def _stop(rt: Runtime) -> str:  # pragma: no cover - side-effect free
@@ -101,7 +101,7 @@ def _stop(rt: Runtime) -> str:  # pragma: no cover - side-effect free
 
 @tool(
     name="continue",
-    description="Continue the conversation.",
+    description="Request user answer or input. If in your previous message you asked for user input, you can use this tool to continue the conversation.",
     parameters={"type": "object", "properties": {}},
 )
 def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
