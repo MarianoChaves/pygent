@@ -13,8 +13,8 @@ Manages the conversation with the model. Each instance owns a
 
 **Methods**
 
-- `step(user_msg: str) -> None` – add a message, run tools and print
-  their output.
+- `step(user_msg: str) -> None` – add a message and run any tools
+  returned by the model.
 - `run_interactive(use_docker: bool | None = None) -> None` – start an
   interactive session.
 - `run_gui(use_docker: bool | None = None) -> None` – start a simple
@@ -74,13 +74,22 @@ from pygent import TaskManager, Runtime
 
 rt = Runtime(use_docker=False)
 tm = TaskManager()
-task_id = tm.start_task("generate report", rt, files=["data.txt"])
+task_id = tm.start_task(
+    "generate report",
+    rt,
+    files=["data.txt"],
+    step_timeout=5,
+    task_timeout=60,
+)
 print(tm.status(task_id))
 ```
 Pass a ``Runtime`` instance when starting a task so files can be copied into the
 sub-agent workspace via the optional ``files`` argument. Delegated agents cannot
 create further tasks. The maximum number of concurrent tasks is controlled by
 the ``PYGENT_MAX_TASKS`` environment variable (default ``3``).
+Optional ``step_timeout`` and ``task_timeout`` parameters control how long each
+step and the overall task are allowed to run. Their defaults can be set via the
+``PYGENT_STEP_TIMEOUT`` and ``PYGENT_TASK_TIMEOUT`` environment variables.
 
 ## Custom prompts
 
@@ -97,3 +106,4 @@ The `Agent` relies on a model object with a ``chat`` method. The default is
 ``OpenAIModel`` which calls an OpenAI-compatible API. To plug in a different
 backend, implement the ``Model`` protocol and pass an instance when creating the
 agent.
+

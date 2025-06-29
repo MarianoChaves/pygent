@@ -11,6 +11,8 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_IMAGE` | Docker image used for sandboxed execution. | `python:3.12-slim` |
 | `PYGENT_USE_DOCKER` | Set to `0` to run commands locally. Otherwise the runtime will try to use Docker if available. | auto |
 | `PYGENT_MAX_TASKS` | Maximum number of delegated tasks that can run concurrently. | `3` |
+| `PYGENT_STEP_TIMEOUT` | Default time limit in seconds for each step when running delegated tasks. | – |
+| `PYGENT_TASK_TIMEOUT` | Default overall time limit in seconds for delegated tasks. | – |
 
 See [Getting Started](getting-started.md) for installation instructions and the
 [API Reference](api-reference.md) for details about the available classes.
