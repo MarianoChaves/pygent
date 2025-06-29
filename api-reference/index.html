@@ -64,6 +64,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#taskmanager">TaskManager</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#custom-prompts">Custom prompts</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#custom-models">Custom models</a>
@@ -123,10 +125,15 @@
   container if used.</li>
 </ul>
 <h2 id="tools">Tools</h2>
-<p>Two tools are available by default:</p>
+<p>Several tools are available by default:</p>
 <ul>
 <li><strong>bash</strong> &ndash; executes shell commands via <code>Runtime.bash</code>.</li>
 <li><strong>write_file</strong> &ndash; writes files through <code>Runtime.write_file</code>.</li>
+<li><strong>delegate_task</strong> &ndash; start a background task handled by a new agent,
+  optionally copying files into it.</li>
+<li><strong>task_status</strong> &ndash; check the progress of a delegated task.</li>
+<li><strong>collect_file</strong> &ndash; copy a file from a delegated task into the current workspace.</li>
+<li><strong>download_file</strong> &ndash; retrieve the contents of a file from the workspace.</li>
 </ul>
 <p>Additional tools can be registered programmatically using
 <code>pygent.register_tool</code> or the <code>pygent.tool</code> decorator. Each tool receives the
@@ -144,6 +151,19 @@ register_tool(
 )
 </code></pre>
 <p>Refer to the <code>tools.py</code> module for more details.</p>
+<h2 id="taskmanager"><code>TaskManager</code></h2>
+<p>Launch separate agents asynchronously and track them:</p>
+<pre><code class="language-python">from pygent import TaskManager, Runtime
+
+rt = Runtime(use_docker=False)
+tm = TaskManager()
+task_id = tm.start_task(&quot;generate report&quot;, rt, files=[&quot;data.txt&quot;])
+print(tm.status(task_id))
+</code></pre>
+<p>Pass a <code>Runtime</code> instance when starting a task so files can be copied into the
+sub-agent workspace via the optional <code>files</code> argument. Delegated agents cannot
+create further tasks. The maximum number of concurrent tasks is controlled by
+the <code>PYGENT_MAX_TASKS</code> environment variable (default <code>3</code>).</p>
 <h2 id="custom-prompts">Custom prompts</h2>
 <p>Pass a custom string to the <code>Agent</code> constructor to override the system prompt:</p>
 <pre><code class="language-python">from pygent import Agent
