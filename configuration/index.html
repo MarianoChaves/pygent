@@ -137,8 +137,34 @@ exported in your shell or set via a <code>.env</code> file before running the CL
 <td>Default overall time limit in seconds for delegated tasks.</td>
 <td>–</td>
 </tr>
+<tr>
+<td><code>PYGENT_PERSONA</code></td>
+<td>System prompt preamble for the main agent.</td>
+<td>"You are Pygent, a sandboxed coding assistant."</td>
+</tr>
+<tr>
+<td><code>PYGENT_TASK_PERSONAS</code></td>
+<td>List of personas for delegated agents separated by <code>os.pathsep</code>.</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>PYGENT_INIT_FILES</code></td>
+<td>List of files or directories copied into the workspace at startup, separated by <code>os.pathsep</code>.</td>
+<td>–</td>
+</tr>
 </tbody>
 </table>
+<p>Instead of setting environment variables you can create a <code>pygent.toml</code> file in
+the current directory or in your home folder. Values defined there are loaded at
+startup if the corresponding variables are unset. Example:</p>
+<pre><code class="language-toml">persona = &quot;You are a friendly bot&quot;
+task_personas = [&quot;tester&quot;, &quot;developer&quot;]
+initial_files = [&quot;bootstrap.py&quot;]
+</code></pre>
+<p>The keys map to the environment variables of the same name.</p>
+<p>You can also specify a configuration file explicitly when launching the CLI:</p>
+<pre><code class="language-bash">pygent --config path/to/pygent.toml
+</code></pre>
 <p>See <a href="../getting-started/">Getting Started</a> for installation instructions and the
 <a href="../api-reference/">API Reference</a> for details about the available classes.</p>
               

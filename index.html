@@ -102,6 +102,7 @@ See the <a href="examples/">Examples</a> section for runnable scripts.</p>
 <p>Python ≥ 3.9 is required. Docker is optional; install <code>pygent[docker]</code> to enable container execution. The default model is <code>gpt-4.1-mini</code>.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <p>Start an interactive session by running <code>pygent</code> in the terminal. Use the <code>--docker</code> option to run commands in a container (requires <code>pygent[docker]</code>); otherwise they execute locally. Use <code>/exit</code> to quit.
+Pass <code>--config path/to/pygent.toml</code> to load settings from a file.
 Alternatively run <code>pygent-ui</code> for a simple web interface (requires <code>pygent[ui]</code>).</p>
 <p>You can also use the Python API:</p>
 <pre><code class="language-python">from pygent import Agent
@@ -166,5 +167,5 @@ the instance to <code>Agent</code>.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-06-29 03:14:06.307564+00:00
+Build Date UTC : 2025-06-29 04:10:08.182576+00:00
 -->
