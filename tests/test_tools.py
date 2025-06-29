@@ -26,7 +26,7 @@ sys.modules.setdefault('rich.syntax', syntax_mod)     # Adicionado
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pygent import tools
+from pygent import tools, register_tool
 
 class DummyRuntime:
     def bash(self, cmd: str):
@@ -52,4 +52,25 @@ def test_execute_write_file():
         })
     })()
     assert tools.execute_tool(call, DummyRuntime()) == 'wrote foo.txt'
+
+
+def test_register_and_execute_custom_tool():
+    def hello(rt, name: str):
+        return f"hi {name}"
+
+    register_tool(
+        "hello",
+        "greet",
+        {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]},
+        hello,
+    )
+
+    call = type('Call', (), {
+        'function': type('Func', (), {
+            'name': 'hello',
+            'arguments': '{"name": "bob"}'
+        })
+    })()
+    assert tools.execute_tool(call, DummyRuntime()) == 'hi bob'
+
 

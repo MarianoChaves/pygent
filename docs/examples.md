@@ -6,5 +6,6 @@ This page collects small scripts demonstrating different aspects of Pygent. Each
 - [runtime_example.py](https://github.com/marianochaves/pygent/blob/main/examples/runtime_example.py) &ndash; using the :class:`~pygent.runtime.Runtime` class directly.
 - [write_file_demo.py](https://github.com/marianochaves/pygent/blob/main/examples/write_file_demo.py) &ndash; calling the built-in tools from Python code.
 - [custom_model.py](https://github.com/marianochaves/pygent/blob/main/examples/custom_model.py) &ndash; implementing a simple custom model.
+- [custom_tool.py](https://github.com/marianochaves/pygent/blob/main/examples/custom_tool.py) &ndash; registering a custom tool.
 
 Run these with `python <script>` from the project root. They expect the environment variables described in the [Configuration](configuration.md) page.

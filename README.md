@@ -9,6 +9,7 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Persists the conversation history during the session.
 * Provides a small Python API for use in other projects.
 * Optional web interface via `pygent-ui`.
+* Register your own tools and customise the system prompt.
 
 ## Installation
 
