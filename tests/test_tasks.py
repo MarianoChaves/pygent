@@ -185,3 +185,19 @@ def test_task_limit():
     assert 'max' in second
 
     tm.tasks[tid].thread.join()
+
+
+def test_step_timeout():
+    ag = make_slow_agent()
+    ag.run_until_stop('run', step_timeout=0.05, max_steps=1)
+    assert 'timeout' in ag.history[-1]["content"]
+
+
+def test_task_timeout():
+    tm = TaskManager(agent_factory=make_slow_agent, max_tasks=1)
+    tools._task_manager = tm
+    rt = Runtime(use_docker=False)
+    tid = tm.start_task('run', rt, task_timeout=0.05, step_timeout=0.01)
+    tm.tasks[tid].thread.join()
+    assert 'timeout' in tm.status(tid)
+

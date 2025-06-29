@@ -47,6 +47,8 @@ class TaskManager:
         parent_rt: Runtime,
         files: list[str] | None = None,
         parent_depth: int = 0,
+        step_timeout: float | None = None,
+        task_timeout: float | None = None,
     ) -> str:
         """Create a new agent and run ``prompt`` asynchronously."""
 
@@ -57,6 +59,13 @@ class TaskManager:
             active = sum(t.status == "running" for t in self.tasks.values())
             if active >= self.max_tasks:
                 raise RuntimeError(f"max {self.max_tasks} tasks reached")
+
+        if step_timeout is None:
+            env = os.getenv("PYGENT_STEP_TIMEOUT")
+            step_timeout = float(env) if env else None
+        if task_timeout is None:
+            env = os.getenv("PYGENT_TASK_TIMEOUT")
+            task_timeout = float(env) if env else None
 
         agent = self.agent_factory()
         setattr(agent.runtime, "task_depth", parent_depth + 1)
@@ -74,8 +83,15 @@ class TaskManager:
 
         def run() -> None:
             try:
-                agent.run_until_stop(prompt)
-                task.status = "finished"
+                agent.run_until_stop(
+                    prompt,
+                    step_timeout=step_timeout,
+                    max_time=task_timeout,
+                )
+                if getattr(agent, "_timed_out", False):
+                    task.status = f"timeout after {task_timeout}s"
+                else:
+                    task.status = "finished"
             except Exception as exc:  # pragma: no cover - error propagation
                 task.status = f"error: {exc}"
 

@@ -122,11 +122,19 @@ def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
                 "items": {"type": "string"},
                 "description": "Files to copy to the sub-agent before starting",
             },
+            "timeout": {"type": "number", "description": "Max seconds for the task"},
+            "step_timeout": {"type": "number", "description": "Time limit per step"},
         },
         "required": ["prompt"],
     },
 )
-def _delegate_task(rt: Runtime, prompt: str, files: list[str] | None = None) -> str:
+def _delegate_task(
+    rt: Runtime,
+    prompt: str,
+    files: list[str] | None = None,
+    timeout: float | None = None,
+    step_timeout: float | None = None,
+) -> str:
     if getattr(rt, "task_depth", 0) >= 1:
         return "error: delegation not allowed in sub-tasks"
     try:
@@ -135,6 +143,8 @@ def _delegate_task(rt: Runtime, prompt: str, files: list[str] | None = None) -> 
             parent_rt=rt,
             files=files,
             parent_depth=getattr(rt, "task_depth", 0),
+            step_timeout=step_timeout,
+            task_timeout=timeout,
         )
     except RuntimeError as exc:
         return str(exc)
