@@ -92,6 +92,24 @@ class Runtime:
         p.write_text(content, encoding="utf-8")
         return f"Wrote {p.relative_to(self.base_dir)}"
 
+    def read_file(self, path: Union[str, Path], binary: bool = False) -> str:
+        """Return the contents of a file relative to the workspace."""
+
+        p = self.base_dir / path
+        if not p.exists():
+            return f"file {p.relative_to(self.base_dir)} not found"
+        data = p.read_bytes()
+        if binary:
+            import base64
+
+            return base64.b64encode(data).decode()
+        try:
+            return data.decode()
+        except UnicodeDecodeError:
+            import base64
+
+            return base64.b64encode(data).decode()
+
     def cleanup(self) -> None:
         if self._use_docker and self.container is not None:
             try:

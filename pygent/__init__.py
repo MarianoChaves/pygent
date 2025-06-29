@@ -10,6 +10,7 @@ from .agent import Agent, run_interactive  # noqa: E402,F401, must come after __
 from .models import Model, OpenAIModel  # noqa: E402,F401
 from .errors import PygentError, APIError  # noqa: E402,F401
 from .tools import register_tool, tool  # noqa: E402,F401
+from .task_manager import TaskManager  # noqa: E402,F401
 
 __all__ = [
     "Agent",
@@ -20,4 +21,5 @@ __all__ = [
     "APIError",
     "register_tool",
     "tool",
+    "TaskManager",
 ]

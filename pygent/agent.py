@@ -20,10 +20,10 @@ DEFAULT_MODEL = os.getenv("PYGENT_MODEL", "gpt-4.1-mini")
 SYSTEM_MSG = (
     "You are Pygent, a sandboxed coding assistant.\n"
     "Respond with JSON when you need to use a tool."
-    "If you need to stop, call the `stop` tool.\n"
+    "If you need to stop or finished you task, call the `stop` tool.\n"
     "You can use the following tools:\n"
     f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
-    "You can also use the `continue` tool to continue the conversation.\n"
+    "You can also use the `continue` tool to request user input or continue the conversation.\n"
 )
 
 console = Console()
