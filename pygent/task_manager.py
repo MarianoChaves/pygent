@@ -62,10 +62,10 @@ class TaskManager:
 
         if step_timeout is None:
             env = os.getenv("PYGENT_STEP_TIMEOUT")
-            step_timeout = float(env) if env else None
+            step_timeout = float(env) if env else 60*5 # default 5 minutes
         if task_timeout is None:
             env = os.getenv("PYGENT_TASK_TIMEOUT")
-            task_timeout = float(env) if env else None
+            task_timeout = float(env) if env else 60*20 # default 20 minutes
 
         agent = self.agent_factory()
         setattr(agent.runtime, "task_depth", parent_depth + 1)

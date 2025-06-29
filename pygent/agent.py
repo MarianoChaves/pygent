@@ -66,7 +66,7 @@ class Agent:
     def run_until_stop(
         self,
         user_msg: str,
-        max_steps: int = 10,
+        max_steps: int = 20,
         step_timeout: float | None = None,
         max_time: float | None = None,
     ) -> None:
