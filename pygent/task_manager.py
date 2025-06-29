@@ -41,7 +41,13 @@ class TaskManager:
         self.tasks: Dict[str, Task] = {}
         self._lock = threading.Lock()
 
-    def start_task(self, prompt: str, parent_depth: int = 0) -> str:
+    def start_task(
+        self,
+        prompt: str,
+        parent_rt: Runtime,
+        files: list[str] | None = None,
+        parent_depth: int = 0,
+    ) -> str:
         """Create a new agent and run ``prompt`` asynchronously."""
 
         if parent_depth >= 1:
@@ -54,6 +60,15 @@ class TaskManager:
 
         agent = self.agent_factory()
         setattr(agent.runtime, "task_depth", parent_depth + 1)
+        if files:
+            for fp in files:
+                src = parent_rt.base_dir / fp
+                dest = agent.runtime.base_dir / fp
+                if src.is_dir():
+                    shutil.copytree(src, dest, dirs_exist_ok=True)
+                elif src.exists():
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy(src, dest)
         task_id = uuid.uuid4().hex[:8]
         task = Task(id=task_id, agent=agent, thread=None)  # type: ignore[arg-type]
 

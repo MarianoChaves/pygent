@@ -73,7 +73,8 @@ def test_delegate_and_collect_file(tmp_path):
     tm = TaskManager(agent_factory=make_agent)
     tools._task_manager = tm
 
-    task_id = tools._delegate_task(Runtime(use_docker=False), prompt='run')
+    rt = Runtime(use_docker=False)
+    task_id = tools._delegate_task(rt, prompt='run')
     tid = task_id.split()[-1]
     tm.tasks[tid].thread.join()
 
@@ -86,6 +87,27 @@ def test_delegate_and_collect_file(tmp_path):
     copied = main_rt.base_dir / 'foo.txt'
     assert copied.exists() and copied.read_text() == 'bar'
     main_rt.cleanup()
+
+
+def test_delegate_with_files():
+    tm = TaskManager(agent_factory=make_agent)
+    tools._task_manager = tm
+
+    rt = Runtime(use_docker=False)
+    rt.write_file("data.txt", "hello")
+    tid_msg = tools._delegate_task(rt, prompt="run", files=["data.txt"])
+    tid = tid_msg.split()[-1]
+    tm.tasks[tid].thread.join()
+
+    child_path = tm.tasks[tid].agent.runtime.base_dir / "data.txt"
+    assert child_path.exists() and child_path.read_text() == "hello"
+
+
+def test_download_file():
+    rt = Runtime(use_docker=False)
+    rt.write_file("sample.txt", "hi")
+    content = tools._download_file(rt, path="sample.txt")
+    assert content == "hi"
 
 
 class DelegateModel:

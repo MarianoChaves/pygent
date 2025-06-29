@@ -39,9 +39,11 @@ Several tools are available by default:
 
 - **bash** &ndash; executes shell commands via `Runtime.bash`.
 - **write_file** &ndash; writes files through `Runtime.write_file`.
-- **delegate_task** &ndash; start a background task handled by a new agent.
+- **delegate_task** &ndash; start a background task handled by a new agent,
+  optionally copying files into it.
 - **task_status** &ndash; check the progress of a delegated task.
 - **collect_file** &ndash; copy a file from a delegated task into the current workspace.
+- **download_file** &ndash; retrieve the contents of a file from the workspace.
 
 Additional tools can be registered programmatically using
 `pygent.register_tool` or the `pygent.tool` decorator. Each tool receives the
@@ -68,15 +70,17 @@ Refer to the `tools.py` module for more details.
 Launch separate agents asynchronously and track them:
 
 ```python
-from pygent import TaskManager
+from pygent import TaskManager, Runtime
 
+rt = Runtime(use_docker=False)
 tm = TaskManager()
-task_id = tm.start_task("generate report")
+task_id = tm.start_task("generate report", rt, files=["data.txt"])
 print(tm.status(task_id))
 ```
-Delegated agents cannot create further tasks. The maximum number of concurrent
-tasks is controlled by the ``PYGENT_MAX_TASKS`` environment variable (default
-``3``).
+Pass a ``Runtime`` instance when starting a task so files can be copied into the
+sub-agent workspace via the optional ``files`` argument. Delegated agents cannot
+create further tasks. The maximum number of concurrent tasks is controlled by
+the ``PYGENT_MAX_TASKS`` environment variable (default ``3``).
 
 ## Custom prompts
 

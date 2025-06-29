@@ -116,16 +116,26 @@ def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
     parameters={
         "type": "object",
         "properties": {
-            "prompt": {"type": "string", "description": "Instruction for the sub-agent"}
+            "prompt": {"type": "string", "description": "Instruction for the sub-agent"},
+            "files": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Files to copy to the sub-agent before starting",
+            },
         },
         "required": ["prompt"],
     },
 )
-def _delegate_task(rt: Runtime, prompt: str) -> str:
+def _delegate_task(rt: Runtime, prompt: str, files: list[str] | None = None) -> str:
     if getattr(rt, "task_depth", 0) >= 1:
         return "error: delegation not allowed in sub-tasks"
     try:
-        tid = _get_manager().start_task(prompt, parent_depth=getattr(rt, "task_depth", 0))
+        tid = _get_manager().start_task(
+            prompt,
+            parent_rt=rt,
+            files=files,
+            parent_depth=getattr(rt, "task_depth", 0),
+        )
     except RuntimeError as exc:
         return str(exc)
     return f"started {tid}"
@@ -158,3 +168,19 @@ def _task_status(rt: Runtime, task_id: str) -> str:
 )
 def _collect_file(rt: Runtime, task_id: str, path: str) -> str:
     return _get_manager().collect_file(rt, task_id, path)
+
+
+@tool(
+    name="download_file",
+    description="Return the contents of a file from the workspace (base64 if binary)",
+    parameters={
+        "type": "object",
+        "properties": {
+            "path": {"type": "string"},
+            "binary": {"type": "boolean", "default": False},
+        },
+        "required": ["path"],
+    },
+)
+def _download_file(rt: Runtime, path: str, binary: bool = False) -> str:
+    return rt.read_file(path, binary=binary)
