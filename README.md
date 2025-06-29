@@ -46,6 +46,7 @@ pygent
 Use `--docker` to run commands inside a container (requires
 `pygent[docker]`). Use `--no-docker` or set `PYGENT_USE_DOCKER=0`
 to force local execution.
+Pass `--config path/to/pygent.toml` to load settings from a file.
 
 Type messages normally; use `/exit` to end the session. Each command is executed
 in the container and the result shown in the terminal.

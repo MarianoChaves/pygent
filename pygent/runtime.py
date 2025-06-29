@@ -18,8 +18,18 @@ except Exception:  # pragma: no cover - optional dependency
 class Runtime:
     """Executes commands in a Docker container or locally if Docker is unavailable."""
 
-    def __init__(self, image: str | None = None, use_docker: bool | None = None) -> None:
+    def __init__(
+        self,
+        image: str | None = None,
+        use_docker: bool | None = None,
+        initial_files: list[str] | None = None,
+    ) -> None:
         self.base_dir = Path(tempfile.mkdtemp(prefix="pygent_"))
+        if initial_files is None:
+            env_files = os.getenv("PYGENT_INIT_FILES")
+            if env_files:
+                initial_files = [f.strip() for f in env_files.split(os.pathsep) if f.strip()]
+        self._initial_files = initial_files or []
         self.image = image or os.getenv("PYGENT_IMAGE", "python:3.12-slim")
         env_opt = os.getenv("PYGENT_USE_DOCKER")
         if use_docker is None:
@@ -45,6 +55,16 @@ class Runtime:
         if not self._use_docker:
             self.client = None
             self.container = None
+
+        # populate workspace with initial files
+        for fp in self._initial_files:
+            src = Path(fp).expanduser()
+            dest = self.base_dir / src.name
+            if src.is_dir():
+                shutil.copytree(src, dest, dirs_exist_ok=True)
+            elif src.exists():
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy(src, dest)
 
     # ---------------- public API ----------------
     def bash(self, cmd: str, timeout: int = 30) -> str:

@@ -16,15 +16,20 @@ from .runtime import Runtime
 from . import tools
 from .models import Model, OpenAIModel
 
+DEFAULT_PERSONA = os.getenv("PYGENT_PERSONA", "You are Pygent, a sandboxed coding assistant.")
+
+def build_system_msg(persona: str) -> str:
+    return (
+        f"{persona}\n"
+        "Respond with JSON when you need to use a tool."
+        "If you need to stop or finished you task, call the `stop` tool.\n"
+        "You can use the following tools:\n"
+        f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
+        "You can also use the `continue` tool to request user input or continue the conversation.\n"
+    )
+
 DEFAULT_MODEL = os.getenv("PYGENT_MODEL", "gpt-4.1-mini")
-SYSTEM_MSG = (
-    "You are Pygent, a sandboxed coding assistant.\n"
-    "Respond with JSON when you need to use a tool."
-    "If you need to stop or finished you task, call the `stop` tool.\n"
-    "You can use the following tools:\n"
-    f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
-    "You can also use the `continue` tool to request user input or continue the conversation.\n"
-)
+SYSTEM_MSG = build_system_msg(DEFAULT_PERSONA)
 
 console = Console()
 
@@ -36,10 +41,13 @@ class Agent:
     runtime: Runtime = field(default_factory=Runtime)
     model: Model = field(default_factory=OpenAIModel)
     model_name: str = DEFAULT_MODEL
-    system_msg: str = SYSTEM_MSG
+    persona: str = DEFAULT_PERSONA
+    system_msg: str = field(default_factory=lambda: build_system_msg(DEFAULT_PERSONA))
     history: List[Dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self) -> None:
+        if not self.system_msg:
+            self.system_msg = build_system_msg(self.persona)
         if not self.history:
             self.history.append({"role": "system", "content": self.system_msg})
 

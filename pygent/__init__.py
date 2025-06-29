@@ -1,6 +1,8 @@
 """Pygent package."""
 from importlib import metadata as _metadata
 
+from .config import load_config
+
 try:
     __version__: str = _metadata.version(__name__)
 except _metadata.PackageNotFoundError:  # pragma: no cover - fallback for tests
@@ -15,6 +17,7 @@ from .task_manager import TaskManager  # noqa: E402,F401
 __all__ = [
     "Agent",
     "run_interactive",
+    "load_config",
     "Model",
     "OpenAIModel",
     "PygentError",
