@@ -35,6 +35,15 @@ You can also specify a configuration file explicitly when launching the CLI:
 pygent --config path/to/pygent.toml
 ```
 
+A practical example is included in
+[`examples/sample_config.toml`](https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml)
+together with the script
+[`config_file_example.py`](https://github.com/marianochaves/pygent/blob/main/examples/config_file_example.py), which delegates a testing task:
+
+```bash
+python examples/config_file_example.py
+```
+
 
 See [Getting Started](getting-started.md) for installation instructions and the
 [API Reference](api-reference.md) for details about the available classes.
