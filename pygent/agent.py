@@ -13,7 +13,7 @@ from rich.panel import Panel
 from rich.markdown import Markdown
 
 from .runtime import Runtime
-from .tools import TOOL_SCHEMAS, execute_tool
+from . import tools
 from .models import Model, OpenAIModel
 
 DEFAULT_MODEL = os.getenv("PYGENT_MODEL", "gpt-4.1-mini")
@@ -22,7 +22,7 @@ SYSTEM_MSG = (
     "Respond with JSON when you need to use a tool."
     "If you need to stop, call the `stop` tool.\n"
     "You can use the following tools:\n"
-    f"{json.dumps(TOOL_SCHEMAS, indent=2)}\n"
+    f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
     "You can also use the `continue` tool to continue the conversation.\n"
 )
 
@@ -36,18 +36,23 @@ class Agent:
     runtime: Runtime = field(default_factory=Runtime)
     model: Model = field(default_factory=OpenAIModel)
     model_name: str = DEFAULT_MODEL
-    history: List[Dict[str, Any]] = field(default_factory=lambda: [
-        {"role": "system", "content": SYSTEM_MSG}
-    ])
+    system_msg: str = SYSTEM_MSG
+    history: List[Dict[str, Any]] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if not self.history:
+            self.history.append({"role": "system", "content": self.system_msg})
 
     def step(self, user_msg: str):
         self.history.append({"role": "user", "content": user_msg})
-        assistant_msg = self.model.chat(self.history, self.model_name, TOOL_SCHEMAS)
+        assistant_msg = self.model.chat(
+            self.history, self.model_name, tools.TOOL_SCHEMAS
+        )
         self.history.append(assistant_msg)
 
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
-                output = execute_tool(call, self.runtime)
+                output = tools.execute_tool(call, self.runtime)
                 self.history.append({"role": "tool", "content": output, "tool_call_id": call.id})
                 console.print(Panel(output, title=f"tool:{call.function.name}"))
         else:
