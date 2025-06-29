@@ -10,6 +10,7 @@ from typing import Any, Dict, List
 
 from rich.console import Console
 from rich.panel import Panel
+from rich.markdown import Markdown
 
 from .runtime import Runtime
 from .tools import TOOL_SCHEMAS, execute_tool
@@ -19,6 +20,10 @@ DEFAULT_MODEL = os.getenv("PYGENT_MODEL", "gpt-4.1-mini")
 SYSTEM_MSG = (
     "You are Pygent, a sandboxed coding assistant.\n"
     "Respond with JSON when you need to use a tool."
+    "If you need to stop, call the `stop` tool.\n"
+    "You can use the following tools:\n"
+    f"{json.dumps(TOOL_SCHEMAS, indent=2)}\n"
+    "You can also use the `continue` tool to continue the conversation.\n"
 )
 
 console = Console()
@@ -46,7 +51,8 @@ class Agent:
                 self.history.append({"role": "tool", "content": output, "tool_call_id": call.id})
                 console.print(Panel(output, title=f"tool:{call.function.name}"))
         else:
-            console.print(assistant_msg.content)
+            markdown_response = Markdown(assistant_msg.content)
+            console.print(Panel(markdown_response, title="Resposta do Agente", title_align="left", border_style="cyan"))
         return assistant_msg
 
     def run_until_stop(self, user_msg: str, max_steps: int = 10) -> None:
@@ -56,7 +62,7 @@ class Agent:
         for _ in range(max_steps):
             assistant_msg = self.step(msg)
             calls = assistant_msg.tool_calls or []
-            if any(c.function.name == "stop" for c in calls):
+            if any(c.function.name in ("stop", "continue") for c in calls):
                 break
             msg = "continue"
 
@@ -66,9 +72,9 @@ def run_interactive(use_docker: bool | None = None) -> None:  # pragma: no cover
     console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
     try:
         while True:
-            user_msg = console.input("[cyan]vc> [/]" )
+            user_msg = console.input("[cyan]user> [/]" )
             if user_msg.strip() in {"/exit", "quit", "q"}:
                 break
-            agent.step(user_msg)
+            agent.run_until_stop(user_msg)
     finally:
         agent.runtime.cleanup()
