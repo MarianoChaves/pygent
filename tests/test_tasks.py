@@ -66,8 +66,18 @@ class DummyModel:
                 ]
             )
 
+class SlowModel(DummyModel):
+    """DummyModel variant that sleeps to simulate long-running tasks."""
+
+    def chat(self, messages, model, tool_schemas):
+        time.sleep(0.1)
+        return super().chat(messages, model, tool_schemas)
+
 def make_agent():
     return Agent(runtime=Runtime(use_docker=False), model=DummyModel())
+
+def make_slow_agent():
+    return Agent(runtime=Runtime(use_docker=False), model=SlowModel())
 
 def test_delegate_and_collect_file(tmp_path):
     tm = TaskManager(agent_factory=make_agent)
@@ -164,11 +174,14 @@ def test_no_nested_delegation():
 
 
 def test_task_limit():
-    tm = TaskManager(agent_factory=make_agent, max_tasks=1)
+    tm = TaskManager(agent_factory=make_slow_agent, max_tasks=1)
     tools._task_manager = tm
 
     first = tools._delegate_task(Runtime(use_docker=False), prompt='run')
     assert first.startswith('started')
+    tid = first.split()[-1]
 
     second = tools._delegate_task(Runtime(use_docker=False), prompt='run')
     assert 'max' in second
+
+    tm.tasks[tid].thread.join()
