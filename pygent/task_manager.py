@@ -30,14 +30,24 @@ class TaskManager:
 
     def __init__(
         self,
-        agent_factory: Callable[[], "Agent"] | None = None,
+        agent_factory: Callable[..., "Agent"] | None = None,
         max_tasks: int | None = None,
+        personas: list[str] | None = None,
     ) -> None:
         from .agent import Agent  # local import to avoid circular dependency
 
         env_max = os.getenv("PYGENT_MAX_TASKS")
         self.max_tasks = max_tasks if max_tasks is not None else int(env_max or "3")
-        self.agent_factory = agent_factory or Agent
+        if agent_factory is None:
+            self.agent_factory = lambda p=None: Agent(persona=p)
+        else:
+            self.agent_factory = agent_factory
+        env_personas = os.getenv("PYGENT_TASK_PERSONAS")
+        if personas is None and env_personas:
+            personas = [p.strip() for p in env_personas.split(os.pathsep) if p.strip()]
+        default_persona = os.getenv("PYGENT_PERSONA", "You are Pygent, a sandboxed coding assistant.")
+        self.personas = personas or [default_persona]
+        self._persona_idx = 0
         self.tasks: Dict[str, Task] = {}
         self._lock = threading.Lock()
 
@@ -67,7 +77,17 @@ class TaskManager:
             env = os.getenv("PYGENT_TASK_TIMEOUT")
             task_timeout = float(env) if env else 60*20 # default 20 minutes
 
-        agent = self.agent_factory()
+        persona = self.personas[self._persona_idx % len(self.personas)]
+        self._persona_idx += 1
+        try:
+            agent = self.agent_factory(persona)
+        except TypeError:
+            agent = self.agent_factory()
+        setattr(agent, "persona", persona)
+        if not getattr(agent, "system_msg", None):
+            from .agent import build_system_msg  # lazy import
+
+            agent.system_msg = build_system_msg(persona)
         setattr(agent.runtime, "task_depth", parent_depth + 1)
         if files:
             for fp in files:
