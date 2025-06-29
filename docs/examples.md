@@ -7,5 +7,6 @@ This page collects small scripts demonstrating different aspects of Pygent. Each
 - [write_file_demo.py](https://github.com/marianochaves/pygent/blob/main/examples/write_file_demo.py) &ndash; calling the built-in tools from Python code.
 - [custom_model.py](https://github.com/marianochaves/pygent/blob/main/examples/custom_model.py) &ndash; implementing a simple custom model.
 - [custom_tool.py](https://github.com/marianochaves/pygent/blob/main/examples/custom_tool.py) &ndash; registering a custom tool.
+- [delegate_task_example.py](https://github.com/marianochaves/pygent/blob/main/examples/delegate_task_example.py) &ndash; delegating work to a background agent.
 
 Run these with `python <script>` from the project root. They expect the environment variables described in the [Configuration](configuration.md) page.

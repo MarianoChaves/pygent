@@ -5,6 +5,16 @@ import json
 from typing import Any, Callable, Dict, List
 
 from .runtime import Runtime
+from .task_manager import TaskManager
+
+_task_manager: TaskManager | None = None
+
+
+def _get_manager() -> TaskManager:
+    global _task_manager
+    if _task_manager is None:
+        _task_manager = TaskManager()
+    return _task_manager
 
 
 # ---- registry ----
@@ -97,3 +107,54 @@ def _stop(rt: Runtime) -> str:  # pragma: no cover - side-effect free
 def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
     return "Continuing the conversation."
 
+
+
+
+@tool(
+    name="delegate_task",
+    description="Create a background task using a new agent and return its ID.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "prompt": {"type": "string", "description": "Instruction for the sub-agent"}
+        },
+        "required": ["prompt"],
+    },
+)
+def _delegate_task(rt: Runtime, prompt: str) -> str:
+    if getattr(rt, "task_depth", 0) >= 1:
+        return "error: delegation not allowed in sub-tasks"
+    try:
+        tid = _get_manager().start_task(prompt, parent_depth=getattr(rt, "task_depth", 0))
+    except RuntimeError as exc:
+        return str(exc)
+    return f"started {tid}"
+
+
+@tool(
+    name="task_status",
+    description="Check the status of a delegated task.",
+    parameters={
+        "type": "object",
+        "properties": {"task_id": {"type": "string"}},
+        "required": ["task_id"],
+    },
+)
+def _task_status(rt: Runtime, task_id: str) -> str:
+    return _get_manager().status(task_id)
+
+
+@tool(
+    name="collect_file",
+    description="Retrieve a file from a delegated task into the main workspace.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "task_id": {"type": "string"},
+            "path": {"type": "string"},
+        },
+        "required": ["task_id", "path"],
+    },
+)
+def _collect_file(rt: Runtime, task_id: str, path: str) -> str:
+    return _get_manager().collect_file(rt, task_id, path)

@@ -33,6 +33,7 @@ Behaviour can be adjusted via environment variables (see `docs/configuration.md`
 * `PYGENT_MODEL` &ndash; model name used for requests (default `gpt-4.1-mini`).
 * `PYGENT_IMAGE` &ndash; Docker image to create the container (default `python:3.12-slim`).
 * `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
+* `PYGENT_MAX_TASKS` &ndash; maximum number of concurrent delegated tasks (default `3`).
 
 ## CLI usage
 
