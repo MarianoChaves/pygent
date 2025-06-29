@@ -54,29 +54,37 @@ class Runtime:
         caller can display what was run.
         """
         if self._use_docker and self.container is not None:
-            res = self.container.exec_run(
+            try:
+                res = self.container.exec_run(
+                    cmd,
+                    workdir="/workspace",
+                    demux=True,
+                    tty=False,
+                    stdin=False,
+                    timeout=timeout,
+                )
+                stdout, stderr = (
+                    res.output if isinstance(res.output, tuple) else (res.output, b"")
+                )
+                output = (stdout or b"").decode() + (stderr or b"").decode()
+                return f"$ {cmd}\n{output}"
+            except Exception as exc:
+                return f"$ {cmd}\n[error] {exc}"
+        try:
+            proc = subprocess.run(
                 cmd,
-                workdir="/workspace",
-                demux=True,
-                tty=False,
-                stdin=False,
+                shell=True,
+                cwd=self.base_dir,
+                capture_output=True,
+                text=True,
+                stdin=subprocess.DEVNULL,
                 timeout=timeout,
             )
-            stdout, stderr = (
-                res.output if isinstance(res.output, tuple) else (res.output, b"")
-            )
-            output = (stdout or b"").decode() + (stderr or b"").decode()
-            return f"$ {cmd}\n{output}"
-        proc = subprocess.run(
-            cmd,
-            shell=True,
-            cwd=self.base_dir,
-            capture_output=True,
-            text=True,
-            stdin=subprocess.DEVNULL,
-            timeout=timeout,
-        )
-        return f"$ {cmd}\n{proc.stdout + proc.stderr}"
+            return f"$ {cmd}\n{proc.stdout + proc.stderr}"
+        except subprocess.TimeoutExpired:
+            return f"$ {cmd}\n[timeout after {timeout}s]"
+        except Exception as exc:
+            return f"$ {cmd}\n[error] {exc}"
 
     def write_file(self, path: Union[str, Path], content: str) -> str:
         p = self.base_dir / path

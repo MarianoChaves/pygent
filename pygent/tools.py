@@ -43,6 +43,14 @@ TOOL_SCHEMAS = [
             "parameters": {"type": "object", "properties": {}},
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "continue",
+            "description": "Continue the conversation.",
+            "parameters": {"type": "object", "properties": {}},
+        },
+    },
 ]
 
 # --------------- dispatcher ---------------
@@ -57,4 +65,6 @@ def execute_tool(call: Any, rt: Runtime) -> str:  # pragma: no cover, Any→open
         return rt.write_file(**args)
     if name == "stop":
         return "Stopping."
+    if name == "continue":
+        return "Continuing the conversation."
     return f"⚠️ unknown tool {name}"
