@@ -3,6 +3,7 @@ from __future__ import annotations
 """Manage background tasks executed by sub-agents."""
 
 import os
+import json
 import shutil
 import threading
 import uuid
@@ -44,14 +45,32 @@ class TaskManager:
             self.agent_factory = lambda p=None: Agent(persona=p)
         else:
             self.agent_factory = agent_factory
+        env_personas_json = os.getenv("PYGENT_TASK_PERSONAS_JSON")
+        if personas is None and env_personas_json:
+            try:
+                data = json.loads(env_personas_json)
+                if isinstance(data, list):
+                    personas = [
+                        Persona(p.get("name", ""), p.get("description", ""))
+                        for p in data
+                        if isinstance(p, dict)
+                    ]
+            except Exception:
+                personas = None
         env_personas = os.getenv("PYGENT_TASK_PERSONAS")
         if personas is None and env_personas:
-            personas = [Persona(p.strip(), "") for p in env_personas.split(os.pathsep) if p.strip()]
+            personas = [
+                Persona(p.strip(), "")
+                for p in env_personas.split(os.pathsep)
+                if p.strip()
+            ]
         if personas is None:
-            personas = [Persona(
-                os.getenv("PYGENT_PERSONA_NAME", "Pygent"),
-                os.getenv("PYGENT_PERSONA", "a sandboxed coding assistant."),
-            )]
+            personas = [
+                Persona(
+                    os.getenv("PYGENT_PERSONA_NAME", "Pygent"),
+                    os.getenv("PYGENT_PERSONA", "a sandboxed coding assistant."),
+                )
+            ]
         self.personas = personas
         self._persona_idx = 0
         self.tasks: Dict[str, Task] = {}
@@ -82,10 +101,10 @@ class TaskManager:
 
         if step_timeout is None:
             env = os.getenv("PYGENT_STEP_TIMEOUT")
-            step_timeout = float(env) if env else 60*5 # default 5 minutes
+            step_timeout = float(env) if env else 60 * 5  # default 5 minutes
         if task_timeout is None:
             env = os.getenv("PYGENT_TASK_TIMEOUT")
-            task_timeout = float(env) if env else 60*20 # default 20 minutes
+            task_timeout = float(env) if env else 60 * 20  # default 20 minutes
 
         if persona is None:
             persona = self.personas[self._persona_idx % len(self.personas)]

@@ -53,7 +53,8 @@ Several tools are available by default:
 Agents use personas to adopt different behaviours. Each persona has a
 ``name`` and ``description``. The default persona name can be set via the
 ``PYGENT_PERSONA_NAME`` environment variable and its description via
-``PYGENT_PERSONA``. The ``list_personas`` tool returns all available personas as
+``PYGENT_PERSONA``. Delegated agent personas can be defined via
+``PYGENT_TASK_PERSONAS_JSON`` using a JSON list of objects. The ``list_personas`` tool returns all available personas as
 JSON objects with these fields.
 
 Additional tools can be registered programmatically using

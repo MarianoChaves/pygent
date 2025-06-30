@@ -4,26 +4,26 @@ import types
 import time
 import json
 
-sys.modules.setdefault('openai', types.ModuleType('openai'))
-sys.modules.setdefault('docker', types.ModuleType('docker'))
+sys.modules.setdefault("openai", types.ModuleType("openai"))
+sys.modules.setdefault("docker", types.ModuleType("docker"))
 
 # mocks for rich
-rich_mod = types.ModuleType('rich')
-console_mod = types.ModuleType('console')
-panel_mod = types.ModuleType('panel')
-markdown_mod = types.ModuleType('markdown')
-syntax_mod = types.ModuleType('syntax')
-console_mod.Console = lambda *a, **k: type('C', (), {'print': lambda *a, **k: None})()
+rich_mod = types.ModuleType("rich")
+console_mod = types.ModuleType("console")
+panel_mod = types.ModuleType("panel")
+markdown_mod = types.ModuleType("markdown")
+syntax_mod = types.ModuleType("syntax")
+console_mod.Console = lambda *a, **k: type("C", (), {"print": lambda *a, **k: None})()
 panel_mod.Panel = lambda *a, **k: None
 markdown_mod.Markdown = lambda *a, **k: None
 syntax_mod.Syntax = lambda *a, **k: None
-sys.modules.setdefault('rich', rich_mod)
-sys.modules.setdefault('rich.console', console_mod)
-sys.modules.setdefault('rich.panel', panel_mod)
-sys.modules.setdefault('rich.markdown', markdown_mod)
-sys.modules.setdefault('rich.syntax', syntax_mod)
+sys.modules.setdefault("rich", rich_mod)
+sys.modules.setdefault("rich.console", console_mod)
+sys.modules.setdefault("rich.panel", panel_mod)
+sys.modules.setdefault("rich.markdown", markdown_mod)
+sys.modules.setdefault("rich.syntax", syntax_mod)
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from pygent import Agent
 from pygent import openai_compat
@@ -32,41 +32,43 @@ from pygent.persona import Persona
 from pygent.runtime import Runtime
 from pygent import tools
 
+
 class DummyModel:
     def __init__(self):
         self.count = 0
+
     def chat(self, messages, model, tool_schemas):
         self.count += 1
         if self.count == 1:
             return openai_compat.Message(
-                role='assistant',
+                role="assistant",
                 content=None,
                 tool_calls=[
                     openai_compat.ToolCall(
-                        id='1',
-                        type='function',
+                        id="1",
+                        type="function",
                         function=openai_compat.ToolCallFunction(
-                            name='write_file',
-                            arguments='{"path": "foo.txt", "content": "bar"}'
-                        )
+                            name="write_file",
+                            arguments='{"path": "foo.txt", "content": "bar"}',
+                        ),
                     )
-                ]
+                ],
             )
         else:
             return openai_compat.Message(
-                role='assistant',
+                role="assistant",
                 content=None,
                 tool_calls=[
                     openai_compat.ToolCall(
-                        id='2',
-                        type='function',
+                        id="2",
+                        type="function",
                         function=openai_compat.ToolCallFunction(
-                            name='stop',
-                            arguments='{}'
-                        )
+                            name="stop", arguments="{}"
+                        ),
                     )
-                ]
+                ],
             )
+
 
 class SlowModel(DummyModel):
     """DummyModel variant that sleeps to simulate long-running tasks."""
@@ -75,29 +77,32 @@ class SlowModel(DummyModel):
         time.sleep(0.1)
         return super().chat(messages, model, tool_schemas)
 
+
 def make_agent():
     return Agent(runtime=Runtime(use_docker=False), model=DummyModel())
 
+
 def make_slow_agent():
     return Agent(runtime=Runtime(use_docker=False), model=SlowModel())
+
 
 def test_delegate_and_collect_file(tmp_path):
     tm = TaskManager(agent_factory=make_agent)
     tools._task_manager = tm
 
     rt = Runtime(use_docker=False)
-    task_id = tools._delegate_task(rt, prompt='run')
+    task_id = tools._delegate_task(rt, prompt="run")
     tid = task_id.split()[-1]
     tm.tasks[tid].thread.join()
 
     status = tools._task_status(Runtime(use_docker=False), task_id=tid)
-    assert status == 'finished'
+    assert status == "finished"
 
     main_rt = Runtime(use_docker=False)
-    msg = tools._collect_file(main_rt, task_id=tid, path='foo.txt')
-    assert 'Retrieved' in msg
-    copied = main_rt.base_dir / 'foo.txt'
-    assert copied.exists() and copied.read_text() == 'bar'
+    msg = tools._collect_file(main_rt, task_id=tid, path="foo.txt")
+    assert "Retrieved" in msg
+    copied = main_rt.base_dir / "foo.txt"
+    assert copied.exists() and copied.read_text() == "bar"
     main_rt.cleanup()
 
 
@@ -125,37 +130,36 @@ def test_download_file():
 class DelegateModel:
     def __init__(self):
         self.count = 0
+
     def chat(self, messages, model, tool_schemas):
         self.count += 1
         if self.count == 1:
             return openai_compat.Message(
-                role='assistant',
+                role="assistant",
                 content=None,
                 tool_calls=[
                     openai_compat.ToolCall(
-                        id='1',
-                        type='function',
+                        id="1",
+                        type="function",
                         function=openai_compat.ToolCallFunction(
-                            name='delegate_task',
-                            arguments='{"prompt": "noop"}'
-                        )
+                            name="delegate_task", arguments='{"prompt": "noop"}'
+                        ),
                     )
-                ]
+                ],
             )
         else:
             return openai_compat.Message(
-                role='assistant',
+                role="assistant",
                 content=None,
                 tool_calls=[
                     openai_compat.ToolCall(
-                        id='2',
-                        type='function',
+                        id="2",
+                        type="function",
                         function=openai_compat.ToolCallFunction(
-                            name='stop',
-                            arguments='{}'
-                        )
+                            name="stop", arguments="{}"
+                        ),
                     )
-                ]
+                ],
             )
 
 
@@ -167,7 +171,7 @@ def test_no_nested_delegation():
     tm = TaskManager(agent_factory=make_delegate_agent, max_tasks=2)
     tools._task_manager = tm
 
-    tid_msg = tools._delegate_task(Runtime(use_docker=False), prompt='run')
+    tid_msg = tools._delegate_task(Runtime(use_docker=False), prompt="run")
     tid = tid_msg.split()[-1]
     tm.tasks[tid].thread.join()
 
@@ -179,29 +183,29 @@ def test_task_limit():
     tm = TaskManager(agent_factory=make_slow_agent, max_tasks=1)
     tools._task_manager = tm
 
-    first = tools._delegate_task(Runtime(use_docker=False), prompt='run')
-    assert first.startswith('started')
+    first = tools._delegate_task(Runtime(use_docker=False), prompt="run")
+    assert first.startswith("started")
     tid = first.split()[-1]
 
-    second = tools._delegate_task(Runtime(use_docker=False), prompt='run')
-    assert 'max' in second
+    second = tools._delegate_task(Runtime(use_docker=False), prompt="run")
+    assert "max" in second
 
     tm.tasks[tid].thread.join()
 
 
 def test_step_timeout():
     ag = make_slow_agent()
-    ag.run_until_stop('run', step_timeout=0.05, max_steps=1)
-    assert 'timeout' in ag.history[-1]["content"]
+    ag.run_until_stop("run", step_timeout=0.05, max_steps=1)
+    assert "timeout" in ag.history[-1]["content"]
 
 
 def test_task_timeout():
     tm = TaskManager(agent_factory=make_slow_agent, max_tasks=1)
     tools._task_manager = tm
     rt = Runtime(use_docker=False)
-    tid = tm.start_task('run', rt, task_timeout=0.05, step_timeout=0.01)
+    tid = tm.start_task("run", rt, task_timeout=0.05, step_timeout=0.01)
     tm.tasks[tid].thread.join()
-    assert 'timeout' in tm.status(tid)
+    assert "timeout" in tm.status(tid)
 
 
 def test_delegate_persona_task():
@@ -209,7 +213,9 @@ def test_delegate_persona_task():
 
     def factory(p):
         created.append(p)
-        ag = types.SimpleNamespace(runtime=Runtime(use_docker=False), model=None, persona=p)
+        ag = types.SimpleNamespace(
+            runtime=Runtime(use_docker=False), model=None, persona=p
+        )
         ag.run_until_stop = lambda *a, **k: None
         return ag
 
@@ -217,17 +223,27 @@ def test_delegate_persona_task():
     tools._task_manager = tm
 
     rt = Runtime(use_docker=False)
-    tid_msg = tools._delegate_persona_task(rt, prompt='run', persona='tester')
+    tid_msg = tools._delegate_persona_task(rt, prompt="run", persona="tester")
     tid = tid_msg.split()[-1]
     tm.tasks[tid].thread.join()
 
-    assert [p.name for p in created] == ['tester']
+    assert [p.name for p in created] == ["tester"]
 
 
 def test_list_personas():
-    tm = TaskManager(personas=[Persona('a', ''), Persona('b', '')])
+    tm = TaskManager(personas=[Persona("a", ""), Persona("b", "")])
     tools._task_manager = tm
     rt = Runtime(use_docker=False)
     result = tools._list_personas(rt)
-    assert json.loads(result) == [{"name": "a", "description": ""}, {"name": "b", "description": ""}]
+    assert json.loads(result) == [
+        {"name": "a", "description": ""},
+        {"name": "b", "description": ""},
+    ]
 
+
+def test_personas_from_env(monkeypatch):
+    monkeypatch.setenv(
+        "PYGENT_TASK_PERSONAS_JSON", '[{"name":"env","description":"desc"}]'
+    )
+    tm = TaskManager()
+    assert tm.personas[0].name == "env" and tm.personas[0].description == "desc"

@@ -1,12 +1,14 @@
 import os
+import json
 import tomllib
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Mapping
 
 DEFAULT_CONFIG_FILES = [
     Path("pygent.toml"),
     Path.home() / ".pygent.toml",
 ]
+
 
 def load_config(path: str | os.PathLike[str] | None = None) -> Dict[str, Any]:
     """Load configuration from a TOML file and set environment variables.
@@ -29,14 +31,27 @@ def load_config(path: str | os.PathLike[str] | None = None) -> Dict[str, Any]:
         os.environ["PYGENT_PERSONA"] = str(config["persona"])
     if "persona_name" in config and "PYGENT_PERSONA_NAME" not in os.environ:
         os.environ["PYGENT_PERSONA_NAME"] = str(config["persona_name"])
-    if "task_personas" in config and "PYGENT_TASK_PERSONAS" not in os.environ:
-        if isinstance(config["task_personas"], list):
-            os.environ["PYGENT_TASK_PERSONAS"] = os.pathsep.join(str(p) for p in config["task_personas"])
-        else:
-            os.environ["PYGENT_TASK_PERSONAS"] = str(config["task_personas"])
+    if "task_personas" in config:
+        personas = config["task_personas"]
+        if isinstance(personas, list) and personas and isinstance(personas[0], Mapping):
+            if "PYGENT_TASK_PERSONAS_JSON" not in os.environ:
+                os.environ["PYGENT_TASK_PERSONAS_JSON"] = json.dumps(personas)
+            if "PYGENT_TASK_PERSONAS" not in os.environ:
+                os.environ["PYGENT_TASK_PERSONAS"] = os.pathsep.join(
+                    str(p.get("name", "")) for p in personas
+                )
+        elif "PYGENT_TASK_PERSONAS" not in os.environ:
+            if isinstance(personas, list):
+                os.environ["PYGENT_TASK_PERSONAS"] = os.pathsep.join(
+                    str(p) for p in personas
+                )
+            else:
+                os.environ["PYGENT_TASK_PERSONAS"] = str(personas)
     if "initial_files" in config and "PYGENT_INIT_FILES" not in os.environ:
         if isinstance(config["initial_files"], list):
-            os.environ["PYGENT_INIT_FILES"] = os.pathsep.join(str(p) for p in config["initial_files"])
+            os.environ["PYGENT_INIT_FILES"] = os.pathsep.join(
+                str(p) for p in config["initial_files"]
+            )
         else:
             os.environ["PYGENT_INIT_FILES"] = str(config["initial_files"])
     return config
