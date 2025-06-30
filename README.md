@@ -80,6 +80,15 @@ passing an object implementing the ``Model`` interface when creating the
 easy to plug in. They can also trigger tools by returning a message with
 ``tool_calls`` as demonstrated in ``examples/custom_model_with_tool.py``.
 
+Custom models can also be configured globally:
+
+```python
+from pygent.models import set_custom_model
+set_custom_model(MyModel())
+```
+
+All new agents and delegated tasks will use this model unless another one is passed explicitly.
+
 ### Using OpenAI and other providers
 
 Set your OpenAI key:

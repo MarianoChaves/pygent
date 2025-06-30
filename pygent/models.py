@@ -35,3 +35,14 @@ class OpenAIModel:
             return resp.choices[0].message
         except Exception as exc:
             raise APIError(str(exc)) from exc
+
+
+# global custom model used for all new agents when set
+CUSTOM_MODEL: Model | None = None
+
+
+def set_custom_model(model: Model | None) -> None:
+    """Set a global custom model used by :class:`~pygent.agent.Agent`."""
+
+    global CUSTOM_MODEL
+    CUSTOM_MODEL = model

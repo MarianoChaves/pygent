@@ -38,3 +38,17 @@ def test_custom_model():
     ag.step('hi')
     assert ag.history[-1].content == 'ok'
 
+
+def test_global_custom_model():
+    class GlobalModel:
+        def chat(self, messages, model, tools):
+            return openai_compat.Message(role='assistant', content='global')
+
+    from pygent.models import set_custom_model
+
+    set_custom_model(GlobalModel())
+    ag = Agent()
+    ag.step('ping')
+    set_custom_model(None)
+    assert ag.history[-1].content == 'global'
+

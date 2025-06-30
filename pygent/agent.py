@@ -13,7 +13,7 @@ from rich.panel import Panel
 from rich.markdown import Markdown
 
 from .runtime import Runtime
-from . import tools
+from . import tools, models
 from .models import Model, OpenAIModel
 from .persona import Persona
 
@@ -38,12 +38,18 @@ SYSTEM_MSG = build_system_msg(DEFAULT_PERSONA)
 console = Console()
 
 
+def _default_model() -> Model:
+    """Return the global custom model or the default OpenAI model."""
+    return models.CUSTOM_MODEL or OpenAIModel()
+
+
+
 
 
 @dataclass
 class Agent:
     runtime: Runtime = field(default_factory=Runtime)
-    model: Model = field(default_factory=OpenAIModel)
+    model: Model = field(default_factory=_default_model)
     model_name: str = DEFAULT_MODEL
     persona: Persona = field(default_factory=lambda: DEFAULT_PERSONA)
     system_msg: str = field(default_factory=lambda: build_system_msg(DEFAULT_PERSONA))
