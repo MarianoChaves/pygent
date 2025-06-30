@@ -1,6 +1,9 @@
 import os
 import json
-import tomllib
+try:  # Python 3.11+
+    import tomllib  # type: ignore
+except ModuleNotFoundError:  # pragma: no cover - executed on older Python versions
+    import tomli as tomllib  # type: ignore
 from pathlib import Path
 from typing import Any, Dict, List, Mapping
 
