@@ -22,12 +22,12 @@ Manages the conversation with the model. Each instance owns a
 
 ## `Runtime`
 
-Executes commands either in a Docker container or locally.
+-Executes commands either in a Docker container or locally.
 
 **Methods**
 
-- `bash(cmd: str, timeout: int = 30) -> str` – run a shell command and
-  return its output.
+- `bash(cmd: str, timeout: int = 30) -> str` – run a shell command,
+  streaming its output and returning the collected text.
 - `write_file(path: str, content: str) -> str` – create or replace a
   UTF-8 encoded text file in the working directory.
 - `cleanup() -> None` – destroy the temporary workspace and stop the

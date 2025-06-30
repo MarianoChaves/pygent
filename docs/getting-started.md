@@ -27,9 +27,9 @@ $ pygent --docker
 vc> echo "Hello"
 ```
 
-Each message is executed in the sandbox and the output printed. Use `/exit`
-to leave the session. You can also launch a simple web interface with
-`pygent-ui` (requires the `ui` extra).
+Each message is executed in the sandbox and the output streamed to the
+terminal as the command runs. Use `/exit` to leave the session. You can also
+launch a simple web interface with `pygent-ui` (requires the `ui` extra).
 
 ### Tool usage
 

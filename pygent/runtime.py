@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import time
 import uuid
 from pathlib import Path
 from typing import Union
@@ -68,11 +69,15 @@ class Runtime:
 
     # ---------------- public API ----------------
     def bash(self, cmd: str, timeout: int = 30) -> str:
-        """Run a command in the container or locally and return the output.
+        """Run a command and stream its output to the console.
 
-        The executed command is always included in the returned string so the
-        caller can display what was run.
+        The returned value still contains the full captured output prefixed with
+        the executed command. Output is printed line by line while the command
+        runs so the user can see progress in real time.
         """
+        prefix = f"$ {cmd}\n"
+        print(prefix, end="")
+
         if self._use_docker and self.container is not None:
             try:
                 res = self.container.exec_run(
@@ -82,29 +87,59 @@ class Runtime:
                     tty=False,
                     stdin=False,
                     timeout=timeout,
+                    stream=True,
                 )
-                stdout, stderr = (
-                    res.output if isinstance(res.output, tuple) else (res.output, b"")
-                )
-                output = (stdout or b"").decode() + (stderr or b"").decode()
-                return f"$ {cmd}\n{output}"
+                chunks = []
+                for out in res.output:
+                    stdout, stderr = (
+                        out if isinstance(out, tuple) else (out, b"")
+                    )
+                    text = (stdout or b"").decode() + (stderr or b"").decode()
+                    print(text, end="")
+                    chunks.append(text)
+                return prefix + "".join(chunks)
             except Exception as exc:
-                return f"$ {cmd}\n[error] {exc}"
+                err = f"[error] {exc}"
+                print(err)
+                return prefix + err
+
         try:
-            proc = subprocess.run(
+            proc = subprocess.Popen(
                 cmd,
                 shell=True,
                 cwd=self.base_dir,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
                 text=True,
                 stdin=subprocess.DEVNULL,
-                timeout=timeout,
             )
-            return f"$ {cmd}\n{proc.stdout + proc.stderr}"
-        except subprocess.TimeoutExpired:
-            return f"$ {cmd}\n[timeout after {timeout}s]"
+            output_parts = []
+            start = time.monotonic()
+            assert proc.stdout is not None
+            import select
+
+            while True:
+                if time.monotonic() - start > timeout:
+                    proc.kill()
+                    output_parts.append(f"[timeout after {timeout}s]")
+                    print(f"[timeout after {timeout}s]")
+                    break
+                ready, _, _ = select.select([proc.stdout], [], [], 0.1)
+                if ready:
+                    line = proc.stdout.readline()
+                    if line:
+                        print(line, end="")
+                        output_parts.append(line)
+                    elif proc.poll() is not None:
+                        break
+                elif proc.poll() is not None:
+                    break
+            proc.wait()
+            return prefix + "".join(output_parts)
         except Exception as exc:
-            return f"$ {cmd}\n[error] {exc}"
+            err = f"[error] {exc}"
+            print(err)
+            return prefix + err
 
     def write_file(self, path: Union[str, Path], content: str) -> str:
         p = self.base_dir / path
