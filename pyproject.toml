@@ -1,6 +1,6 @@
 [project]
 name = "pygent"
-version = "0.1.16"
+version = "0.1.18"
 description = "Pygent is a minimalist coding assistant that runs commands in a Docker container when available and falls back to local execution. See https://marianochaves.github.io/pygent for documentation and https://github.com/marianochaves/pygent for the source code."
 readme = "README.md"
 authors = [ { name = "Mariano Chaves", email = "mchaves.software@gmail.com" } ]
@@ -8,6 +8,7 @@ requires-python = ">=3.9"
 dependencies = [
     "rich>=13.7.0",
     "openai>=1.0.0",
+    "tomli; python_version < '3.11'",
 ]
 
 [project.optional-dependencies]
