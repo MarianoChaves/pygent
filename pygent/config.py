@@ -27,6 +27,8 @@ def load_config(path: str | os.PathLike[str] | None = None) -> Dict[str, Any]:
     # update environment without overwriting existing values
     if "persona" in config and "PYGENT_PERSONA" not in os.environ:
         os.environ["PYGENT_PERSONA"] = str(config["persona"])
+    if "persona_name" in config and "PYGENT_PERSONA_NAME" not in os.environ:
+        os.environ["PYGENT_PERSONA_NAME"] = str(config["persona_name"])
     if "task_personas" in config and "PYGENT_TASK_PERSONAS" not in os.environ:
         if isinstance(config["task_personas"], list):
             os.environ["PYGENT_TASK_PERSONAS"] = os.pathsep.join(str(p) for p in config["task_personas"])

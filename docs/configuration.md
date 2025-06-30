@@ -13,7 +13,8 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_MAX_TASKS` | Maximum number of delegated tasks that can run concurrently. | `3` |
 | `PYGENT_STEP_TIMEOUT` | Default time limit in seconds for each step when running delegated tasks. | – |
 | `PYGENT_TASK_TIMEOUT` | Default overall time limit in seconds for delegated tasks. | – |
-| `PYGENT_PERSONA` | System prompt preamble for the main agent. | "You are Pygent, a sandboxed coding assistant." |
+| `PYGENT_PERSONA_NAME` | Name of the main agent persona. | `Pygent` |
+| `PYGENT_PERSONA` | Description of the main agent persona. | "a sandboxed coding assistant." |
 | `PYGENT_TASK_PERSONAS` | List of personas for delegated agents separated by `os.pathsep`. | – |
 | `PYGENT_INIT_FILES` | List of files or directories copied into the workspace at startup, separated by `os.pathsep`. | – |
 
@@ -22,7 +23,8 @@ the current directory or in your home folder. Values defined there are loaded at
 startup if the corresponding variables are unset. Example:
 
 ```toml
-persona = "You are a friendly bot"
+persona_name = "FriendlyBot"
+persona = "a friendly bot"
 task_personas = ["tester", "developer"]
 initial_files = ["bootstrap.py"]
 ```

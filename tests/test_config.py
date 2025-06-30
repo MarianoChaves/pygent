@@ -28,14 +28,16 @@ from pygent.persona import Persona
 
 def test_load_config(tmp_path, monkeypatch):
     cfg = tmp_path / "pygent.toml"
-    cfg.write_text('persona="bot"\ntask_personas=["a","b"]\ninitial_files=["seed.txt"]')
+    cfg.write_text('persona="bot"\npersona_name="Bot"\ntask_personas=["a","b"]\ninitial_files=["seed.txt"]')
     (tmp_path / "seed.txt").write_text("seed")
     monkeypatch.chdir(tmp_path)
     monkeypatch.delenv("PYGENT_PERSONA", raising=False)
     monkeypatch.delenv("PYGENT_TASK_PERSONAS", raising=False)
     monkeypatch.delenv("PYGENT_INIT_FILES", raising=False)
+    monkeypatch.delenv("PYGENT_PERSONA_NAME", raising=False)
     load_config()
     assert os.getenv("PYGENT_PERSONA") == "bot"
+    assert os.getenv("PYGENT_PERSONA_NAME") == "Bot"
     assert os.getenv("PYGENT_TASK_PERSONAS") == os.pathsep.join(["a", "b"])
     assert os.getenv("PYGENT_INIT_FILES") == "seed.txt"
     rt = Runtime(use_docker=False)

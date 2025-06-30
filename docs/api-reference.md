@@ -107,8 +107,9 @@ step and the overall task are allowed to run. Their defaults can be set via the
 Pass a custom string to the `Agent` constructor to override the system prompt:
 
 ```python
-from pygent import Agent
-ag = Agent(system_msg="You are a friendly bot")
+from pygent import Agent, Persona
+
+ag = Agent(persona=Persona("Helper", "a friendly bot"))
 ```
 
 ## Custom models
