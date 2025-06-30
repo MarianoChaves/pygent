@@ -9,6 +9,8 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Callable, Dict, TYPE_CHECKING
 
+from .persona import Persona
+
 from .runtime import Runtime
 
 if TYPE_CHECKING:  # pragma: no cover - for type hints only
@@ -32,7 +34,7 @@ class TaskManager:
         self,
         agent_factory: Callable[..., "Agent"] | None = None,
         max_tasks: int | None = None,
-        personas: list[str] | None = None,
+        personas: list[Persona] | None = None,
     ) -> None:
         from .agent import Agent  # local import to avoid circular dependency
 
@@ -44,9 +46,13 @@ class TaskManager:
             self.agent_factory = agent_factory
         env_personas = os.getenv("PYGENT_TASK_PERSONAS")
         if personas is None and env_personas:
-            personas = [p.strip() for p in env_personas.split(os.pathsep) if p.strip()]
-        default_persona = os.getenv("PYGENT_PERSONA", "You are Pygent, a sandboxed coding assistant.")
-        self.personas = personas or [default_persona]
+            personas = [Persona(p.strip(), "") for p in env_personas.split(os.pathsep) if p.strip()]
+        if personas is None:
+            personas = [Persona(
+                os.getenv("PYGENT_PERSONA_NAME", "Pygent"),
+                os.getenv("PYGENT_PERSONA", "a sandboxed coding assistant."),
+            )]
+        self.personas = personas
         self._persona_idx = 0
         self.tasks: Dict[str, Task] = {}
         self._lock = threading.Lock()
@@ -59,8 +65,12 @@ class TaskManager:
         parent_depth: int = 0,
         step_timeout: float | None = None,
         task_timeout: float | None = None,
+        persona: Persona | str | None = None,
     ) -> str:
-        """Create a new agent and run ``prompt`` asynchronously."""
+        """Create a new agent and run ``prompt`` asynchronously.
+
+        ``persona`` overrides the default rotation used for delegated tasks.
+        """
 
         if parent_depth >= 1:
             raise RuntimeError("nested delegation is not allowed")
@@ -77,8 +87,12 @@ class TaskManager:
             env = os.getenv("PYGENT_TASK_TIMEOUT")
             task_timeout = float(env) if env else 60*20 # default 20 minutes
 
-        persona = self.personas[self._persona_idx % len(self.personas)]
-        self._persona_idx += 1
+        if persona is None:
+            persona = self.personas[self._persona_idx % len(self.personas)]
+            self._persona_idx += 1
+        elif isinstance(persona, str):
+            match = next((p for p in self.personas if p.name == persona), None)
+            persona = match or Persona(persona, "")
         try:
             agent = self.agent_factory(persona)
         except TypeError:

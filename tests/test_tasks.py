@@ -2,6 +2,7 @@ import os
 import sys
 import types
 import time
+import json
 
 sys.modules.setdefault('openai', types.ModuleType('openai'))
 sys.modules.setdefault('docker', types.ModuleType('docker'))
@@ -27,6 +28,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from pygent import Agent
 from pygent import openai_compat
 from pygent.task_manager import TaskManager
+from pygent.persona import Persona
 from pygent.runtime import Runtime
 from pygent import tools
 
@@ -200,4 +202,32 @@ def test_task_timeout():
     tid = tm.start_task('run', rt, task_timeout=0.05, step_timeout=0.01)
     tm.tasks[tid].thread.join()
     assert 'timeout' in tm.status(tid)
+
+
+def test_delegate_persona_task():
+    created = []
+
+    def factory(p):
+        created.append(p)
+        ag = types.SimpleNamespace(runtime=Runtime(use_docker=False), model=None, persona=p)
+        ag.run_until_stop = lambda *a, **k: None
+        return ag
+
+    tm = TaskManager(agent_factory=factory)
+    tools._task_manager = tm
+
+    rt = Runtime(use_docker=False)
+    tid_msg = tools._delegate_persona_task(rt, prompt='run', persona='tester')
+    tid = tid_msg.split()[-1]
+    tm.tasks[tid].thread.join()
+
+    assert [p.name for p in created] == ['tester']
+
+
+def test_list_personas():
+    tm = TaskManager(personas=[Persona('a', ''), Persona('b', '')])
+    tools._task_manager = tm
+    rt = Runtime(use_docker=False)
+    result = tools._list_personas(rt)
+    assert json.loads(result) == [{"name": "a", "description": ""}, {"name": "b", "description": ""}]
 

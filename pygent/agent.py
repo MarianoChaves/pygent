@@ -15,12 +15,16 @@ from rich.markdown import Markdown
 from .runtime import Runtime
 from . import tools
 from .models import Model, OpenAIModel
+from .persona import Persona
 
-DEFAULT_PERSONA = os.getenv("PYGENT_PERSONA", "You are Pygent, a sandboxed coding assistant.")
+DEFAULT_PERSONA = Persona(
+    os.getenv("PYGENT_PERSONA_NAME", "Pygent"),
+    os.getenv("PYGENT_PERSONA", "a sandboxed coding assistant."),
+)
 
-def build_system_msg(persona: str) -> str:
+def build_system_msg(persona: Persona) -> str:
     return (
-        f"{persona}\n"
+        f"You are {persona.name}. {persona.description}\n"
         "Respond with JSON when you need to use a tool."
         "If you need to stop or finished you task, call the `stop` tool.\n"
         "You can use the following tools:\n"
@@ -41,7 +45,7 @@ class Agent:
     runtime: Runtime = field(default_factory=Runtime)
     model: Model = field(default_factory=OpenAIModel)
     model_name: str = DEFAULT_MODEL
-    persona: str = DEFAULT_PERSONA
+    persona: Persona = field(default_factory=lambda: DEFAULT_PERSONA)
     system_msg: str = field(default_factory=lambda: build_system_msg(DEFAULT_PERSONA))
     history: List[Dict[str, Any]] = field(default_factory=list)
 
