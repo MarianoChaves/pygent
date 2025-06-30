@@ -111,7 +111,8 @@ ag.step(&quot;echo test&quot;)
 ag.runtime.cleanup()
 </code></pre>
 <p>Custom models are supported by implementing the <code>Model</code> protocol and passing
-the instance to <code>Agent</code>.</p>
+the instance to <code>Agent</code>. They can also trigger tools by returning a message
+with <code>tool_calls</code> as shown in the <code>custom_model_with_tool.py</code> example.</p>
 <h2 id="development">Development</h2>
 <p>Install optional dependencies with <code>pip install -e .[test,docs]</code> and run <code>pytest</code> to execute the tests. Use <code>mkdocs serve</code> to build this documentation locally.</p>
 <p>See the README file for more detailed information.</p>
@@ -167,5 +168,5 @@ the instance to <code>Agent</code>.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-06-30 01:35:49.777659+00:00
+Build Date UTC : 2025-06-30 04:57:57.553365+00:00
 -->

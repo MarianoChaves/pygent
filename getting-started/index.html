@@ -167,6 +167,30 @@ ag = Agent(model=EchoModel())
 ag.step(&quot;test&quot;)
 ag.runtime.cleanup()
 </code></pre>
+<p>Custom models can also issue tool calls. The following model runs the last user
+message as a <code>bash</code> command:</p>
+<pre><code class="language-python">import json
+from pygent import Agent, openai_compat
+
+
+class BashModel:
+    def chat(self, messages, model, tools):
+        cmd = messages[-1][&quot;content&quot;]
+        call = openai_compat.ToolCall(
+            id=&quot;1&quot;,
+            type=&quot;function&quot;,
+            function=openai_compat.ToolCallFunction(
+                name=&quot;bash&quot;,
+                arguments=json.dumps({&quot;cmd&quot;: cmd}),
+            ),
+        )
+        return openai_compat.Message(role=&quot;assistant&quot;, content=None, tool_calls=[call])
+
+
+ag = Agent(model=BashModel())
+ag.step(&quot;echo hi&quot;)
+ag.runtime.cleanup()
+</code></pre>
 <p>See the <a href="../api-reference/">API reference</a> for the complete list of classes and
 configuration options.</p>
               
