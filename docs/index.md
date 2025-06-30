@@ -31,7 +31,8 @@ ag.runtime.cleanup()
 ```
 
 Custom models are supported by implementing the ``Model`` protocol and passing
-the instance to ``Agent``.
+the instance to ``Agent``. They can also trigger tools by returning a message
+with ``tool_calls`` as shown in the ``custom_model_with_tool.py`` example.
 
 ## Development
 

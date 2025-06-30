@@ -77,7 +77,8 @@ ag.runtime.cleanup()
 See the [examples](https://github.com/marianochaves/pygent/tree/main/examples) folder for more complete scripts. Models can be swapped by
 passing an object implementing the ``Model`` interface when creating the
 ``Agent``. The default uses an OpenAI-compatible API, but custom models are
-easy to plug in.
+easy to plug in. They can also trigger tools by returning a message with
+``tool_calls`` as demonstrated in ``examples/custom_model_with_tool.py``.
 
 ### Using OpenAI and other providers
 
