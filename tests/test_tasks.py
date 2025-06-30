@@ -247,3 +247,15 @@ def test_personas_from_env(monkeypatch):
     )
     tm = TaskManager()
     assert tm.personas[0].name == "env" and tm.personas[0].description == "desc"
+
+
+def test_global_model_for_tasks():
+    from pygent.models import set_custom_model
+
+    set_custom_model(DummyModel())
+    tm = TaskManager()
+    rt = Runtime(use_docker=False)
+    tid = tm.start_task("run", rt)
+    tm.tasks[tid].thread.join()
+    set_custom_model(None)
+    assert isinstance(tm.tasks[tid].agent.model, DummyModel)
