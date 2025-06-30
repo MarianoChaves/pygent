@@ -41,9 +41,21 @@ Several tools are available by default:
 - **write_file** &ndash; writes files through `Runtime.write_file`.
 - **delegate_task** &ndash; start a background task handled by a new agent,
   optionally copying files into it.
+- **delegate_persona_task** &ndash; like ``delegate_task`` but allows selecting
+  the persona of the delegated agent.
+- **list_personas** &ndash; return the available personas for task delegation.
 - **task_status** &ndash; check the progress of a delegated task.
 - **collect_file** &ndash; copy a file from a delegated task into the current workspace.
 - **download_file** &ndash; retrieve the contents of a file from the workspace.
+
+## Personas
+
+Agents use personas to adopt different behaviours. Each persona has a
+``name`` and ``description``. The default persona name can be set via the
+``PYGENT_PERSONA_NAME`` environment variable and its description via
+``PYGENT_PERSONA``. Delegated agent personas can be defined via
+``PYGENT_TASK_PERSONAS_JSON`` using a JSON list of objects. The ``list_personas`` tool returns all available personas as
+JSON objects with these fields.
 
 Additional tools can be registered programmatically using
 `pygent.register_tool` or the `pygent.tool` decorator. Each tool receives the
@@ -96,8 +108,9 @@ step and the overall task are allowed to run. Their defaults can be set via the
 Pass a custom string to the `Agent` constructor to override the system prompt:
 
 ```python
-from pygent import Agent
-ag = Agent(system_msg="You are a friendly bot")
+from pygent import Agent, Persona
+
+ag = Agent(persona=Persona("Helper", "a friendly bot"))
 ```
 
 ## Custom models

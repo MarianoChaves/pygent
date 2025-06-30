@@ -13,8 +13,10 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_MAX_TASKS` | Maximum number of delegated tasks that can run concurrently. | `3` |
 | `PYGENT_STEP_TIMEOUT` | Default time limit in seconds for each step when running delegated tasks. | – |
 | `PYGENT_TASK_TIMEOUT` | Default overall time limit in seconds for delegated tasks. | – |
-| `PYGENT_PERSONA` | System prompt preamble for the main agent. | "You are Pygent, a sandboxed coding assistant." |
+| `PYGENT_PERSONA_NAME` | Name of the main agent persona. | `Pygent` |
+| `PYGENT_PERSONA` | Description of the main agent persona. | "a sandboxed coding assistant." |
 | `PYGENT_TASK_PERSONAS` | List of personas for delegated agents separated by `os.pathsep`. | – |
+| `PYGENT_TASK_PERSONAS_JSON` | JSON array of persona objects with name and description for delegated agents. Overrides `PYGENT_TASK_PERSONAS` if set. | – |
 | `PYGENT_INIT_FILES` | List of files or directories copied into the workspace at startup, separated by `os.pathsep`. | – |
 
 Instead of setting environment variables you can create a `pygent.toml` file in
@@ -22,8 +24,17 @@ the current directory or in your home folder. Values defined there are loaded at
 startup if the corresponding variables are unset. Example:
 
 ```toml
-persona = "You are a friendly bot"
-task_personas = ["tester", "developer"]
+persona_name = "FriendlyBot"
+persona = "a friendly bot"
+
+[[task_personas]]
+name = "tester"
+description = "runs tests"
+
+[[task_personas]]
+name = "developer"
+description = "implements features"
+
 initial_files = ["bootstrap.py"]
 ```
 

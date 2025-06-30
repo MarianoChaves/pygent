@@ -122,6 +122,7 @@ def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
                 "items": {"type": "string"},
                 "description": "Files to copy to the sub-agent before starting",
             },
+            "persona": {"type": "string", "description": "Persona for the sub-agent"},
             "timeout": {"type": "number", "description": "Max seconds for the task"},
             "step_timeout": {"type": "number", "description": "Time limit per step"},
         },
@@ -134,6 +135,7 @@ def _delegate_task(
     files: list[str] | None = None,
     timeout: float | None = None,
     step_timeout: float | None = None,
+    persona: str | None = None,
 ) -> str:
     if getattr(rt, "task_depth", 0) >= 1:
         return "error: delegation not allowed in sub-tasks"
@@ -145,10 +147,62 @@ def _delegate_task(
             parent_depth=getattr(rt, "task_depth", 0),
             step_timeout=step_timeout,
             task_timeout=timeout,
+            persona=persona,
         )
     except RuntimeError as exc:
         return str(exc)
     return f"started {tid}"
+
+
+@tool(
+    name="delegate_persona_task",
+    description="Create a background task with a specific persona and return its ID.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "prompt": {"type": "string", "description": "Instruction for the sub-agent"},
+            "persona": {"type": "string", "description": "Persona for the sub-agent"},
+            "files": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Files to copy to the sub-agent before starting",
+            },
+            "timeout": {"type": "number", "description": "Max seconds for the task"},
+            "step_timeout": {"type": "number", "description": "Time limit per step"},
+        },
+        "required": ["prompt", "persona"],
+    },
+)
+def _delegate_persona_task(
+    rt: Runtime,
+    prompt: str,
+    persona: str,
+    files: list[str] | None = None,
+    timeout: float | None = None,
+    step_timeout: float | None = None,
+) -> str:
+    return _delegate_task(
+        rt,
+        prompt=prompt,
+        files=files,
+        timeout=timeout,
+        step_timeout=step_timeout,
+        persona=persona,
+    )
+
+
+@tool(
+    name="list_personas",
+    description="Return the available personas for delegated agents.",
+    parameters={"type": "object", "properties": {}},
+)
+def _list_personas(rt: Runtime) -> str:
+    """Return JSON list of personas."""
+    personas = [
+        {"name": p.name, "description": p.description}
+        for p in _get_manager().personas
+    ]
+    return json.dumps(personas)
 
 
 @tool(

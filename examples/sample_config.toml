@@ -1,4 +1,9 @@
 # Sample configuration for config_file_example.py
-persona = "You are the config bot"
-task_personas = ["You are the test bot"]
+persona_name = "ConfigBot"
+persona = "handles configuration tasks"
+
+[[task_personas]]
+name = "TestBot"
+description = "writes tests"
+
 initial_files = ["examples/welcome.txt"]
