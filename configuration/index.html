@@ -138,13 +138,23 @@ exported in your shell or set via a <code>.env</code> file before running the CL
 <td>–</td>
 </tr>
 <tr>
+<td><code>PYGENT_PERSONA_NAME</code></td>
+<td>Name of the main agent persona.</td>
+<td><code>Pygent</code></td>
+</tr>
+<tr>
 <td><code>PYGENT_PERSONA</code></td>
-<td>System prompt preamble for the main agent.</td>
-<td>"You are Pygent, a sandboxed coding assistant."</td>
+<td>Description of the main agent persona.</td>
+<td>"a sandboxed coding assistant."</td>
 </tr>
 <tr>
 <td><code>PYGENT_TASK_PERSONAS</code></td>
 <td>List of personas for delegated agents separated by <code>os.pathsep</code>.</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>PYGENT_TASK_PERSONAS_JSON</code></td>
+<td>JSON array of persona objects with name and description for delegated agents. Overrides <code>PYGENT_TASK_PERSONAS</code> if set.</td>
 <td>–</td>
 </tr>
 <tr>
@@ -157,8 +167,17 @@ exported in your shell or set via a <code>.env</code> file before running the CL
 <p>Instead of setting environment variables you can create a <code>pygent.toml</code> file in
 the current directory or in your home folder. Values defined there are loaded at
 startup if the corresponding variables are unset. Example:</p>
-<pre><code class="language-toml">persona = &quot;You are a friendly bot&quot;
-task_personas = [&quot;tester&quot;, &quot;developer&quot;]
+<pre><code class="language-toml">persona_name = &quot;FriendlyBot&quot;
+persona = &quot;a friendly bot&quot;
+
+[[task_personas]]
+name = &quot;tester&quot;
+description = &quot;runs tests&quot;
+
+[[task_personas]]
+name = &quot;developer&quot;
+description = &quot;implements features&quot;
+
 initial_files = [&quot;bootstrap.py&quot;]
 </code></pre>
 <p>The keys map to the environment variables of the same name.</p>

@@ -64,6 +64,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#personas">Personas</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#taskmanager">TaskManager</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#custom-prompts">Custom prompts</a>
@@ -131,10 +133,20 @@
 <li><strong>write_file</strong> &ndash; writes files through <code>Runtime.write_file</code>.</li>
 <li><strong>delegate_task</strong> &ndash; start a background task handled by a new agent,
   optionally copying files into it.</li>
+<li><strong>delegate_persona_task</strong> &ndash; like <code>delegate_task</code> but allows selecting
+  the persona of the delegated agent.</li>
+<li><strong>list_personas</strong> &ndash; return the available personas for task delegation.</li>
 <li><strong>task_status</strong> &ndash; check the progress of a delegated task.</li>
 <li><strong>collect_file</strong> &ndash; copy a file from a delegated task into the current workspace.</li>
 <li><strong>download_file</strong> &ndash; retrieve the contents of a file from the workspace.</li>
 </ul>
+<h2 id="personas">Personas</h2>
+<p>Agents use personas to adopt different behaviours. Each persona has a
+<code>name</code> and <code>description</code>. The default persona name can be set via the
+<code>PYGENT_PERSONA_NAME</code> environment variable and its description via
+<code>PYGENT_PERSONA</code>. Delegated agent personas can be defined via
+<code>PYGENT_TASK_PERSONAS_JSON</code> using a JSON list of objects. The <code>list_personas</code> tool returns all available personas as
+JSON objects with these fields.</p>
 <p>Additional tools can be registered programmatically using
 <code>pygent.register_tool</code> or the <code>pygent.tool</code> decorator. Each tool receives the
 active <code>Runtime</code> instance and must return a string.</p>
@@ -175,8 +187,9 @@ step and the overall task are allowed to run. Their defaults can be set via the
 <code>PYGENT_STEP_TIMEOUT</code> and <code>PYGENT_TASK_TIMEOUT</code> environment variables.</p>
 <h2 id="custom-prompts">Custom prompts</h2>
 <p>Pass a custom string to the <code>Agent</code> constructor to override the system prompt:</p>
-<pre><code class="language-python">from pygent import Agent
-ag = Agent(system_msg=&quot;You are a friendly bot&quot;)
+<pre><code class="language-python">from pygent import Agent, Persona
+
+ag = Agent(persona=Persona(&quot;Helper&quot;, &quot;a friendly bot&quot;))
 </code></pre>
 <h2 id="custom-models">Custom models</h2>
 <p>The <code>Agent</code> relies on a model object with a <code>chat</code> method. The default is
