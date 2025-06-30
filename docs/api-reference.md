@@ -118,5 +118,6 @@ ag = Agent(persona=Persona("Helper", "a friendly bot"))
 The `Agent` relies on a model object with a ``chat`` method. The default is
 ``OpenAIModel`` which calls an OpenAI-compatible API. To plug in a different
 backend, implement the ``Model`` protocol and pass an instance when creating the
-agent.
+agent. Custom models may return tool calls by populating the ``tool_calls``
+attribute of the returned message.
 
