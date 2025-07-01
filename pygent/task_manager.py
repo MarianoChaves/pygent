@@ -162,8 +162,10 @@ class TaskManager:
             return f"Task {task_id} not found"
         return task.status
 
-    def collect_file(self, rt: Runtime, task_id: str, path: str) -> str:
-        """Copy a file from a task workspace into ``rt``."""
+    def collect_file(
+        self, rt: Runtime, task_id: str, path: str, dest: Optional[str] = None
+    ) -> str:
+        """Copy a file or directory from a task workspace into ``rt``."""
 
         with self._lock:
             task = self.tasks.get(task_id)
@@ -172,7 +174,10 @@ class TaskManager:
         src = task.agent.runtime.base_dir / path
         if not src.exists():
             return f"file {path} not found"
-        dest = rt.base_dir / path
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(src, dest)
-        return f"Retrieved {dest.relative_to(rt.base_dir)}"
+        dest_path = rt.base_dir / (dest or path)
+        if src.is_dir():
+            shutil.copytree(src, dest_path, dirs_exist_ok=True)
+        else:
+            dest_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(src, dest_path)
+        return f"Retrieved {dest_path.relative_to(rt.base_dir)}"

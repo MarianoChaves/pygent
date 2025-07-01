@@ -130,6 +130,34 @@ class Runtime:
 
             return base64.b64encode(data).decode()
 
+    def upload_file(self, src: Union[str, Path], dest: Optional[Union[str, Path]] = None) -> str:
+        """Copy a local file or directory into the workspace."""
+
+        src_path = Path(src).expanduser()
+        if not src_path.exists():
+            return f"file {src} not found"
+        target = self.base_dir / (Path(dest) if dest else src_path.name)
+        if src_path.is_dir():
+            shutil.copytree(src_path, target, dirs_exist_ok=True)
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(src_path, target)
+        return f"Uploaded {target.relative_to(self.base_dir)}"
+
+    def export_file(self, path: Union[str, Path], dest: Union[str, Path]) -> str:
+        """Copy a file or directory from the workspace to a local path."""
+
+        src = self.base_dir / path
+        if not src.exists():
+            return f"file {path} not found"
+        dest_path = Path(dest).expanduser()
+        if src.is_dir():
+            shutil.copytree(src, dest_path, dirs_exist_ok=True)
+        else:
+            dest_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(src, dest_path)
+        return f"Exported {src.relative_to(self.base_dir)}"
+
     def cleanup(self) -> None:
         if self._use_docker and self.container is not None:
             try:

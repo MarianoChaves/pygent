@@ -91,6 +91,22 @@ def _write_file(rt: Runtime, path: str, content: str) -> str:
 
 
 @tool(
+    name="upload_file",
+    description="Copy a local file or directory into the workspace.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "src": {"type": "string", "description": "Local path"},
+            "dest": {"type": "string", "description": "Destination path"},
+        },
+        "required": ["src"],
+    },
+)
+def _upload_file(rt: Runtime, src: str, dest: Optional[str] = None) -> str:
+    return rt.upload_file(src, dest)
+
+
+@tool(
     name="stop",
     description="Stop the autonomous loop. This is a side-effect free tool that does not return any output. Use when finished some task or when you want to stop the agent.",
     parameters={"type": "object", "properties": {}},
@@ -220,18 +236,19 @@ def _task_status(rt: Runtime, task_id: str) -> str:
 
 @tool(
     name="collect_file",
-    description="Retrieve a file from a delegated task into the main workspace.",
+    description="Retrieve a file or directory from a delegated task into the main workspace.",
     parameters={
         "type": "object",
         "properties": {
             "task_id": {"type": "string"},
             "path": {"type": "string"},
+            "dest": {"type": "string", "description": "Destination path"},
         },
         "required": ["task_id", "path"],
     },
 )
-def _collect_file(rt: Runtime, task_id: str, path: str) -> str:
-    return _get_manager().collect_file(rt, task_id, path)
+def _collect_file(rt: Runtime, task_id: str, path: str, dest: Optional[str] = None) -> str:
+    return _get_manager().collect_file(rt, task_id, path, dest)
 
 
 @tool(
