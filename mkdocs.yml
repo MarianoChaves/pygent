@@ -4,7 +4,16 @@ repo_url: https://github.com/marianochaves/pygent
 theme:
   name: material
   palette:
-    scheme: slate
+    - scheme: default
+      primary: indigo
+      accent: indigo
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      media: '(prefers-color-scheme: dark)'
+  features:
+    - content.code.copy
+    - navigation.instant
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
