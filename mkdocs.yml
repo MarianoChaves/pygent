@@ -7,6 +7,7 @@ nav:
   - Getting Started: getting-started.md
   - Configuration: configuration.md
   - Examples: examples.md
+  - Custom Models: custom-models.md
   - API Reference: api-reference.md
 plugins:
   - search
