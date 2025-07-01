@@ -13,7 +13,7 @@ dependencies = [
 
 [project.optional-dependencies]
 test = ["pytest"]
-docs = ["mkdocs", "mkdocs-material"]
+docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
 docker = ["docker>=7.0.0"]
 ui = ["gradio"]
 

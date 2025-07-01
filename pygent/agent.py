@@ -24,10 +24,12 @@ DEFAULT_PERSONA = Persona(
 
 
 def build_system_msg(persona: Persona) -> str:
+    """Return the system prompt for ``persona``."""
+
     return (
         f"You are {persona.name}. {persona.description}\n"
         "Respond with JSON when you need to use a tool."
-        "If you need to stop or finished you task, call the `stop` tool.\n"
+        "If you need to stop or finish your task, call the `stop` tool.\n"
         "You can use the following tools:\n"
         f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
         "You can also use the `continue` tool to request user input or continue the conversation.\n"
@@ -47,6 +49,7 @@ def _default_model() -> Model:
 
 @dataclass
 class Agent:
+    """Interactive assistant handling messages and tool execution."""
     runtime: Runtime = field(default_factory=Runtime)
     model: Model = field(default_factory=_default_model)
     model_name: str = DEFAULT_MODEL
@@ -55,6 +58,7 @@ class Agent:
     history: List[Dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self) -> None:
+        """Initialize defaults after dataclass construction."""
         if not self.system_msg:
             self.system_msg = build_system_msg(self.persona)
         if not self.history:
@@ -134,6 +138,7 @@ class Agent:
 
 
 def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no cover
+    """Start an interactive session in the terminal."""
     agent = Agent(runtime=Runtime(use_docker=use_docker))
     console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
     try:
