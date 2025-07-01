@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Persona:
-    """Representa uma persona com nome e descricao."""
+    """Simple container for a persona name and description."""
     name: str
     description: str
 

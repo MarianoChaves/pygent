@@ -1,4 +1,7 @@
+"""Utilities for loading configuration files."""
+
 import os
+
 import json
 try:  # Python 3.11+
     import tomllib  # type: ignore

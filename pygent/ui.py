@@ -1,3 +1,5 @@
+"""Simple Gradio-based chat interface."""
+
 from .agent import Agent
 from .runtime import Runtime
 from .tools import execute_tool, TOOL_SCHEMAS

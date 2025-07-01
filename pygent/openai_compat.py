@@ -1,3 +1,5 @@
+"""Lightweight client compatible with the OpenAI HTTP API."""
+
 import os
 import json
 from dataclasses import dataclass
