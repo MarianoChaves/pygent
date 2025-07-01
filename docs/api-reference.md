@@ -1,6 +1,6 @@
 # API Reference
 
-This section summarises the most relevant classes and functions.
+This page describes the public classes and helpers provided by **Pygent**. Import everything from the package root unless noted otherwise.
 
 ## `Agent`
 
@@ -8,58 +8,42 @@ This section summarises the most relevant classes and functions.
 from pygent import Agent
 ```
 
-Manages the conversation with the model. Each instance owns a
-`Runtime` accessible via ``agent.runtime``.
+`Agent` orchestrates the conversation with the selected model. Each instance owns a `Runtime` available as `agent.runtime`.
 
-**Methods**
+### Methods
 
-- `step(user_msg: str) -> None` – add a message and run any tools
-  returned by the model.
-- `run_interactive(use_docker: bool | None = None) -> None` – start an
-  interactive session.
-- `run_gui(use_docker: bool | None = None) -> None` – start a simple
-  web interface.
+- `step(user_msg: str) -> pygent.openai_compat.Message` – add a message and run any tools returned by the model.
+- `run_interactive(use_docker: bool | None = None) -> None` – start a terminal session.
+- `run_gui(use_docker: bool | None = None) -> None` – launch the simple web interface.
+- `run_until_stop(user_msg: str, max_steps=20, ...) -> None` – keep executing steps until the `stop` tool is called or a limit is reached.
 
 ## `Runtime`
 
-Executes commands either in a Docker container or locally.
+`Runtime` executes commands either locally or in a Docker container.
 
-**Methods**
+### Methods
 
-- `bash(cmd: str, timeout: int = 30) -> str` – run a shell command and
-  return its output.
-- `write_file(path: str, content: str) -> str` – create or replace a
-  UTF-8 encoded text file in the working directory.
-- `cleanup() -> None` – destroy the temporary workspace and stop the
-  container if used.
+- `bash(cmd: str, timeout: int = 30) -> str` – run a shell command and return its output.
+- `write_file(path: str, content: str) -> str` – create or overwrite a UTF‑8 file.
+- `read_file(path: str, binary: bool = False) -> str` – read a file from the workspace.
+- `cleanup() -> None` – destroy the temporary workspace and stop the container if one was used.
 
-## Tools
+## Built‑in tools
 
-Several tools are available by default:
+These tools are registered automatically:
 
-- **bash** &ndash; executes shell commands via `Runtime.bash`.
-- **write_file** &ndash; writes files through `Runtime.write_file`.
-- **delegate_task** &ndash; start a background task handled by a new agent,
-  optionally copying files into it.
-- **delegate_persona_task** &ndash; like ``delegate_task`` but allows selecting
-  the persona of the delegated agent.
-- **list_personas** &ndash; return the available personas for task delegation.
-- **task_status** &ndash; check the progress of a delegated task.
-- **collect_file** &ndash; copy a file from a delegated task into the current workspace.
-- **download_file** &ndash; retrieve the contents of a file from the workspace.
+- **bash** – run a command through `Runtime.bash`.
+- **write_file** – create files via `Runtime.write_file`.
+- **delegate_task** – start a background agent.
+- **delegate_persona_task** – like `delegate_task` but lets you pick the persona.
+- **list_personas** – return the available personas for delegation.
+- **task_status** – check the status of a delegated task.
+- **collect_file** – copy a file from a delegated task into the current workspace.
+- **download_file** – read a file using `Runtime.read_file`.
+- **continue** – request user input when running autonomously.
+- **stop** – stop the autonomous loop.
 
-## Personas
-
-Agents use personas to adopt different behaviours. Each persona has a
-``name`` and ``description``. The default persona name can be set via the
-``PYGENT_PERSONA_NAME`` environment variable and its description via
-``PYGENT_PERSONA``. Delegated agent personas can be defined via
-``PYGENT_TASK_PERSONAS_JSON`` using a JSON list of objects. The ``list_personas`` tool returns all available personas as
-JSON objects with these fields.
-
-Additional tools can be registered programmatically using
-`pygent.register_tool` or the `pygent.tool` decorator. Each tool receives the
-active `Runtime` instance and must return a string.
+Custom tools can be registered programmatically:
 
 ```python
 from pygent import register_tool
@@ -75,37 +59,21 @@ register_tool(
 )
 ```
 
-Refer to the `tools.py` module for more details.
-
 ## `TaskManager`
-
-Launch separate agents asynchronously and track them:
 
 ```python
 from pygent import TaskManager, Runtime
-
-rt = Runtime(use_docker=False)
-tm = TaskManager()
-task_id = tm.start_task(
-    "generate report",
-    rt,
-    files=["data.txt"],
-    step_timeout=5,
-    task_timeout=60,
-)
-print(tm.status(task_id))
 ```
-Pass a ``Runtime`` instance when starting a task so files can be copied into the
-sub-agent workspace via the optional ``files`` argument. Delegated agents cannot
-create further tasks. The maximum number of concurrent tasks is controlled by
-the ``PYGENT_MAX_TASKS`` environment variable (default ``3``).
-Optional ``step_timeout`` and ``task_timeout`` parameters control how long each
-step and the overall task are allowed to run. Their defaults can be set via the
-``PYGENT_STEP_TIMEOUT`` and ``PYGENT_TASK_TIMEOUT`` environment variables.
+
+`TaskManager` launches separate agents asynchronously and tracks them. Pass a `Runtime` instance when starting a task so files can be copied into the sub‑agent's workspace.
+
+## Personas
+
+Agents can adopt different personas. The defaults come from the `PYGENT_PERSONA_NAME` and `PYGENT_PERSONA` environment variables. Delegated agent personas can be configured via `PYGENT_TASK_PERSONAS_JSON`. The `list_personas` tool returns all available options.
 
 ## Custom prompts
 
-Pass a custom string to the `Agent` constructor to override the system prompt:
+Provide a `Persona` object to the `Agent` constructor to override the system prompt:
 
 ```python
 from pygent import Agent, Persona
@@ -115,9 +83,4 @@ ag = Agent(persona=Persona("Helper", "a friendly bot"))
 
 ## Custom models
 
-The `Agent` relies on a model object with a ``chat`` method. The default is
-``OpenAIModel`` which calls an OpenAI-compatible API. To plug in a different
-backend, implement the ``Model`` protocol and pass an instance when creating the
-agent. Custom models may return tool calls by populating the ``tool_calls``
-attribute of the returned message.
-
+`Agent` relies on an object implementing the `Model` protocol. The default `OpenAIModel` calls an OpenAI‑compatible API, but any backend can be plugged in. Custom models may return tool calls by filling the `tool_calls` attribute of the returned message.
