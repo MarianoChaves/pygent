@@ -1,7 +1,10 @@
 site_name: Pygent
 site_url: https://marianochaves.github.io/pygent/
 repo_url: https://github.com/marianochaves/pygent
-theme: readthedocs
+theme:
+  name: material
+  palette:
+    scheme: slate
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
