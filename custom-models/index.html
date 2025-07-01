@@ -68,6 +68,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#delegating-tasks-from-a-custom-model">Delegating tasks from a custom model</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#custom-tool-and-external-model-in-a-delegated-task">Custom tool and external model in a delegated task</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -198,6 +200,62 @@ class DelegateModel:
 
 ag = Agent(model=DelegateModel())
 ag.run_until_stop(&quot;begin&quot;, max_steps=2)
+</code></pre>
+<h2 id="custom-tool-and-external-model-in-a-delegated-task">Custom tool and external model in a delegated task</h2>
+<p>This scenario combines several features: defining a new tool, using an
+OpenAI-compatible service via <code>openai_compat</code> and delegating work to a
+background agent.</p>
+<pre><code class="language-python">import json
+import time
+from pygent import Agent, TaskManager, register_tool, openai_compat
+
+def shout(rt, text: str) -&gt; str:
+    return text.upper()
+
+register_tool(
+    &quot;shout&quot;,
+    &quot;Uppercase some text&quot;,
+    {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;text&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;text&quot;]},
+    shout,
+)
+
+class HTTPModel:
+    def chat(self, messages, model, tools):
+        resp = openai_compat.chat.completions.create(
+            model=model, messages=messages, tools=tools, tool_choice=&quot;auto&quot;
+        )
+        return resp.choices[0].message
+
+class DelegatingModel:
+    def __init__(self):
+        self.done = False
+
+    def chat(self, messages, model, tools):
+        if not self.done:
+            self.done = True
+            return openai_compat.Message(
+                role=&quot;assistant&quot;,
+                content=None,
+                tool_calls=[
+                    openai_compat.ToolCall(
+                        id=&quot;1&quot;,
+                        type=&quot;function&quot;,
+                        function=openai_compat.ToolCallFunction(
+                            name=&quot;delegate_task&quot;,
+                            arguments=json.dumps({&quot;prompt&quot;: &quot;shout text='hi'\nstop&quot;}),
+                        ),
+                    )
+                ],
+            )
+        return openai_compat.Message(role=&quot;assistant&quot;, content=&quot;delegated&quot;)
+
+manager = TaskManager(agent_factory=lambda p=None: Agent(model=HTTPModel(), persona=p))
+main = Agent(model=DelegatingModel())
+
+task_id = manager.start_task(&quot;begin&quot;, main.runtime)
+while manager.status(task_id) == &quot;running&quot;:
+    time.sleep(1)
+print(&quot;Status:&quot;, manager.status(task_id))
 </code></pre>
 <p>These snippets demonstrate different ways of integrating custom logic with Pygent. See the <a href="../examples/">examples</a> directory for the full source code.</p>
               
