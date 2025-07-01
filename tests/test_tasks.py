@@ -120,6 +120,25 @@ def test_delegate_with_files():
     assert child_path.exists() and child_path.read_text() == "hello"
 
 
+def test_collect_directory(tmp_path):
+    tm = TaskManager(agent_factory=make_agent)
+    tools._task_manager = tm
+
+    rt = Runtime(use_docker=False)
+    tid_msg = tools._delegate_task(rt, prompt="run")
+    tid = tid_msg.split()[-1]
+    tm.tasks[tid].thread.join()
+
+    subdir = tm.tasks[tid].agent.runtime.base_dir / "sub"
+    subdir.mkdir()
+    (subdir / "file.txt").write_text("hi")
+
+    main_rt = Runtime(use_docker=False)
+    msg = tools._collect_file(main_rt, task_id=tid, path="sub", dest="copy")
+    assert "Retrieved" in msg
+    assert (main_rt.base_dir / "copy/file.txt").read_text() == "hi"
+
+
 def test_download_file():
     rt = Runtime(use_docker=False)
     rt.write_file("sample.txt", "hi")

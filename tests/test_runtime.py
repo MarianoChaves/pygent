@@ -39,3 +39,16 @@ def test_bash_includes_command():
     rt.cleanup()
     assert out.startswith('$ echo hi\n')
 
+
+def test_upload_and_export_file(tmp_path):
+    src = tmp_path / "src.txt"
+    src.write_text("hello")
+    rt = Runtime(use_docker=False)
+    msg = rt.upload_file(src)
+    assert "Uploaded" in msg
+    dest = tmp_path / "dest.txt"
+    msg2 = rt.export_file(src.name, dest)
+    assert "Exported" in msg2
+    assert dest.exists() and dest.read_text() == "hello"
+    rt.cleanup()
+
