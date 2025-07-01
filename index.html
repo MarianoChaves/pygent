@@ -64,6 +64,10 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="custom-models/">Custom Models</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="api-reference/">API Reference</a>
                 </li>
               </ul>
@@ -112,7 +116,9 @@ ag.runtime.cleanup()
 </code></pre>
 <p>Custom models are supported by implementing the <code>Model</code> protocol and passing
 the instance to <code>Agent</code>. They can also trigger tools by returning a message
-with <code>tool_calls</code> as shown in the <code>custom_model_with_tool.py</code> example.</p>
+with <code>tool_calls</code> as shown in the <code>custom_model_with_tool.py</code> example.
+See the dedicated <a href="custom-models/">Custom Models</a> page for extended
+examples and advanced usage.</p>
 <h2 id="development">Development</h2>
 <p>Install optional dependencies with <code>pip install -e .[test,docs]</code> and run <code>pytest</code> to execute the tests. Use <code>mkdocs serve</code> to build this documentation locally.</p>
 <p>See the README file for more detailed information.</p>
@@ -168,5 +174,5 @@ with <code>tool_calls</code> as shown in the <code>custom_model_with_tool.py</co
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-07-01 00:39:40.704092+00:00
+Build Date UTC : 2025-07-01 04:06:00.836846+00:00
 -->

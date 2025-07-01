@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://marianochaves.github.io/pygent/custom-models/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Custom Models - Pygent</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Custom Models";
+        var mkdocs_page_input_path = "custom-models.md";
+        var mkdocs_page_url = "/pygent/custom-models/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Pygent
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Custom Models</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#echo-model">Echo model</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#calling-a-remote-api-with-openai_compat">Calling a remote API with openai_compat</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#returning-tool-calls">Returning tool calls</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#global-custom-model">Global custom model</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#delegating-tasks-from-a-custom-model">Delegating tasks from a custom model</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../api-reference/">API Reference</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Pygent</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Custom Models</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/marianochaves/pygent/edit/master/docs/custom-models.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="custom-models">Custom Models</h1>
+<p>Pygent allows plugging in any model backend as long as it implements the <code>Model</code> protocol. This page collects extended examples showing how to build your own models, use the <code>openai_compat</code> helpers and return tool calls.</p>
+<h2 id="echo-model">Echo model</h2>
+<p>A trivial example that simply repeats the last user message. The implementation returns an <code>openai_compat.Message</code> instance.</p>
+<pre><code class="language-python">from pygent import Agent, openai_compat
+
+class EchoModel:
+    def chat(self, messages, model, tools):
+        last = messages[-1][&quot;content&quot;]
+        return openai_compat.Message(role=&quot;assistant&quot;, content=f&quot;Echo: {last}&quot;)
+
+ag = Agent(model=EchoModel())
+ag.step(&quot;test&quot;)
+</code></pre>
+<h2 id="calling-a-remote-api-with-openai_compat">Calling a remote API with <code>openai_compat</code></h2>
+<p>The <code>openai_compat</code> module ships a lightweight client mirroring the official OpenAI interface. You can use it to talk to any compatible endpoint.</p>
+<pre><code class="language-python">from pygent import Agent, openai_compat
+
+class HTTPModel:
+    def chat(self, messages, model, tools):
+        resp = openai_compat.chat.completions.create(
+            model=model,
+            messages=messages,
+            tools=tools,
+            tool_choice=&quot;auto&quot;,
+        )
+        return resp.choices[0].message
+
+ag = Agent(model=HTTPModel())
+ag.step(&quot;who am I?&quot;)
+</code></pre>
+<p>Set <code>OPENAI_BASE_URL</code> and <code>OPENAI_API_KEY</code> to target a different provider if needed.</p>
+<h2 id="returning-tool-calls">Returning tool calls</h2>
+<p>Custom models may trigger tools by returning a message with the <code>tool_calls</code> attribute populated. The next example runs the last user message as a <code>bash</code> command.</p>
+<pre><code class="language-python">import json
+from pygent import Agent, openai_compat
+
+class BashModel:
+    def chat(self, messages, model, tools):
+        cmd = messages[-1][&quot;content&quot;]
+        call = openai_compat.ToolCall(
+            id=&quot;1&quot;,
+            type=&quot;function&quot;,
+            function=openai_compat.ToolCallFunction(
+                name=&quot;bash&quot;,
+                arguments=json.dumps({&quot;cmd&quot;: cmd}),
+            ),
+        )
+        return openai_compat.Message(role=&quot;assistant&quot;, content=None, tool_calls=[call])
+
+ag = Agent(model=BashModel())
+ag.step(&quot;echo 'hi from tool'&quot;)
+</code></pre>
+<h2 id="global-custom-model">Global custom model</h2>
+<p>Use <code>set_custom_model</code> to apply a model to all new agents and delegated tasks:</p>
+<pre><code class="language-python">from pygent import Agent
+from pygent.models import set_custom_model
+
+set_custom_model(EchoModel())
+ag = Agent()
+ag.step(&quot;hello&quot;)
+set_custom_model(None)
+</code></pre>
+<h2 id="delegating-tasks-from-a-custom-model">Delegating tasks from a custom model</h2>
+<p>Models can call the <code>delegate_task</code> tool to start a background agent. This example delegates once and then stops.</p>
+<pre><code class="language-python">import json
+from pygent import Agent, openai_compat
+
+class DelegateModel:
+    def __init__(self):
+        self.first = True
+
+    def chat(self, messages, model, tools):
+        if self.first:
+            self.first = False
+            return openai_compat.Message(
+                role=&quot;assistant&quot;,
+                content=None,
+                tool_calls=[
+                    openai_compat.ToolCall(
+                        id=&quot;1&quot;,
+                        type=&quot;function&quot;,
+                        function=openai_compat.ToolCallFunction(
+                            name=&quot;delegate_task&quot;,
+                            arguments=json.dumps({&quot;prompt&quot;: &quot;noop&quot;}),
+                        ),
+                    )
+                ],
+            )
+        return openai_compat.Message(role=&quot;assistant&quot;, content=None, tool_calls=[
+            openai_compat.ToolCall(
+                id=&quot;2&quot;,
+                type=&quot;function&quot;,
+                function=openai_compat.ToolCallFunction(name=&quot;stop&quot;, arguments=&quot;{}&quot;),
+            )
+        ])
+
+ag = Agent(model=DelegateModel())
+ag.run_until_stop(&quot;begin&quot;, max_steps=2)
+</code></pre>
+<p>These snippets demonstrate different ways of integrating custom logic with Pygent. See the <a href="../examples/">examples</a> directory for the full source code.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../examples/" class="btn btn-neutral float-left" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../api-reference/" class="btn btn-neutral float-right" title="API Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/marianochaves/pygent" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../examples/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../api-reference/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
