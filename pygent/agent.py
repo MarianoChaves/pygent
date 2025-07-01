@@ -13,7 +13,7 @@ from rich.panel import Panel
 from rich.markdown import Markdown
 
 from .runtime import Runtime
-from . import tools, models
+from . import tools, models, openai_compat
 from .models import Model, OpenAIModel
 from .persona import Persona
 
@@ -21,6 +21,7 @@ DEFAULT_PERSONA = Persona(
     os.getenv("PYGENT_PERSONA_NAME", "Pygent"),
     os.getenv("PYGENT_PERSONA", "a sandboxed coding assistant."),
 )
+
 
 def build_system_msg(persona: Persona) -> str:
     return (
@@ -32,6 +33,7 @@ def build_system_msg(persona: Persona) -> str:
         "You can also use the `continue` tool to request user input or continue the conversation.\n"
     )
 
+
 DEFAULT_MODEL = os.getenv("PYGENT_MODEL", "gpt-4.1-mini")
 SYSTEM_MSG = build_system_msg(DEFAULT_PERSONA)
 
@@ -41,9 +43,6 @@ console = Console()
 def _default_model() -> Model:
     """Return the global custom model or the default OpenAI model."""
     return models.CUSTOM_MODEL or OpenAIModel()
-
-
-
 
 
 @dataclass
@@ -66,19 +65,29 @@ class Agent:
 
         self.history.append({"role": "user", "content": user_msg})
 
-        assistant_msg = self.model.chat(
+        assistant_raw = self.model.chat(
             self.history, self.model_name, tools.TOOL_SCHEMAS
         )
+        assistant_msg = openai_compat.parse_message(assistant_raw)
         self.history.append(assistant_msg)
 
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
                 output = tools.execute_tool(call, self.runtime)
-                self.history.append({"role": "tool", "content": output, "tool_call_id": call.id})
+                self.history.append(
+                    {"role": "tool", "content": output, "tool_call_id": call.id}
+                )
                 console.print(Panel(output, title=f"tool:{call.function.name}"))
         else:
             markdown_response = Markdown(assistant_msg.content)
-            console.print(Panel(markdown_response, title="Resposta do Agente", title_align="left", border_style="cyan"))
+            console.print(
+                Panel(
+                    markdown_response,
+                    title="Resposta do Agente",
+                    title_align="left",
+                    border_style="cyan",
+                )
+            )
         return assistant_msg
 
     def run_until_stop(
@@ -102,13 +111,20 @@ class Agent:
         self._timed_out = False
         for _ in range(max_steps):
             if max_time is not None and time.monotonic() - start > max_time:
-                self.history.append({"role": "system", "content": f"[timeout after {max_time}s]"})
+                self.history.append(
+                    {"role": "system", "content": f"[timeout after {max_time}s]"}
+                )
                 self._timed_out = True
                 break
             step_start = time.monotonic()
             assistant_msg = self.step(msg)
-            if step_timeout is not None and time.monotonic() - step_start > step_timeout:
-                self.history.append({"role": "system", "content": f"[timeout after {step_timeout}s]"})
+            if (
+                step_timeout is not None
+                and time.monotonic() - step_start > step_timeout
+            ):
+                self.history.append(
+                    {"role": "system", "content": f"[timeout after {step_timeout}s]"}
+                )
                 self._timed_out = True
                 break
             calls = assistant_msg.tool_calls or []
@@ -122,7 +138,7 @@ def run_interactive(use_docker: bool | None = None) -> None:  # pragma: no cover
     console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
     try:
         while True:
-            user_msg = console.input("[cyan]user> [/]" )
+            user_msg = console.input("[cyan]user> [/]")
             if user_msg.strip() in {"/exit", "quit", "q"}:
                 break
             agent.run_until_stop(user_msg)
