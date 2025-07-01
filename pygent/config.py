@@ -5,7 +5,7 @@ try:  # Python 3.11+
 except ModuleNotFoundError:  # pragma: no cover - executed on older Python versions
     import tomli as tomllib  # type: ignore
 from pathlib import Path
-from typing import Any, Dict, List, Mapping
+from typing import Any, Dict, List, Mapping, Optional, Union
 
 DEFAULT_CONFIG_FILES = [
     Path("pygent.toml"),
@@ -13,7 +13,7 @@ DEFAULT_CONFIG_FILES = [
 ]
 
 
-def load_config(path: str | os.PathLike[str] | None = None) -> Dict[str, Any]:
+def load_config(path: Optional[Union[str, os.PathLike[str]]] = None) -> Dict[str, Any]:
     """Load configuration from a TOML file and set environment variables.
 
     Environment variables already set take precedence over file values.

@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 import uuid
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional
 
 try:  # Docker may not be available (e.g. Windows without Docker)
     import docker  # type: ignore
@@ -20,9 +20,9 @@ class Runtime:
 
     def __init__(
         self,
-        image: str | None = None,
-        use_docker: bool | None = None,
-        initial_files: list[str] | None = None,
+        image: Optional[str] = None,
+        use_docker: Optional[bool] = None,
+        initial_files: Optional[list[str]] = None,
     ) -> None:
         self.base_dir = Path(tempfile.mkdtemp(prefix="pygent_"))
         if initial_files is None:

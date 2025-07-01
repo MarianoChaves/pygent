@@ -1,7 +1,7 @@
 import os
 import json
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from urllib import request, error
 
 from .errors import APIError
@@ -26,8 +26,8 @@ class ToolCall:
 @dataclass
 class Message:
     role: str
-    content: str | None = None
-    tool_calls: List[ToolCall] | None = None
+    content: Optional[str] = None
+    tool_calls: Optional[List[ToolCall]] = None
 
 
 @dataclass
@@ -63,7 +63,7 @@ class _ChatCompletions:
         model: str,
         messages: List[Dict[str, Any]],
         tools: Any = None,
-        tool_choice: str | None = "auto",
+        tool_choice: Optional[str] = "auto",
     ) -> ChatCompletion:
         payload: Dict[str, Any] = {"model": model, "messages": messages}
         if tools is not None:

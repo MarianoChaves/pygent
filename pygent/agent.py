@@ -6,7 +6,7 @@ import pathlib
 import uuid
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from rich.console import Console
 from rich.panel import Panel
@@ -94,8 +94,8 @@ class Agent:
         self,
         user_msg: str,
         max_steps: int = 20,
-        step_timeout: float | None = None,
-        max_time: float | None = None,
+        step_timeout: Optional[float] = None,
+        max_time: Optional[float] = None,
     ) -> None:
         """Run steps until ``stop`` is called or limits are reached."""
 
@@ -133,7 +133,7 @@ class Agent:
             msg = "continue"
 
 
-def run_interactive(use_docker: bool | None = None) -> None:  # pragma: no cover
+def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no cover
     agent = Agent(runtime=Runtime(use_docker=use_docker))
     console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
     try:

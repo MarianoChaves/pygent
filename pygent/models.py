@@ -2,7 +2,7 @@ from __future__ import annotations
 
 """Model interface and default implementation for OpenAI-compatible APIs."""
 
-from typing import Any, Dict, List, Protocol
+from typing import Any, Dict, List, Protocol, Optional
 
 try:
     import openai  # type: ignore
@@ -38,10 +38,10 @@ class OpenAIModel:
 
 
 # global custom model used for all new agents when set
-CUSTOM_MODEL: Model | None = None
+CUSTOM_MODEL: Optional[Model] = None
 
 
-def set_custom_model(model: Model | None) -> None:
+def set_custom_model(model: Optional[Model]) -> None:
     """Set a global custom model used by :class:`~pygent.agent.Agent`."""
 
     global CUSTOM_MODEL

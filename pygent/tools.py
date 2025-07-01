@@ -2,12 +2,12 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Optional
 
 from .runtime import Runtime
 from .task_manager import TaskManager
 
-_task_manager: TaskManager | None = None
+_task_manager: Optional[TaskManager] = None
 
 
 def _get_manager() -> TaskManager:
@@ -132,10 +132,10 @@ def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
 def _delegate_task(
     rt: Runtime,
     prompt: str,
-    files: list[str] | None = None,
-    timeout: float | None = None,
-    step_timeout: float | None = None,
-    persona: str | None = None,
+    files: Optional[list[str]] = None,
+    timeout: Optional[float] = None,
+    step_timeout: Optional[float] = None,
+    persona: Optional[str] = None,
 ) -> str:
     if getattr(rt, "task_depth", 0) >= 1:
         return "error: delegation not allowed in sub-tasks"
@@ -177,9 +177,9 @@ def _delegate_persona_task(
     rt: Runtime,
     prompt: str,
     persona: str,
-    files: list[str] | None = None,
-    timeout: float | None = None,
-    step_timeout: float | None = None,
+    files: Optional[list[str]] = None,
+    timeout: Optional[float] = None,
+    step_timeout: Optional[float] = None,
 ) -> str:
     return _delegate_task(
         rt,
