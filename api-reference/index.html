@@ -58,10 +58,12 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -114,7 +116,25 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -392,6 +412,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -401,21 +436,27 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tools" class="md-nav__link">
+    <nav class="md-nav" aria-label="Runtime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#methods_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Tools
+      Methods
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#personas" class="md-nav__link">
+  <a href="#builtin-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Personas
+      Built‑in tools
     </span>
   </a>
   
@@ -425,6 +466,15 @@
   <a href="#taskmanager" class="md-nav__link">
     <span class="md-ellipsis">
       TaskManager
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#personas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Personas
     </span>
   </a>
   
@@ -489,6 +539,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Agent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -498,21 +563,27 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tools" class="md-nav__link">
+    <nav class="md-nav" aria-label="Runtime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#methods_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Tools
+      Methods
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#personas" class="md-nav__link">
+  <a href="#builtin-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Personas
+      Built‑in tools
     </span>
   </a>
   
@@ -522,6 +593,15 @@
   <a href="#taskmanager" class="md-nav__link">
     <span class="md-ellipsis">
       TaskManager
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#personas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Personas
     </span>
   </a>
   
@@ -565,56 +645,42 @@
 
 
 <h1 id="api-reference">API Reference</h1>
-<p>This section summarises the most relevant classes and functions.</p>
+<p>This page describes the public classes and helpers provided by <strong>Pygent</strong>. Import everything from the package root unless noted otherwise.</p>
 <h2 id="agent"><code>Agent</code></h2>
 <pre><code class="language-python">from pygent import Agent
 </code></pre>
-<p>Manages the conversation with the model. Each instance owns a
-<code>Runtime</code> accessible via <code>agent.runtime</code>.</p>
-<p><strong>Methods</strong></p>
+<p><code>Agent</code> orchestrates the conversation with the selected model. Each instance owns a <code>Runtime</code> available as <code>agent.runtime</code>.</p>
+<h3 id="methods">Methods</h3>
 <ul>
-<li><code>step(user_msg: str) -&gt; None</code> – add a message and run any tools
-  returned by the model.</li>
-<li><code>run_interactive(use_docker: bool | None = None) -&gt; None</code> – start an
-  interactive session.</li>
-<li><code>run_gui(use_docker: bool | None = None) -&gt; None</code> – start a simple
-  web interface.</li>
+<li><code>step(user_msg: str) -&gt; pygent.openai_compat.Message</code> – add a message and run any tools returned by the model.</li>
+<li><code>run_interactive(use_docker: bool | None = None) -&gt; None</code> – start a terminal session.</li>
+<li><code>run_gui(use_docker: bool | None = None) -&gt; None</code> – launch the simple web interface.</li>
+<li><code>run_until_stop(user_msg: str, max_steps=20, ...) -&gt; None</code> – keep executing steps until the <code>stop</code> tool is called or a limit is reached.</li>
 </ul>
 <h2 id="runtime"><code>Runtime</code></h2>
-<p>Executes commands either in a Docker container or locally.</p>
-<p><strong>Methods</strong></p>
+<p><code>Runtime</code> executes commands either locally or in a Docker container.</p>
+<h3 id="methods_1">Methods</h3>
 <ul>
-<li><code>bash(cmd: str, timeout: int = 30) -&gt; str</code> – run a shell command and
-  return its output.</li>
-<li><code>write_file(path: str, content: str) -&gt; str</code> – create or replace a
-  UTF-8 encoded text file in the working directory.</li>
-<li><code>cleanup() -&gt; None</code> – destroy the temporary workspace and stop the
-  container if used.</li>
+<li><code>bash(cmd: str, timeout: int = 30) -&gt; str</code> – run a shell command and return its output.</li>
+<li><code>write_file(path: str, content: str) -&gt; str</code> – create or overwrite a UTF‑8 file.</li>
+<li><code>read_file(path: str, binary: bool = False) -&gt; str</code> – read a file from the workspace.</li>
+<li><code>cleanup() -&gt; None</code> – destroy the temporary workspace and stop the container if one was used.</li>
 </ul>
-<h2 id="tools">Tools</h2>
-<p>Several tools are available by default:</p>
+<h2 id="builtin-tools">Built‑in tools</h2>
+<p>These tools are registered automatically:</p>
 <ul>
-<li><strong>bash</strong> &ndash; executes shell commands via <code>Runtime.bash</code>.</li>
-<li><strong>write_file</strong> &ndash; writes files through <code>Runtime.write_file</code>.</li>
-<li><strong>delegate_task</strong> &ndash; start a background task handled by a new agent,
-  optionally copying files into it.</li>
-<li><strong>delegate_persona_task</strong> &ndash; like <code>delegate_task</code> but allows selecting
-  the persona of the delegated agent.</li>
-<li><strong>list_personas</strong> &ndash; return the available personas for task delegation.</li>
-<li><strong>task_status</strong> &ndash; check the progress of a delegated task.</li>
-<li><strong>collect_file</strong> &ndash; copy a file from a delegated task into the current workspace.</li>
-<li><strong>download_file</strong> &ndash; retrieve the contents of a file from the workspace.</li>
+<li><strong>bash</strong> – run a command through <code>Runtime.bash</code>.</li>
+<li><strong>write_file</strong> – create files via <code>Runtime.write_file</code>.</li>
+<li><strong>delegate_task</strong> – start a background agent.</li>
+<li><strong>delegate_persona_task</strong> – like <code>delegate_task</code> but lets you pick the persona.</li>
+<li><strong>list_personas</strong> – return the available personas for delegation.</li>
+<li><strong>task_status</strong> – check the status of a delegated task.</li>
+<li><strong>collect_file</strong> – copy a file from a delegated task into the current workspace.</li>
+<li><strong>download_file</strong> – read a file using <code>Runtime.read_file</code>.</li>
+<li><strong>continue</strong> – request user input when running autonomously.</li>
+<li><strong>stop</strong> – stop the autonomous loop.</li>
 </ul>
-<h2 id="personas">Personas</h2>
-<p>Agents use personas to adopt different behaviours. Each persona has a
-<code>name</code> and <code>description</code>. The default persona name can be set via the
-<code>PYGENT_PERSONA_NAME</code> environment variable and its description via
-<code>PYGENT_PERSONA</code>. Delegated agent personas can be defined via
-<code>PYGENT_TASK_PERSONAS_JSON</code> using a JSON list of objects. The <code>list_personas</code> tool returns all available personas as
-JSON objects with these fields.</p>
-<p>Additional tools can be registered programmatically using
-<code>pygent.register_tool</code> or the <code>pygent.tool</code> decorator. Each tool receives the
-active <code>Runtime</code> instance and must return a string.</p>
+<p>Custom tools can be registered programmatically:</p>
 <pre><code class="language-python">from pygent import register_tool
 
 def hello(rt, name: str) -&gt; str:
@@ -627,41 +693,20 @@ register_tool(
     hello,
 )
 </code></pre>
-<p>Refer to the <code>tools.py</code> module for more details.</p>
 <h2 id="taskmanager"><code>TaskManager</code></h2>
-<p>Launch separate agents asynchronously and track them:</p>
 <pre><code class="language-python">from pygent import TaskManager, Runtime
-
-rt = Runtime(use_docker=False)
-tm = TaskManager()
-task_id = tm.start_task(
-    &quot;generate report&quot;,
-    rt,
-    files=[&quot;data.txt&quot;],
-    step_timeout=5,
-    task_timeout=60,
-)
-print(tm.status(task_id))
 </code></pre>
-<p>Pass a <code>Runtime</code> instance when starting a task so files can be copied into the
-sub-agent workspace via the optional <code>files</code> argument. Delegated agents cannot
-create further tasks. The maximum number of concurrent tasks is controlled by
-the <code>PYGENT_MAX_TASKS</code> environment variable (default <code>3</code>).
-Optional <code>step_timeout</code> and <code>task_timeout</code> parameters control how long each
-step and the overall task are allowed to run. Their defaults can be set via the
-<code>PYGENT_STEP_TIMEOUT</code> and <code>PYGENT_TASK_TIMEOUT</code> environment variables.</p>
+<p><code>TaskManager</code> launches separate agents asynchronously and tracks them. Pass a <code>Runtime</code> instance when starting a task so files can be copied into the sub‑agent's workspace.</p>
+<h2 id="personas">Personas</h2>
+<p>Agents can adopt different personas. The defaults come from the <code>PYGENT_PERSONA_NAME</code> and <code>PYGENT_PERSONA</code> environment variables. Delegated agent personas can be configured via <code>PYGENT_TASK_PERSONAS_JSON</code>. The <code>list_personas</code> tool returns all available options.</p>
 <h2 id="custom-prompts">Custom prompts</h2>
-<p>Pass a custom string to the <code>Agent</code> constructor to override the system prompt:</p>
+<p>Provide a <code>Persona</code> object to the <code>Agent</code> constructor to override the system prompt:</p>
 <pre><code class="language-python">from pygent import Agent, Persona
 
 ag = Agent(persona=Persona(&quot;Helper&quot;, &quot;a friendly bot&quot;))
 </code></pre>
 <h2 id="custom-models">Custom models</h2>
-<p>The <code>Agent</code> relies on a model object with a <code>chat</code> method. The default is
-<code>OpenAIModel</code> which calls an OpenAI-compatible API. To plug in a different
-backend, implement the <code>Model</code> protocol and pass an instance when creating the
-agent. Custom models may return tool calls by populating the <code>tool_calls</code>
-attribute of the returned message.</p>
+<p><code>Agent</code> relies on an object implementing the <code>Model</code> protocol. The default <code>OpenAIModel</code> calls an OpenAI‑compatible API, but any backend can be plugged in. Custom models may return tool calls by filling the <code>tool_calls</code> attribute of the returned message.</p>
 
 
 
@@ -710,7 +755,7 @@ attribute of the returned message.</p>
     
     
       
-      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "navigation.instant"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
