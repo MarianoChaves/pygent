@@ -56,7 +56,7 @@ jobs:
           python-version: '3.11'
       - name: Install docs deps
         run: |
-          pip install mkdocs
+          pip install mkdocs mkdocs-material
       - name: Build docs
         run: mkdocs build
       - name: Deploy docs
