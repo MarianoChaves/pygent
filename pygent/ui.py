@@ -1,6 +1,7 @@
 from .agent import Agent
 from .runtime import Runtime
 from .tools import execute_tool, TOOL_SCHEMAS
+from . import openai_compat
 
 
 def run_gui(use_docker: bool | None = None) -> None:
@@ -16,13 +17,16 @@ def run_gui(use_docker: bool | None = None) -> None:
 
     def _respond(message: str, history: list[tuple[str, str]] | None) -> str:
         agent.history.append({"role": "user", "content": message})
-        assistant_msg = agent.model.chat(agent.history, agent.model_name, TOOL_SCHEMAS)
+        raw = agent.model.chat(agent.history, agent.model_name, TOOL_SCHEMAS)
+        assistant_msg = openai_compat.parse_message(raw)
         agent.history.append(assistant_msg)
         reply = assistant_msg.content or ""
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
                 output = execute_tool(call, agent.runtime)
-                agent.history.append({"role": "tool", "content": output, "tool_call_id": call.id})
+                agent.history.append(
+                    {"role": "tool", "content": output, "tool_call_id": call.id}
+                )
                 reply += f"\n\n[tool:{call.function.name}]\n{output}"
         return reply
 

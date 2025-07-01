@@ -9,10 +9,12 @@ from .errors import APIError
 OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 
+
 @dataclass
 class ToolCallFunction:
     name: str
     arguments: str
+
 
 @dataclass
 class ToolCall:
@@ -20,15 +22,18 @@ class ToolCall:
     type: str
     function: ToolCallFunction
 
+
 @dataclass
 class Message:
     role: str
     content: str | None = None
     tool_calls: List[ToolCall] | None = None
 
+
 @dataclass
 class Choice:
     message: Message
+
 
 @dataclass
 class ChatCompletion:
@@ -53,7 +58,13 @@ def _post(path: str, payload: Dict[str, Any]) -> Dict[str, Any]:
 
 
 class _ChatCompletions:
-    def create(self, model: str, messages: List[Dict[str, Any]], tools: Any = None, tool_choice: str | None = "auto") -> ChatCompletion:
+    def create(
+        self,
+        model: str,
+        messages: List[Dict[str, Any]],
+        tools: Any = None,
+        tool_choice: str | None = "auto",
+    ) -> ChatCompletion:
         payload: Dict[str, Any] = {"model": model, "messages": messages}
         if tools is not None:
             payload["tools"] = tools
@@ -66,8 +77,16 @@ class _ChatCompletions:
             tool_calls = []
             for tc in msg_data.get("tool_calls", []):
                 func = ToolCallFunction(**tc.get("function", {}))
-                tool_calls.append(ToolCall(id=tc.get("id", ""), type=tc.get("type", ""), function=func))
-            msg = Message(role=msg_data.get("role", ""), content=msg_data.get("content"), tool_calls=tool_calls or None)
+                tool_calls.append(
+                    ToolCall(
+                        id=tc.get("id", ""), type=tc.get("type", ""), function=func
+                    )
+                )
+            msg = Message(
+                role=msg_data.get("role", ""),
+                content=msg_data.get("content"),
+                tool_calls=tool_calls or None,
+            )
             choices.append(Choice(message=msg))
         return ChatCompletion(choices=choices)
 
@@ -78,3 +97,37 @@ class _Chat:
 
 
 chat = _Chat()
+
+
+def parse_message(raw: Any) -> Message:
+    """Return a :class:`Message` from ``raw`` data.
+
+    Accepts dictionaries and objects from the official OpenAI client.
+    """
+    if isinstance(raw, Message):
+        return raw
+    if isinstance(raw, dict):
+        tool_calls = []
+        for tc in raw.get("tool_calls", []) or []:
+            func_data = tc.get("function", {})
+            func = ToolCallFunction(
+                name=func_data.get("name", ""),
+                arguments=func_data.get("arguments", ""),
+            )
+            tool_calls.append(
+                ToolCall(
+                    id=tc.get("id", ""),
+                    type=tc.get("type", ""),
+                    function=func,
+                )
+            )
+        return Message(
+            role=raw.get("role", ""),
+            content=raw.get("content"),
+            tool_calls=tool_calls or None,
+        )
+    if hasattr(raw, "model_dump"):
+        return parse_message(raw.model_dump())
+    if hasattr(raw, "to_dict"):
+        return parse_message(raw.to_dict())
+    raise TypeError(f"Unsupported message type: {type(raw)!r}")
