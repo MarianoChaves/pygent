@@ -11,4 +11,6 @@ This page collects small scripts demonstrating different aspects of Pygent. Each
 - [delegate_task_example.py](https://github.com/marianochaves/pygent/blob/main/examples/delegate_task_example.py) &ndash; delegating work to a background agent.
 - [config_file_example.py](https://github.com/marianochaves/pygent/blob/main/examples/config_file_example.py) &ndash; loading a config file and delegating a testing agent.
 
+See the [Custom Models](custom-models.md) page for a walkthrough of building your own models.
+
 Run these with `python <script>` from the project root. They expect the environment variables described in the [Configuration](configuration.md) page.
