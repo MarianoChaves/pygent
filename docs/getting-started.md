@@ -66,7 +66,8 @@ available in the [Configuration](configuration.md) page.
 
 For full control you may pass a custom model implementation to `Agent`. The file
 [custom_model.py](https://github.com/marianochaves/pygent/blob/main/examples/custom_model.py)
-contains a minimal echo model example.
+contains a minimal echo model example. A dedicated [Custom Models](custom-models.md)
+page expands on this topic with additional scenarios.
 
 ## Additional examples
 
