@@ -14,4 +14,6 @@ This page collects small scripts demonstrating different aspects of Pygent. Each
 
 See the [Custom Models](custom-models.md) page for a walkthrough of building your own models.
 
+See the [Custom Models](custom-models.md) page for a walkthrough of building your own models.
+
 Run these with `python <script>` from the project root. They expect the environment variables described in the [Configuration](configuration.md) page.
