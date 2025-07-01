@@ -8,7 +8,7 @@ import shutil
 import threading
 import uuid
 from dataclasses import dataclass, field
-from typing import Callable, Dict, TYPE_CHECKING
+from typing import Callable, Dict, TYPE_CHECKING, Optional, Union
 
 from .persona import Persona
 
@@ -33,9 +33,9 @@ class TaskManager:
 
     def __init__(
         self,
-        agent_factory: Callable[..., "Agent"] | None = None,
-        max_tasks: int | None = None,
-        personas: list[Persona] | None = None,
+        agent_factory: Optional[Callable[..., "Agent"]] = None,
+        max_tasks: Optional[int] = None,
+        personas: Optional[list[Persona]] = None,
     ) -> None:
         from .agent import Agent  # local import to avoid circular dependency
 
@@ -80,11 +80,11 @@ class TaskManager:
         self,
         prompt: str,
         parent_rt: Runtime,
-        files: list[str] | None = None,
+        files: Optional[list[str]] = None,
         parent_depth: int = 0,
-        step_timeout: float | None = None,
-        task_timeout: float | None = None,
-        persona: Persona | str | None = None,
+        step_timeout: Optional[float] = None,
+        task_timeout: Optional[float] = None,
+        persona: Union[Persona, str, None] = None,
     ) -> str:
         """Create a new agent and run ``prompt`` asynchronously.
 

@@ -4,7 +4,10 @@ from .tools import execute_tool, TOOL_SCHEMAS
 from . import openai_compat
 
 
-def run_gui(use_docker: bool | None = None) -> None:
+from typing import Optional
+
+
+def run_gui(use_docker: Optional[bool] = None) -> None:
     """Launch a simple Gradio chat interface."""
     try:
         import gradio as gr
@@ -15,7 +18,7 @@ def run_gui(use_docker: bool | None = None) -> None:
 
     agent = Agent(runtime=Runtime(use_docker=use_docker))
 
-    def _respond(message: str, history: list[tuple[str, str]] | None) -> str:
+    def _respond(message: str, history: Optional[list[tuple[str, str]]]) -> str:
         agent.history.append({"role": "user", "content": message})
         raw = agent.model.chat(agent.history, agent.model_name, TOOL_SCHEMAS)
         assistant_msg = openai_compat.parse_message(raw)
