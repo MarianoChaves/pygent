@@ -612,11 +612,13 @@ vc&gt; echo &quot;Hello&quot;
 to leave the session. You can also launch a simple web interface with
 <code>pygent-ui</code> (requires the <code>ui</code> extra).</p>
 <h3 id="tool-usage">Tool usage</h3>
-<p>During the conversation the assistant can call two built-in tools: <code>bash</code> to
-run shell commands and <code>write_file</code> to create files inside the workspace. For
+<p>During the conversation the assistant can call several built-in tools. <code>bash</code>
+runs shell commands, <code>write_file</code> creates files inside the workspace and
+<code>upload_file</code> copies a local file or directory into the workspace. For
 example:</p>
 <pre><code class="language-text">vc&gt; write_file path=&quot;hello.txt&quot; content=&quot;Hello from Pygent&quot;
 vc&gt; bash cmd=&quot;cat hello.txt&quot;
+vc&gt; upload_file src=&quot;/path/to/data.txt&quot; dest=&quot;data.txt&quot;
 </code></pre>
 <h2 id="using-the-api">Using the API</h2>
 <p>The same functionality is accessible programmatically via the <code>Agent</code> class:</p>
