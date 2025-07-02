@@ -31,6 +31,9 @@ from pygent.task_manager import TaskManager
 from pygent.persona import Persona
 from pygent.runtime import Runtime
 from pygent import tools
+from pygent.task_tools import register_task_tools
+
+register_task_tools()
 
 
 class DummyModel:

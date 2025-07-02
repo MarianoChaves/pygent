@@ -123,7 +123,8 @@ class TaskManager:
                 agent.runtime.cleanup()
             except Exception:
                 pass
-        agent.runtime = Runtime(use_docker=parent_rt.use_docker)
+        task_dir = parent_rt.base_dir / f"task_{uuid.uuid4().hex[:8]}"
+        agent.runtime = Runtime(use_docker=parent_rt.use_docker, workspace=task_dir)
         setattr(agent, "persona", persona)
         if not getattr(agent, "system_msg", None):
             from .agent import build_system_msg  # lazy import

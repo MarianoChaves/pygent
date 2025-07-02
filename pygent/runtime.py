@@ -32,13 +32,13 @@ class Runtime:
         env_ws = os.getenv("PYGENT_WORKSPACE")
         if workspace is None and env_ws:
             workspace = env_ws
-        if workspace:
-            self.base_dir = Path(workspace).expanduser()
-            self.base_dir.mkdir(parents=True, exist_ok=True)
-            self._persistent = True
-        else:
-            self.base_dir = Path(tempfile.mkdtemp(prefix="pygent_"))
+        if workspace is None:
+            self.base_dir = Path.cwd() / f"agent_{uuid.uuid4().hex[:8]}"
             self._persistent = False
+        else:
+            self.base_dir = Path(workspace).expanduser()
+            self._persistent = True
+        self.base_dir.mkdir(parents=True, exist_ok=True)
         if initial_files is None:
             env_files = os.getenv("PYGENT_INIT_FILES")
             if env_files:

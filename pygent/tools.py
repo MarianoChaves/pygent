@@ -116,25 +116,6 @@ def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
 
 
 
-@tool(
-    name="delegate_task",
-    description="Create a background task using a new agent and return its ID.",
-    parameters={
-        "type": "object",
-        "properties": {
-            "prompt": {"type": "string", "description": "Instruction for the sub-agent"},
-            "files": {
-                "type": "array",
-                "items": {"type": "string"},
-                "description": "Files to copy to the sub-agent before starting",
-            },
-            "persona": {"type": "string", "description": "Persona for the sub-agent"},
-            "timeout": {"type": "number", "description": "Max seconds for the task"},
-            "step_timeout": {"type": "number", "description": "Time limit per step"},
-        },
-        "required": ["prompt"],
-    },
-)
 def _delegate_task(
     rt: Runtime,
     prompt: str,
@@ -160,25 +141,6 @@ def _delegate_task(
     return f"started {tid}"
 
 
-@tool(
-    name="delegate_persona_task",
-    description="Create a background task with a specific persona and return its ID.",
-    parameters={
-        "type": "object",
-        "properties": {
-            "prompt": {"type": "string", "description": "Instruction for the sub-agent"},
-            "persona": {"type": "string", "description": "Persona for the sub-agent"},
-            "files": {
-                "type": "array",
-                "items": {"type": "string"},
-                "description": "Files to copy to the sub-agent before starting",
-            },
-            "timeout": {"type": "number", "description": "Max seconds for the task"},
-            "step_timeout": {"type": "number", "description": "Time limit per step"},
-        },
-        "required": ["prompt", "persona"],
-    },
-)
 def _delegate_persona_task(
     rt: Runtime,
     prompt: str,
@@ -197,11 +159,6 @@ def _delegate_persona_task(
     )
 
 
-@tool(
-    name="list_personas",
-    description="Return the available personas for delegated agents.",
-    parameters={"type": "object", "properties": {}},
-)
 def _list_personas(rt: Runtime) -> str:
     """Return JSON list of personas."""
     personas = [
@@ -211,15 +168,6 @@ def _list_personas(rt: Runtime) -> str:
     return json.dumps(personas)
 
 
-@tool(
-    name="task_status",
-    description="Check the status of a delegated task.",
-    parameters={
-        "type": "object",
-        "properties": {"task_id": {"type": "string"}},
-        "required": ["task_id"],
-    },
-)
 def _task_status(rt: Runtime, task_id: str) -> str:
     return _get_manager().status(task_id)
 
