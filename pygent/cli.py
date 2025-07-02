@@ -1,17 +1,44 @@
-"""Command-line entry point for Pygent."""
-import argparse
+"""Command-line interface for Pygent using Typer."""
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Optional
+
+import typer
 
 from .config import load_config
+from .agent import run_interactive
+
+app = typer.Typer(add_completion=False, help="Pygent - assistente de c\u00f3digo")
+
+
+@app.callback(invoke_without_command=True)
+def cli(
+    ctx: typer.Context,
+    docker: Optional[bool] = typer.Option(
+        None,
+        "--docker/--no-docker",
+        help="run commands in a Docker container",
+    ),
+    config: Optional[Path] = typer.Option(
+        None, "-c", "--config", help="path to configuration file"
+    ),
+    workspace: Optional[Path] = typer.Option(
+        None, "-w", "--workspace", help="name of workspace directory"
+    ),
+) -> None:
+    """Start an interactive session if no subcommand is given."""
+    load_config(str(config) if config else None)
+    if ctx.invoked_subcommand is None:
+        run_interactive(
+            use_docker=docker, workspace_name=str(workspace) if workspace else None
+        )
+
 
 def main() -> None:  # pragma: no cover
-    parser = argparse.ArgumentParser(prog="pygent")
-    parser.add_argument("--docker", dest="use_docker", action="store_true", help="run commands in a Docker container")
-    parser.add_argument("--no-docker", dest="use_docker", action="store_false", help="run locally")
-    parser.add_argument("-c", "--config", help="path to configuration file")
-    parser.add_argument("-w", "--workspace", help="name of workspace directory")
-    parser.set_defaults(use_docker=None)
-    args = parser.parse_args()
-    load_config(args.config)
-    from .agent import run_interactive
+    """Entry point for the ``pygent`` console script."""
+    app()
 
-    run_interactive(use_docker=args.use_docker, workspace_name=args.workspace)
+
+if __name__ == "__main__":  # pragma: no cover
+    app()
