@@ -186,27 +186,12 @@ class Agent:
             msg = "continue"
 
 
-def run_interactive(use_docker: Optional[bool] = None, workspace_name: Optional[str] = None) -> None:  # pragma: no cover
+def run_interactive(
+    use_docker: Optional[bool] = None, workspace_name: Optional[str] = None
+) -> None:  # pragma: no cover
     """Start an interactive session in the terminal."""
-    ws = pathlib.Path.cwd() / workspace_name if workspace_name else None
-    agent = Agent(runtime=Runtime(use_docker=use_docker, workspace=ws))
-    from .commands import COMMANDS
-    mode = "Docker" if agent.runtime.use_docker else "local"
-    console.print(
-        f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
-    )
-    try:
-        while True:
-            user_msg = console.input("[cyan]user> [/]")
-            cmd = user_msg.split(maxsplit=1)[0]
-            args = user_msg[len(cmd):].strip() if " " in user_msg else ""
-            if cmd in {"/exit", "quit", "q"}:
-                break
-            if cmd in COMMANDS:
-                result = COMMANDS[cmd](agent, args)
-                if isinstance(result, Agent):
-                    agent = result
-                continue
-            agent.run_until_stop(user_msg)
-    finally:
-        agent.runtime.cleanup()
+
+    from .interactive import InteractiveSession
+
+    session = InteractiveSession(use_docker=use_docker, workspace=workspace_name)
+    session.start()
