@@ -28,11 +28,10 @@ def build_system_msg(persona: Persona) -> str:
 
     return (
         f"You are {persona.name}. {persona.description}\n"
-        "Respond with JSON when you need to use a tool."
-        "If you need to stop or finish your task, call the `stop` tool.\n"
-        "You can use the following tools:\n"
+        "Think step by step and use the available tools to solve the problem. "
+        "Call `stop` when your work is done. Use `continue` if you require user input.\n"
+        "Available tools:\n"
         f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
-        "You can also use the `continue` tool to request user input or continue the conversation.\n"
     )
 
 
@@ -187,9 +186,11 @@ class Agent:
             msg = "continue"
 
 
-def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no cover
+def run_interactive(use_docker: Optional[bool] = None, workspace_name: Optional[str] = None) -> None:  # pragma: no cover
     """Start an interactive session in the terminal."""
-    agent = Agent(runtime=Runtime(use_docker=use_docker))
+    ws = pathlib.Path.cwd() / workspace_name if workspace_name else None
+    agent = Agent(runtime=Runtime(use_docker=use_docker, workspace=ws))
+    from .commands import COMMANDS
     mode = "Docker" if agent.runtime.use_docker else "local"
     console.print(
         f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
@@ -197,8 +198,15 @@ def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no co
     try:
         while True:
             user_msg = console.input("[cyan]user> [/]")
-            if user_msg.strip() in {"/exit", "quit", "q"}:
+            cmd = user_msg.split(maxsplit=1)[0]
+            args = user_msg[len(cmd):].strip() if " " in user_msg else ""
+            if cmd in {"/exit", "quit", "q"}:
                 break
+            if cmd in COMMANDS:
+                result = COMMANDS[cmd](agent, args)
+                if isinstance(result, Agent):
+                    agent = result
+                continue
             agent.run_until_stop(user_msg)
     finally:
         agent.runtime.cleanup()
