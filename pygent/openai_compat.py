@@ -2,6 +2,7 @@
 
 import os
 import json
+import dataclasses
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 from urllib import request, error
@@ -43,7 +44,16 @@ class ChatCompletion:
 
 
 def _post(path: str, payload: Dict[str, Any]) -> Dict[str, Any]:
-    data = json.dumps(payload).encode()
+    def _to_dict(obj: Any) -> Any:
+        if dataclasses.is_dataclass(obj):
+            return dataclasses.asdict(obj)
+        if isinstance(obj, list):
+            return [_to_dict(o) for o in obj]
+        if isinstance(obj, dict):
+            return {k: _to_dict(v) for k, v in obj.items()}
+        return obj
+
+    data = json.dumps(_to_dict(payload)).encode()
     headers = {"Content-Type": "application/json"}
     if OPENAI_API_KEY:
         headers["Authorization"] = f"Bearer {OPENAI_API_KEY}"
