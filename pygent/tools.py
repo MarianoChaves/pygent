@@ -224,6 +224,16 @@ def _task_status(rt: Runtime, task_id: str) -> str:
     return _get_manager().status(task_id)
 
 
+@tool(
+    name="list_tasks",
+    description="Return the available delegated tasks and their status.",
+    parameters={"type": "object", "properties": {}},
+)
+def _list_tasks(rt: Runtime) -> str:
+    """Return JSON mapping of task IDs to persona and status."""
+    return json.dumps(_get_manager().list_tasks())
+
+
 def _collect_file(rt: Runtime, task_id: str, path: str, dest: Optional[str] = None) -> str:
     """Retrieve a file or directory from a delegated task."""
     return _get_manager().collect_file(rt, task_id, path, dest)
