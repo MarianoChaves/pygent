@@ -286,3 +286,12 @@ def test_task_runtime_matches_parent():
     tid = tm.start_task("echo", rt, task_timeout=0.01, step_timeout=0.01)
     tm.tasks[tid].thread.join()
     assert tm.tasks[tid].agent.runtime.use_docker == rt.use_docker
+
+
+def test_list_tasks():
+    tm = TaskManager(agent_factory=make_agent)
+    rt = Runtime(use_docker=False)
+    tid = tm.start_task("echo", rt, task_timeout=0.01, step_timeout=0.01)
+    tm.tasks[tid].thread.join()
+    lst = tm.list_tasks()
+    assert any(t["id"] == tid for t in lst)
