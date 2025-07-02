@@ -60,6 +60,10 @@ Type messages normally; use `/exit` to end the session. Each command is executed
 in the container and the result shown in the terminal.
 Interactive programs that expect input (e.g. running `python` without a script)
 are not supported and will exit immediately.
+You can manage multiple agents during a session. Use `/agents` to list them,
+`/new NAME` to create a new agent, `/use NAME` to switch the active one and
+`/talk NAME MESSAGE` to send a message to another agent. The `/agents` command
+also shows any delegated tasks currently running.
 For a minimal web interface run `pygent-ui` instead (requires `pygent[ui]`).
 
 

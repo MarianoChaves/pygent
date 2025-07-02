@@ -189,3 +189,14 @@ class TaskManager:
             dest_path.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(src, dest_path)
         return f"Retrieved {dest_path.relative_to(rt.base_dir)}"
+
+    def list_tasks(self) -> list[dict[str, str]]:
+        """Return metadata for all tracked tasks."""
+
+        with self._lock:
+            items = list(self.tasks.items())
+        result: list[dict[str, str]] = []
+        for tid, task in items:
+            persona = getattr(getattr(task.agent, "persona", None), "name", "")
+            result.append({"id": tid, "status": task.status, "persona": persona})
+        return result

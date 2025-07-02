@@ -150,17 +150,66 @@ class Agent:
 
 
 def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no cover
-    """Start an interactive session in the terminal."""
-    agent = Agent(runtime=Runtime(use_docker=use_docker))
-    mode = "Docker" if agent.runtime.use_docker else "local"
+    """Start an interactive multi-agent session in the terminal."""
+
+    agents: dict[str, Agent] = {}
+    current = "main"
+    agents[current] = Agent(runtime=Runtime(use_docker=use_docker))
+    manager = tools._get_manager()
+
+    mode = "Docker" if agents[current].runtime.use_docker else "local"
     console.print(
-        f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
+        f"[bold green]{agents[current].persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
     )
+    console.print(
+        "Comandos: /agents, /new NOME, /use NOME, /talk NOME MENSAGEM"
+    )
+
     try:
         while True:
-            user_msg = console.input("[cyan]user> [/]")
-            if user_msg.strip() in {"/exit", "quit", "q"}:
+            user_msg = console.input(f"[cyan]{current}> [/]" )
+            cmd = user_msg.strip()
+            if cmd in {"/exit", "quit", "q"}:
                 break
-            agent.run_until_stop(user_msg)
+            if cmd == "/agents":
+                names = ", ".join(agents.keys()) or "none"
+                console.print(f"Agentes ativos ({len(agents)}): {names}")
+                tasks = manager.list_tasks()
+                if tasks:
+                    console.print("Tarefas:")
+                    for t in tasks:
+                        console.print(f"  {t['id']}: {t['status']} ({t['persona']})")
+                continue
+            if cmd.startswith("/new "):
+                name = cmd.split(maxsplit=1)[1]
+                if name in agents:
+                    console.print(f"agente {name} ja existe")
+                else:
+                    agents[name] = Agent(runtime=Runtime(use_docker=use_docker))
+                    console.print(f"agente {name} criado")
+                continue
+            if cmd.startswith("/use "):
+                name = cmd.split(maxsplit=1)[1]
+                if name not in agents:
+                    console.print(f"agente {name} desconhecido")
+                else:
+                    current = name
+                    console.print(f"usando agente {name}")
+                continue
+            if cmd.startswith("/talk "):
+                parts = cmd.split(maxsplit=2)
+                if len(parts) < 3:
+                    console.print("uso: /talk NOME MENSAGEM")
+                else:
+                    name = parts[1]
+                    msg = parts[2]
+                    if name not in agents:
+                        console.print(f"agente {name} desconhecido")
+                    else:
+                        console.print(f"[yellow]Enviando mensagem para {name}[/]")
+                        agents[name].run_until_stop(msg)
+                continue
+            agents[current].run_until_stop(user_msg)
     finally:
-        agent.runtime.cleanup()
+        for ag in agents.values():
+            ag.runtime.cleanup()
