@@ -7,6 +7,7 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Runs commands in ephemeral containers (default image `python:3.12-slim`).
 * Integrates with OpenAI-compatible models to orchestrate each step.
 * Persists the conversation history during the session.
+* Optionally save the history to a JSON file for later recovery.
 * Provides a small Python API for use in other projects.
 * Optional web interface via `pygent-ui`.
 * Register your own tools and customise the system prompt.

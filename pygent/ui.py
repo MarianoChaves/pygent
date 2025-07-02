@@ -21,15 +21,15 @@ def run_gui(use_docker: Optional[bool] = None) -> None:
     agent = Agent(runtime=Runtime(use_docker=use_docker))
 
     def _respond(message: str, history: Optional[list[tuple[str, str]]]) -> str:
-        agent.history.append({"role": "user", "content": message})
+        agent.append_history({"role": "user", "content": message})
         raw = agent.model.chat(agent.history, agent.model_name, TOOL_SCHEMAS)
         assistant_msg = openai_compat.parse_message(raw)
-        agent.history.append(assistant_msg)
+        agent.append_history(assistant_msg)
         reply = assistant_msg.content or ""
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
                 output = execute_tool(call, agent.runtime)
-                agent.history.append(
+                agent.append_history(
                     {"role": "tool", "content": output, "tool_call_id": call.id}
                 )
                 reply += f"\n\n[tool:{call.function.name}]\n{output}"
