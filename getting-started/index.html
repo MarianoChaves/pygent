@@ -604,7 +604,9 @@ available. Include the optional extras to enable Docker support and the web UI:<
 <code>[docker]</code> extras and commands will run on the host system.</p>
 <h2 id="interactive-session">Interactive session</h2>
 <p>Start an interactive session by running <code>pygent</code> in a terminal. Use the
-<code>--docker</code> flag to force container execution or <code>--no-docker</code> to run locally.</p>
+<code>--docker</code> flag to force container execution or <code>--no-docker</code> to run locally.
+The CLI prints the persona name and whether commands run <code>local</code> or in
+<code>Docker</code> when the session starts so you know which agent is active.</p>
 <pre><code class="language-bash">$ pygent --docker
 vc&gt; echo &quot;Hello&quot;
 </code></pre>
@@ -613,13 +615,15 @@ to leave the session. You can also launch a simple web interface with
 <code>pygent-ui</code> (requires the <code>ui</code> extra).</p>
 <h3 id="tool-usage">Tool usage</h3>
 <p>During the conversation the assistant can call several built-in tools. <code>bash</code>
-runs shell commands, <code>write_file</code> creates files inside the workspace and
-<code>upload_file</code> copies a local file or directory into the workspace. For
+runs shell commands and <code>write_file</code> creates files inside the workspace. For
 example:</p>
 <pre><code class="language-text">vc&gt; write_file path=&quot;hello.txt&quot; content=&quot;Hello from Pygent&quot;
 vc&gt; bash cmd=&quot;cat hello.txt&quot;
-vc&gt; upload_file src=&quot;/path/to/data.txt&quot; dest=&quot;data.txt&quot;
 </code></pre>
+<p>You can disable all built-in tools with <code>pygent.clear_tools()</code> or
+remove a specific one with <code>pygent.remove_tool("bash")</code>. Restore the
+defaults at any time using <code>pygent.reset_tools()</code>. The system prompt will
+update automatically to list the tools currently registered.</p>
 <h2 id="using-the-api">Using the API</h2>
 <p>The same functionality is accessible programmatically via the <code>Agent</code> class:</p>
 <pre><code class="language-python">from pygent import Agent
