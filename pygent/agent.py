@@ -151,16 +151,67 @@ class Agent:
 
 def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no cover
     """Start an interactive session in the terminal."""
-    agent = Agent(runtime=Runtime(use_docker=use_docker))
-    mode = "Docker" if agent.runtime.use_docker else "local"
+    main_agent = Agent(runtime=Runtime(use_docker=use_docker))
+    manager = tools._get_manager()
+    agents: Dict[str, Agent] = {"main": main_agent}
+    current = "main"
+
+    mode = "Docker" if main_agent.runtime.use_docker else "local"
     console.print(
-        f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
+        f"[bold green]{main_agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
     )
     try:
         while True:
-            user_msg = console.input("[cyan]user> [/]")
-            if user_msg.strip() in {"/exit", "quit", "q"}:
+            prompt = console.input(f"[cyan]{current}> [/]" )
+            cmd = prompt.strip()
+            if cmd in {"/exit", "quit", "q"}:
                 break
-            agent.run_until_stop(user_msg)
+            if cmd.startswith("/tasks"):
+                tasks = manager.list_tasks()
+                active = sum(1 for info in tasks.values() if info["status"] == "running")
+                active += 1  # main agent
+                console.print(f"Agentes ativos: {active}")
+                for tid, info in tasks.items():
+                    console.print(f"{tid}: {info['persona']} - {info['status']}")
+                continue
+            if cmd.startswith("/switch"):
+                parts = cmd.split(maxsplit=1)
+                if len(parts) == 2:
+                    tid = parts[1]
+                    if tid == "main":
+                        current = "main"
+                        console.print("troquei para agente principal")
+                    else:
+                        ag = manager.get_agent(tid)
+                        if ag:
+                            agents[tid] = ag
+                            current = tid
+                            console.print(f"troquei para {tid}")
+                        else:
+                            console.print(f"Task {tid} não encontrada")
+                else:
+                    console.print("uso: /switch TASK_ID")
+                continue
+            if cmd.startswith("/talk"):
+                parts = cmd.split(maxsplit=2)
+                if len(parts) >= 3:
+                    tid = parts[1]
+                    msg = parts[2]
+                    ag = manager.get_agent(tid)
+                    if ag:
+                        ag.run_until_stop(msg)
+                    else:
+                        console.print(f"Task {tid} não encontrada")
+                else:
+                    console.print("uso: /talk TASK_ID MENSAGEM")
+                continue
+            agents[current].run_until_stop(prompt)
     finally:
-        agent.runtime.cleanup()
+        seen = {ag.runtime for ag in agents.values()}
+        for t in manager.tasks.values():
+            seen.add(t.agent.runtime)
+        for rt in seen:
+            try:
+                rt.cleanup()
+            except Exception:
+                pass

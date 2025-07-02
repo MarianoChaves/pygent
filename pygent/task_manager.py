@@ -76,6 +76,20 @@ class TaskManager:
         self.tasks: Dict[str, Task] = {}
         self._lock = threading.Lock()
 
+    def list_tasks(self) -> Dict[str, Dict[str, str]]:
+        """Return ``task_id`` -> ``{"persona": name, "status": status}``."""
+        with self._lock:
+            return {
+                tid: {"persona": t.agent.persona.name, "status": t.status}
+                for tid, t in self.tasks.items()
+            }
+
+    def get_agent(self, task_id: str) -> Optional["Agent"]:
+        """Return the agent instance for ``task_id`` or ``None``."""
+        with self._lock:
+            task = self.tasks.get(task_id)
+        return task.agent if task else None
+
     def start_task(
         self,
         prompt: str,
