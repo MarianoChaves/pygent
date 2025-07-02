@@ -24,7 +24,7 @@ except _metadata.PackageNotFoundError:  # pragma: no cover - fallback for tests
 from .agent import Agent, run_interactive  # noqa: E402,F401, must come after __version__
 from .models import Model, OpenAIModel, set_custom_model  # noqa: E402,F401
 from .errors import PygentError, APIError  # noqa: E402,F401
-from .tools import register_tool, tool, clear_tools, reset_tools  # noqa: E402,F401
+from .tools import register_tool, tool, clear_tools, reset_tools, remove_tool  # noqa: E402,F401
 from .task_manager import TaskManager  # noqa: E402,F401
 
 __all__ = [
@@ -40,5 +40,6 @@ __all__ = [
     "tool",
     "clear_tools",
     "reset_tools",
+    "remove_tool",
     "TaskManager",
 ]

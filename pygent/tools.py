@@ -249,3 +249,16 @@ def reset_tools() -> None:
     clear_tools()
     TOOLS.update(BUILTIN_TOOLS)
     TOOL_SCHEMAS.extend(deepcopy(BUILTIN_TOOL_SCHEMAS))
+
+
+def remove_tool(name: str) -> None:
+    """Unregister a specific tool."""
+    if name not in TOOLS:
+        raise ValueError(f"tool {name} not registered")
+    del TOOLS[name]
+    for i, schema in enumerate(TOOL_SCHEMAS):
+        func = schema.get("function", {})
+        if func.get("name") == name:
+            TOOL_SCHEMAS.pop(i)
+            break
+
