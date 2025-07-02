@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from typing import Any, Callable, Dict, List, Optional
+from copy import deepcopy
 
 from .runtime import Runtime
 from .task_manager import TaskManager
@@ -90,19 +91,8 @@ def _write_file(rt: Runtime, path: str, content: str) -> str:
     return rt.write_file(path, content)
 
 
-@tool(
-    name="upload_file",
-    description="Copy a local file or directory into the workspace.",
-    parameters={
-        "type": "object",
-        "properties": {
-            "src": {"type": "string", "description": "Local path"},
-            "dest": {"type": "string", "description": "Destination path"},
-        },
-        "required": ["src"],
-    },
-)
 def _upload_file(rt: Runtime, src: str, dest: Optional[str] = None) -> str:
+    """Copy a local file or directory into the workspace."""
     return rt.upload_file(src, dest)
 
 
@@ -234,34 +224,41 @@ def _task_status(rt: Runtime, task_id: str) -> str:
     return _get_manager().status(task_id)
 
 
-@tool(
-    name="collect_file",
-    description="Retrieve a file or directory from a delegated task into the main workspace.",
-    parameters={
-        "type": "object",
-        "properties": {
-            "task_id": {"type": "string"},
-            "path": {"type": "string"},
-            "dest": {"type": "string", "description": "Destination path"},
-        },
-        "required": ["task_id", "path"],
-    },
-)
 def _collect_file(rt: Runtime, task_id: str, path: str, dest: Optional[str] = None) -> str:
+    """Retrieve a file or directory from a delegated task."""
     return _get_manager().collect_file(rt, task_id, path, dest)
 
 
-@tool(
-    name="download_file",
-    description="Return the contents of a file from the workspace (base64 if binary)",
-    parameters={
-        "type": "object",
-        "properties": {
-            "path": {"type": "string"},
-            "binary": {"type": "boolean", "default": False},
-        },
-        "required": ["path"],
-    },
-)
 def _download_file(rt: Runtime, path: str, binary: bool = False) -> str:
+    """Return the contents of a file from the workspace."""
     return rt.read_file(path, binary=binary)
+
+# snapshot of the default built-in registry
+BUILTIN_TOOLS = TOOLS.copy()
+BUILTIN_TOOL_SCHEMAS = deepcopy(TOOL_SCHEMAS)
+
+
+def clear_tools() -> None:
+    """Remove all registered tools globally."""
+    TOOLS.clear()
+    TOOL_SCHEMAS.clear()
+
+
+def reset_tools() -> None:
+    """Restore the default built-in tools."""
+    clear_tools()
+    TOOLS.update(BUILTIN_TOOLS)
+    TOOL_SCHEMAS.extend(deepcopy(BUILTIN_TOOL_SCHEMAS))
+
+
+def remove_tool(name: str) -> None:
+    """Unregister a specific tool."""
+    if name not in TOOLS:
+        raise ValueError(f"tool {name} not registered")
+    del TOOLS[name]
+    for i, schema in enumerate(TOOL_SCHEMAS):
+        func = schema.get("function", {})
+        if func.get("name") == name:
+            TOOL_SCHEMAS.pop(i)
+            break
+

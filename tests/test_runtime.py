@@ -52,3 +52,11 @@ def test_upload_and_export_file(tmp_path):
     assert dest.exists() and dest.read_text() == "hello"
     rt.cleanup()
 
+
+def test_runtime_use_docker_property():
+    rt = Runtime(use_docker=False)
+    try:
+        assert rt.use_docker is False
+    finally:
+        rt.cleanup()
+

@@ -116,6 +116,14 @@ class TaskManager:
             agent = self.agent_factory(persona)
         except TypeError:
             agent = self.agent_factory()
+
+        from .runtime import Runtime
+        if getattr(agent, "runtime", None) is not None:
+            try:
+                agent.runtime.cleanup()
+            except Exception:
+                pass
+        agent.runtime = Runtime(use_docker=parent_rt.use_docker)
         setattr(agent, "persona", persona)
         if not getattr(agent, "system_msg", None):
             from .agent import build_system_msg  # lazy import

@@ -3,6 +3,7 @@ from __future__ import annotations
 """Model interface and default implementation for OpenAI-compatible APIs."""
 
 from typing import Any, Dict, List, Protocol, Optional
+from dataclasses import asdict, is_dataclass
 
 try:
     import openai  # type: ignore
@@ -26,9 +27,13 @@ class OpenAIModel:
 
     def chat(self, messages: List[Dict[str, Any]], model: str, tools: Any) -> Message:
         try:
+            serialized = [
+                asdict(m) if is_dataclass(m) else m
+                for m in messages
+            ]
             resp = openai.chat.completions.create(
                 model=model,
-                messages=messages,
+                messages=serialized,
                 tools=tools,
                 tool_choice="auto",
             )

@@ -21,6 +21,8 @@ Python 3.9 or newer is required. If Docker is not installed omit the
 
 Start an interactive session by running `pygent` in a terminal. Use the
 `--docker` flag to force container execution or `--no-docker` to run locally.
+The CLI prints the persona name and whether commands run `local` or in
+`Docker` when the session starts so you know which agent is active.
 
 ```bash
 $ pygent --docker
@@ -34,15 +36,18 @@ to leave the session. You can also launch a simple web interface with
 ### Tool usage
 
 During the conversation the assistant can call several built-in tools. `bash`
-runs shell commands, `write_file` creates files inside the workspace and
-`upload_file` copies a local file or directory into the workspace. For
+runs shell commands and `write_file` creates files inside the workspace. For
 example:
 
 ```text
 vc> write_file path="hello.txt" content="Hello from Pygent"
 vc> bash cmd="cat hello.txt"
-vc> upload_file src="/path/to/data.txt" dest="data.txt"
 ```
+
+You can disable all built-in tools with `pygent.clear_tools()` or
+remove a specific one with `pygent.remove_tool("bash")`. Restore the
+defaults at any time using `pygent.reset_tools()`. The system prompt will
+update automatically to list the tools currently registered.
 
 ## Using the API
 

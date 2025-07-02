@@ -64,9 +64,16 @@ class Agent:
         if not self.history:
             self.history.append({"role": "system", "content": self.system_msg})
 
+    def refresh_system_message(self) -> None:
+        """Update the system prompt based on the current tool registry."""
+        self.system_msg = build_system_msg(self.persona)
+        if self.history and self.history[0].get("role") == "system":
+            self.history[0]["content"] = self.system_msg
+
     def step(self, user_msg: str):
         """Execute one round of interaction with the model."""
 
+        self.refresh_system_message()
         self.history.append({"role": "user", "content": user_msg})
 
         assistant_raw = self.model.chat(
@@ -81,13 +88,18 @@ class Agent:
                 self.history.append(
                     {"role": "tool", "content": output, "tool_call_id": call.id}
                 )
-                console.print(Panel(output, title=f"tool:{call.function.name}"))
+                console.print(
+                    Panel(
+                        output,
+                        title=f"{self.persona.name} tool:{call.function.name}",
+                    )
+                )
         else:
             markdown_response = Markdown(assistant_msg.content)
             console.print(
                 Panel(
                     markdown_response,
-                    title="Resposta do Agente",
+                    title=f"Resposta de {self.persona.name}",
                     title_align="left",
                     border_style="cyan",
                 )
@@ -140,7 +152,10 @@ class Agent:
 def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no cover
     """Start an interactive session in the terminal."""
     agent = Agent(runtime=Runtime(use_docker=use_docker))
-    console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
+    mode = "Docker" if agent.runtime.use_docker else "local"
+    console.print(
+        f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
+    )
     try:
         while True:
             user_msg = console.input("[cyan]user> [/]")
