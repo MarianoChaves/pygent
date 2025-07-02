@@ -12,6 +12,7 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_USE_DOCKER` | Set to `0` to run commands locally. Otherwise the runtime will try to use Docker if available. | auto |
 | `PYGENT_MAX_TASKS` | Maximum number of delegated tasks that can run concurrently. | `3` |
 | `PYGENT_HISTORY_FILE` | Path to a JSON file where the conversation history is saved. | – |
+| `PYGENT_WORKSPACE` | Directory used to persist the workspace between sessions. | – |
 | `PYGENT_STEP_TIMEOUT` | Default time limit in seconds for each step when running delegated tasks. | – |
 | `PYGENT_TASK_TIMEOUT` | Default overall time limit in seconds for delegated tasks. | – |
 | `PYGENT_PERSONA_NAME` | Name of the main agent persona. | `Pygent` |
