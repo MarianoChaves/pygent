@@ -88,13 +88,18 @@ class Agent:
                 self.history.append(
                     {"role": "tool", "content": output, "tool_call_id": call.id}
                 )
-                console.print(Panel(output, title=f"tool:{call.function.name}"))
+                console.print(
+                    Panel(
+                        output,
+                        title=f"{self.persona.name} tool:{call.function.name}",
+                    )
+                )
         else:
             markdown_response = Markdown(assistant_msg.content)
             console.print(
                 Panel(
                     markdown_response,
-                    title="Resposta do Agente",
+                    title=f"Resposta de {self.persona.name}",
                     title_align="left",
                     border_style="cyan",
                 )
@@ -147,7 +152,10 @@ class Agent:
 def run_interactive(use_docker: Optional[bool] = None) -> None:  # pragma: no cover
     """Start an interactive session in the terminal."""
     agent = Agent(runtime=Runtime(use_docker=use_docker))
-    console.print("[bold green]Pygent[/] iniciado. (digite /exit para sair)")
+    mode = "Docker" if agent.runtime.use_docker else "local"
+    console.print(
+        f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
+    )
     try:
         while True:
             user_msg = console.input("[cyan]user> [/]")

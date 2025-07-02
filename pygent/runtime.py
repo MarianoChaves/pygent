@@ -66,6 +66,11 @@ class Runtime:
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy(src, dest)
 
+    @property
+    def use_docker(self) -> bool:
+        """Return ``True`` if commands run inside a Docker container."""
+        return self._use_docker
+
     # ---------------- public API ----------------
     def bash(self, cmd: str, timeout: int = 30) -> str:
         """Run a command in the container or locally and return the output.

@@ -21,6 +21,8 @@ Python 3.9 or newer is required. If Docker is not installed omit the
 
 Start an interactive session by running `pygent` in a terminal. Use the
 `--docker` flag to force container execution or `--no-docker` to run locally.
+The CLI prints the persona name and whether commands run `local` or in
+`Docker` when the session starts so you know which agent is active.
 
 ```bash
 $ pygent --docker

@@ -278,3 +278,11 @@ def test_global_model_for_tasks():
     tm.tasks[tid].thread.join()
     set_custom_model(None)
     assert isinstance(tm.tasks[tid].agent.model, DummyModel)
+
+
+def test_task_runtime_matches_parent():
+    tm = TaskManager(agent_factory=make_agent)
+    rt = Runtime(use_docker=False)
+    tid = tm.start_task("echo", rt, task_timeout=0.01, step_timeout=0.01)
+    tm.tasks[tid].thread.join()
+    assert tm.tasks[tid].agent.runtime.use_docker == rt.use_docker
