@@ -16,15 +16,29 @@ except Exception:  # pragma: no cover - optional dependency
 
 
 class Runtime:
-    """Executes commands in a Docker container or locally if Docker is unavailable."""
+    """Executes commands in a Docker container or locally if Docker is unavailable.
+
+    If ``workspace`` or the environment variable ``PYGENT_WORKSPACE`` is set,
+    the given directory is used as the base workspace and kept across sessions.
+    """
 
     def __init__(
         self,
         image: Optional[str] = None,
         use_docker: Optional[bool] = None,
         initial_files: Optional[list[str]] = None,
+        workspace: Optional[Union[str, Path]] = None,
     ) -> None:
-        self.base_dir = Path(tempfile.mkdtemp(prefix="pygent_"))
+        env_ws = os.getenv("PYGENT_WORKSPACE")
+        if workspace is None and env_ws:
+            workspace = env_ws
+        if workspace:
+            self.base_dir = Path(workspace).expanduser()
+            self.base_dir.mkdir(parents=True, exist_ok=True)
+            self._persistent = True
+        else:
+            self.base_dir = Path(tempfile.mkdtemp(prefix="pygent_"))
+            self._persistent = False
         if initial_files is None:
             env_files = os.getenv("PYGENT_INIT_FILES")
             if env_files:
@@ -169,4 +183,5 @@ class Runtime:
                 self.container.kill()
             finally:
                 self.container.remove(force=True)
-        shutil.rmtree(self.base_dir, ignore_errors=True)
+        if not self._persistent:
+            shutil.rmtree(self.base_dir, ignore_errors=True)
