@@ -34,14 +34,12 @@ to leave the session. You can also launch a simple web interface with
 ### Tool usage
 
 During the conversation the assistant can call several built-in tools. `bash`
-runs shell commands, `write_file` creates files inside the workspace and
-`upload_file` copies a local file or directory into the workspace. For
+runs shell commands and `write_file` creates files inside the workspace. For
 example:
 
 ```text
 vc> write_file path="hello.txt" content="Hello from Pygent"
 vc> bash cmd="cat hello.txt"
-vc> upload_file src="/path/to/data.txt" dest="data.txt"
 ```
 
 ## Using the API
