@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from typing import Any, Callable, Dict, List, Optional
+from copy import deepcopy
 
 from .runtime import Runtime
 from .task_manager import TaskManager
@@ -231,3 +232,20 @@ def _collect_file(rt: Runtime, task_id: str, path: str, dest: Optional[str] = No
 def _download_file(rt: Runtime, path: str, binary: bool = False) -> str:
     """Return the contents of a file from the workspace."""
     return rt.read_file(path, binary=binary)
+
+# snapshot of the default built-in registry
+BUILTIN_TOOLS = TOOLS.copy()
+BUILTIN_TOOL_SCHEMAS = deepcopy(TOOL_SCHEMAS)
+
+
+def clear_tools() -> None:
+    """Remove all registered tools globally."""
+    TOOLS.clear()
+    TOOL_SCHEMAS.clear()
+
+
+def reset_tools() -> None:
+    """Restore the default built-in tools."""
+    clear_tools()
+    TOOLS.update(BUILTIN_TOOLS)
+    TOOL_SCHEMAS.extend(deepcopy(BUILTIN_TOOL_SCHEMAS))

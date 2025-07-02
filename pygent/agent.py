@@ -64,9 +64,16 @@ class Agent:
         if not self.history:
             self.history.append({"role": "system", "content": self.system_msg})
 
+    def refresh_system_message(self) -> None:
+        """Update the system prompt based on the current tool registry."""
+        self.system_msg = build_system_msg(self.persona)
+        if self.history and self.history[0].get("role") == "system":
+            self.history[0]["content"] = self.system_msg
+
     def step(self, user_msg: str):
         """Execute one round of interaction with the model."""
 
+        self.refresh_system_message()
         self.history.append({"role": "user", "content": user_msg})
 
         assistant_raw = self.model.chat(

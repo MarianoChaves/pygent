@@ -26,7 +26,7 @@ sys.modules.setdefault('rich.syntax', syntax_mod)     # Adicionado
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pygent import tools, register_tool
+from pygent import tools, register_tool, Agent, clear_tools, reset_tools
 
 class DummyRuntime:
     def bash(self, cmd: str):
@@ -72,5 +72,14 @@ def test_register_and_execute_custom_tool():
         })
     })()
     assert tools.execute_tool(call, DummyRuntime()) == 'hi bob'
+
+
+def test_clear_and_reset_tools_updates_prompt():
+    clear_tools()
+    ag = Agent()
+    assert "bash" not in ag.system_msg
+    reset_tools()
+    ag2 = Agent()
+    assert "bash" in ag2.system_msg
 
 

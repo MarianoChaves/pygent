@@ -42,6 +42,10 @@ vc> write_file path="hello.txt" content="Hello from Pygent"
 vc> bash cmd="cat hello.txt"
 ```
 
+You can disable all built-in tools with `pygent.clear_tools()` and
+restore them using `pygent.reset_tools()`. The system prompt will update
+automatically to list the currently registered tools.
+
 ## Using the API
 
 The same functionality is accessible programmatically via the `Agent` class:
