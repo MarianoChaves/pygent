@@ -37,7 +37,6 @@ def main(
         "--omit-tool",
         help="disable a specific tool",
         show_default=False,
-        multiple=True,
     ),
 ) -> None:  # pragma: no cover - CLI wrapper
     """Start an interactive session when no subcommand is given."""
