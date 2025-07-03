@@ -11,6 +11,11 @@ from typing import Any, Dict, List, Optional
 from rich.console import Console
 from rich.panel import Panel
 from rich.markdown import Markdown
+try:
+    from rich import box  # type: ignore
+except Exception:  # pragma: no cover - tests stub out rich
+    box = None
+from contextlib import nullcontext
 
 from .runtime import Runtime
 from . import tools, models, openai_compat
@@ -113,15 +118,29 @@ class Agent:
         self.refresh_system_message()
         self.append_history({"role": "user", "content": user_msg})
 
-        assistant_raw = self.model.chat(
-            self.history, self.model_name, tools.TOOL_SCHEMAS
+        status_cm = (
+            console.status("[bold cyan]Thinking...", spinner="dots")
+            if hasattr(console, "status")
+            else nullcontext()
         )
+        with status_cm:
+            assistant_raw = self.model.chat(
+                self.history, self.model_name, tools.TOOL_SCHEMAS
+            )
         assistant_msg = openai_compat.parse_message(assistant_raw)
         self.append_history(assistant_msg)
 
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
-                output = tools.execute_tool(call, self.runtime)
+                status_cm = (
+                    console.status(
+                        f"[green]Running {call.function.name}...", spinner="line"
+                    )
+                    if hasattr(console, "status")
+                    else nullcontext()
+                )
+                with status_cm:
+                    output = tools.execute_tool(call, self.runtime)
                 self.append_history(
                     {"role": "tool", "content": output, "tool_call_id": call.id}
                 )
@@ -129,6 +148,7 @@ class Agent:
                     Panel(
                         output,
                         title=f"{self.persona.name} tool:{call.function.name}",
+                        box=box.ROUNDED if box else None,
                     )
                 )
         else:
@@ -136,9 +156,10 @@ class Agent:
             console.print(
                 Panel(
                     markdown_response,
-                    title=f"Resposta de {self.persona.name}",
+                    title=f"{self.persona.name} replied",
                     title_align="left",
                     border_style="cyan",
+                    box=box.ROUNDED if box else None,
                 )
             )
         return assistant_msg
@@ -193,9 +214,9 @@ def run_interactive(use_docker: Optional[bool] = None, workspace_name: Optional[
     from .commands import COMMANDS
     mode = "Docker" if agent.runtime.use_docker else "local"
     console.print(
-        f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
+        f"[bold green]{agent.persona.name} ({mode})[/] started. (type /exit to quit)"
     )
-    console.print("Digite /help para ver os comandos disponíveis.")
+    console.print("Type /help for available commands.")
     try:
         while True:
             user_msg = console.input("[cyan]user> [/]")
