@@ -613,6 +613,9 @@ vc&gt; echo &quot;Hello&quot;
 <p>Each message is executed in the sandbox and the output printed. Use <code>/exit</code>
 to leave the session. You can also launch a simple web interface with
 <code>pygent-ui</code> (requires the <code>ui</code> extra).</p>
+<p>Use <code>/help</code> inside the CLI to list available commands. The helper shows
+<code>/cmd</code> to run a raw shell command, <code>/cp</code> to copy files into the workspace
+and <code>/new</code> to restart the conversation while keeping the current runtime.</p>
 <h3 id="tool-usage">Tool usage</h3>
 <p>During the conversation the assistant can call several built-in tools. <code>bash</code>
 runs shell commands and <code>write_file</code> creates files inside the workspace. For
