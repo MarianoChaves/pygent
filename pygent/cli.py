@@ -41,11 +41,11 @@ def main(
 ) -> None:  # pragma: no cover - CLI wrapper
     """Start an interactive session when no subcommand is given."""
     load_config(config)
-    ctx.obj = {"docker": docker, "workspace": workspace, "omit_tool": list(omit_tool)}
+    ctx.obj = {"docker": docker, "workspace": workspace, "omit_tool": omit_tool or []}
     if ctx.invoked_subcommand is None:
         from .agent import run_interactive
 
-        run_interactive(use_docker=docker, workspace_name=workspace, disabled_tools=list(omit_tool))
+        run_interactive(use_docker=docker, workspace_name=workspace, disabled_tools=omit_tool or [])
         raise typer.Exit()
 
 
