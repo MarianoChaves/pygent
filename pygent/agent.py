@@ -11,6 +11,12 @@ from typing import Any, Dict, List, Optional
 from rich.console import Console
 from rich.panel import Panel
 from rich.markdown import Markdown
+try:
+    from rich import box  # type: ignore
+except Exception:  # pragma: no cover - tests stub out rich
+    box = None
+from contextlib import nullcontext
+import questionary
 
 from .runtime import Runtime
 from . import tools, models, openai_compat
@@ -23,15 +29,21 @@ DEFAULT_PERSONA = Persona(
 )
 
 
-def build_system_msg(persona: Persona) -> str:
-    """Return the system prompt for ``persona``."""
+def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = None) -> str:
+    """Return the system prompt for ``persona`` with given tools."""
+
+    schemas = [
+        s
+        for s in tools.TOOL_SCHEMAS
+        if not disabled_tools or s["function"]["name"] not in disabled_tools
+    ]
 
     return (
         f"You are {persona.name}. {persona.description}\n"
         "Think step by step and use the available tools to solve the problem. "
         "Call `stop` when your work is done. Use `continue` if you require user input.\n"
         "Available tools:\n"
-        f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
+        f"{json.dumps(schemas, indent=2)}\n"
     )
 
 
@@ -61,11 +73,12 @@ class Agent:
     system_msg: str = field(default_factory=lambda: build_system_msg(DEFAULT_PERSONA))
     history: List[Dict[str, Any]] = field(default_factory=list)
     history_file: Optional[pathlib.Path] = field(default_factory=_default_history_file)
+    disabled_tools: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         """Initialize defaults after dataclass construction."""
         if not self.system_msg:
-            self.system_msg = build_system_msg(self.persona)
+            self.system_msg = build_system_msg(self.persona, self.disabled_tools)
         if self.history_file and isinstance(self.history_file, (str, pathlib.Path)):
             self.history_file = pathlib.Path(self.history_file)
             if self.history_file.is_file():
@@ -103,7 +116,7 @@ class Agent:
 
     def refresh_system_message(self) -> None:
         """Update the system prompt based on the current tool registry."""
-        self.system_msg = build_system_msg(self.persona)
+        self.system_msg = build_system_msg(self.persona, self.disabled_tools)
         if self.history and self.history[0].get("role") == "system":
             self.history[0]["content"] = self.system_msg
 
@@ -113,32 +126,54 @@ class Agent:
         self.refresh_system_message()
         self.append_history({"role": "user", "content": user_msg})
 
-        assistant_raw = self.model.chat(
-            self.history, self.model_name, tools.TOOL_SCHEMAS
+        status_cm = (
+            console.status("[bold cyan]Thinking...", spinner="dots")
+            if hasattr(console, "status")
+            else nullcontext()
         )
+        schemas = [
+            s
+            for s in tools.TOOL_SCHEMAS
+            if s["function"]["name"] not in self.disabled_tools
+        ]
+        with status_cm:
+            assistant_raw = self.model.chat(
+                self.history, self.model_name, schemas
+            )
         assistant_msg = openai_compat.parse_message(assistant_raw)
         self.append_history(assistant_msg)
 
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
-                output = tools.execute_tool(call, self.runtime)
+                status_cm = (
+                    console.status(
+                        f"[green]Running {call.function.name}...", spinner="line"
+                    )
+                    if hasattr(console, "status")
+                    else nullcontext()
+                )
+                with status_cm:
+                    output = tools.execute_tool(call, self.runtime)
                 self.append_history(
                     {"role": "tool", "content": output, "tool_call_id": call.id}
                 )
-                console.print(
-                    Panel(
-                        output,
-                        title=f"{self.persona.name} tool:{call.function.name}",
+                if call.function.name not in {"continue", "stop"}:
+                    console.print(
+                        Panel(
+                            output,
+                            title=f"{self.persona.name} tool:{call.function.name}",
+                            box=box.ROUNDED if box else None,
+                        )
                     )
-                )
         else:
             markdown_response = Markdown(assistant_msg.content)
             console.print(
                 Panel(
                     markdown_response,
-                    title=f"Resposta de {self.persona.name}",
+                    title=f"{self.persona.name} replied",
                     title_align="left",
                     border_style="cyan",
+                    box=box.ROUNDED if box else None,
                 )
             )
         return assistant_msg
@@ -149,7 +184,7 @@ class Agent:
         max_steps: int = 20,
         step_timeout: Optional[float] = None,
         max_time: Optional[float] = None,
-    ) -> None:
+    ) -> Optional[openai_compat.Message]:
         """Run steps until ``stop`` is called or limits are reached."""
 
         if step_timeout is None:
@@ -162,6 +197,7 @@ class Agent:
         msg = user_msg
         start = time.monotonic()
         self._timed_out = False
+        last_msg = None
         for _ in range(max_steps):
             if max_time is not None and time.monotonic() - start > max_time:
                 self.append_history(
@@ -171,6 +207,7 @@ class Agent:
                 break
             step_start = time.monotonic()
             assistant_msg = self.step(msg)
+            last_msg = assistant_msg
             if (
                 step_timeout is not None
                 and time.monotonic() - step_start > step_timeout
@@ -185,20 +222,34 @@ class Agent:
                 break
             msg = "continue"
 
+        return last_msg
 
-def run_interactive(use_docker: Optional[bool] = None, workspace_name: Optional[str] = None) -> None:  # pragma: no cover
+
+def run_interactive(
+    use_docker: Optional[bool] = None,
+    workspace_name: Optional[str] = None,
+    disabled_tools: Optional[List[str]] = None,
+) -> None:  # pragma: no cover
     """Start an interactive session in the terminal."""
     ws = pathlib.Path.cwd() / workspace_name if workspace_name else None
-    agent = Agent(runtime=Runtime(use_docker=use_docker, workspace=ws))
+    agent = Agent(
+        runtime=Runtime(use_docker=use_docker, workspace=ws),
+        disabled_tools=disabled_tools or [],
+    )
     from .commands import COMMANDS
     mode = "Docker" if agent.runtime.use_docker else "local"
     console.print(
-        f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
+        f"[bold green]{agent.persona.name} ({mode})[/] started. (type /exit to quit)"
     )
-    console.print("Digite /help para ver os comandos disponíveis.")
+    console.print("Type /help for available commands.")
     try:
+        next_msg: Optional[str] = None
         while True:
-            user_msg = console.input("[cyan]user> [/]")
+            if next_msg is None:
+                user_msg = console.input("[cyan]user> [/]")
+            else:
+                user_msg = next_msg
+                next_msg = None
             cmd = user_msg.split(maxsplit=1)[0]
             args = user_msg[len(cmd):].strip() if " " in user_msg else ""
             if cmd in {"/exit", "quit", "q"}:
@@ -208,6 +259,15 @@ def run_interactive(use_docker: Optional[bool] = None, workspace_name: Optional[
                 if isinstance(result, Agent):
                     agent = result
                 continue
-            agent.run_until_stop(user_msg)
+            last = agent.run_until_stop(user_msg)
+            if last and last.tool_calls:
+                for call in last.tool_calls:
+                    if call.function.name == "continue":
+                        args = json.loads(call.function.arguments or "{}")
+                        options = args.get("options")
+                        if options:
+                            prompt = args.get("prompt", "Choose:")
+                            next_msg = questionary.select(prompt, choices=options).ask()
+                        break
     finally:
         agent.runtime.cleanup()

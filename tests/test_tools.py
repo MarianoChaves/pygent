@@ -91,3 +91,9 @@ def test_remove_tool_updates_prompt():
     reset_tools()
 
 
+def test_continue_tool_schema_allows_options():
+    schema = [s for s in tools.TOOL_SCHEMAS if s["function"]["name"] == "continue"][0]
+    props = schema["function"]["parameters"]["properties"]
+    assert "options" in props
+
+

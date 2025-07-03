@@ -107,10 +107,30 @@ def _stop(rt: Runtime) -> str:  # pragma: no cover - side-effect free
 
 @tool(
     name="continue",
-    description="Request user answer or input. If in your previous message you asked for user input, you can use this tool to continue the conversation.",
-    parameters={"type": "object", "properties": {}},
+    description=(
+        "Request user answer or input. If in your previous message you asked for user"
+        " input, you can use this tool to continue the conversation. Optionally"
+        " supply a 'prompt' and a list of 'options' to present a menu."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "prompt": {
+                "type": "string",
+                "description": "question to present when asking for user input",
+            },
+            "options": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "choices the user can select from",
+            },
+        },
+        "required": [],
+    },
 )
-def _continue(rt: Runtime) -> str:  # pragma: no cover - side-effect free
+def _continue(
+    rt: Runtime, prompt: str | None = None, options: Optional[list[str]] = None
+) -> str:  # pragma: no cover - side-effect free
     return "Continuing the conversation."
 
 
