@@ -63,6 +63,7 @@ in the container and the result shown in the terminal.
 Interactive programs that expect input (e.g. running `python` without a script)
 are not supported and will exit immediately.
 For a minimal web interface run `pygent ui` instead (requires `pygent[ui]`).
+Use `/help` for a list of built-in commands or `/help <cmd>` for details.
 
 
 ## API usage
