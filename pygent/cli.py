@@ -1,17 +1,71 @@
-"""Command-line entry point for Pygent."""
-import argparse
+"""Command-line interface for Pygent using ``typer``."""
+
+from __future__ import annotations
+
+from typing import Optional
+
+import typer
 
 from .config import load_config
 
-def main() -> None:  # pragma: no cover
-    parser = argparse.ArgumentParser(prog="pygent")
-    parser.add_argument("--docker", dest="use_docker", action="store_true", help="run commands in a Docker container")
-    parser.add_argument("--no-docker", dest="use_docker", action="store_false", help="run locally")
-    parser.add_argument("-c", "--config", help="path to configuration file")
-    parser.add_argument("-w", "--workspace", help="name of workspace directory")
-    parser.set_defaults(use_docker=None)
-    args = parser.parse_args()
-    load_config(args.config)
-    from .agent import run_interactive
 
-    run_interactive(use_docker=args.use_docker, workspace_name=args.workspace)
+app = typer.Typer(invoke_without_command=True, help="Pygent command line interface")
+
+
+@app.callback(invoke_without_command=True)
+def main(
+    ctx: typer.Context,
+    docker: Optional[bool] = typer.Option(
+        None,
+        "--docker/--no-docker",
+        help="run commands in a Docker container",
+    ),
+    config: Optional[str] = typer.Option(
+        None,
+        "-c",
+        "--config",
+        help="path to configuration file",
+    ),
+    workspace: Optional[str] = typer.Option(
+        None,
+        "-w",
+        "--workspace",
+        help="name of workspace directory",
+    ),
+) -> None:  # pragma: no cover - CLI wrapper
+    """Start an interactive session when no subcommand is given."""
+    load_config(config)
+    ctx.obj = {"docker": docker, "workspace": workspace}
+    if ctx.invoked_subcommand is None:
+        from .agent import run_interactive
+
+        run_interactive(use_docker=docker, workspace_name=workspace)
+        raise typer.Exit()
+
+
+@app.command()
+def ui(ctx: typer.Context) -> None:  # pragma: no cover - optional
+    """Launch the simple web interface."""
+
+    from .ui import run_gui
+
+    run_gui(use_docker=ctx.obj.get("docker"))
+
+
+@app.command()
+def version() -> None:  # pragma: no cover - trivial
+    """Print the installed version."""
+
+    from . import __version__
+
+    typer.echo(__version__)
+
+
+def run() -> None:  # pragma: no cover
+    """Entry point for the ``pygent`` script."""
+
+    app()
+
+
+main = run  # Backwards compatibility
+

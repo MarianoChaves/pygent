@@ -11,19 +11,22 @@ from .runtime import Runtime
 class Command:
     """CLI command definition."""
 
-    def __init__(self, handler: Callable[[Agent, str], Optional[Agent]]):
+    def __init__(self, handler: Callable[[Agent, str], Optional[Agent]], description: str | None = None):
         self.handler = handler
+        self.description = description or (handler.__doc__ or "")
 
     def __call__(self, agent: Agent, arg: str) -> Optional[Agent]:
         return self.handler(agent, arg)
 
 
 def cmd_cmd(agent: Agent, arg: str) -> None:
+    """Run a raw shell command in the sandbox."""
     output = agent.runtime.bash(arg)
     print(output)
 
 
 def cmd_cp(agent: Agent, arg: str) -> None:
+    """Copy a file into the workspace: ``/cp SRC [DEST]``."""
     parts = arg.split()
     if not parts:
         print("usage: /cp SRC [DEST]")
@@ -35,6 +38,7 @@ def cmd_cp(agent: Agent, arg: str) -> None:
 
 
 def cmd_new(agent: Agent, arg: str) -> Agent:
+    """Restart the conversation with a fresh history."""
     persistent = agent.runtime._persistent
     use_docker = agent.runtime.use_docker
     workspace = agent.runtime.base_dir if persistent else None
@@ -44,10 +48,18 @@ def cmd_new(agent: Agent, arg: str) -> Agent:
 
 def cmd_help(agent: Agent, arg: str) -> None:
     """Display available commands."""
-    cmds = sorted(list(COMMANDS.keys()) + ["/exit"])
+    if arg:
+        cmd = COMMANDS.get(arg)
+        if cmd:
+            print(f"{arg} - {cmd.description}")
+        else:
+            print(f"No help available for {arg}")
+        return
+
     print("Available commands:")
-    for name in cmds:
-        print(f"  {name}")
+    for name, command in sorted(COMMANDS.items()):
+        print(f"  {name:<5} - {command.description}")
+    print("  /exit - quit the session")
 
 
 COMMANDS = {
