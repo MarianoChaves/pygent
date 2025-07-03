@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, List
 
 import typer
 
@@ -32,14 +32,21 @@ def main(
         "--workspace",
         help="name of workspace directory",
     ),
+    omit_tool: List[str] = typer.Option(
+        None,
+        "--omit-tool",
+        help="disable a specific tool",
+        show_default=False,
+        multiple=True,
+    ),
 ) -> None:  # pragma: no cover - CLI wrapper
     """Start an interactive session when no subcommand is given."""
     load_config(config)
-    ctx.obj = {"docker": docker, "workspace": workspace}
+    ctx.obj = {"docker": docker, "workspace": workspace, "omit_tool": list(omit_tool)}
     if ctx.invoked_subcommand is None:
         from .agent import run_interactive
 
-        run_interactive(use_docker=docker, workspace_name=workspace)
+        run_interactive(use_docker=docker, workspace_name=workspace, disabled_tools=list(omit_tool))
         raise typer.Exit()
 
 
