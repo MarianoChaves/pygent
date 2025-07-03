@@ -129,7 +129,7 @@ class TaskManager:
         if not getattr(agent, "system_msg", None):
             from .agent import build_system_msg  # lazy import
 
-            agent.system_msg = build_system_msg(persona)
+            agent.system_msg = build_system_msg(persona, getattr(agent, "disabled_tools", None))
         setattr(agent.runtime, "task_depth", parent_depth + 1)
         if files:
             for fp in files:

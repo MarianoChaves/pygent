@@ -23,15 +23,20 @@ DEFAULT_PERSONA = Persona(
 )
 
 
-def build_system_msg(persona: Persona) -> str:
-    """Return the system prompt for ``persona``."""
+def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] | None = None) -> str:
+    """Return the system prompt for ``persona`` excluding disabled tools."""
+
+    disabled_tools = disabled_tools or []
+    tool_schemas = [
+        t for t in tools.TOOL_SCHEMAS if t["function"]["name"] not in disabled_tools
+    ]
 
     return (
         f"You are {persona.name}. {persona.description}\n"
         "Think step by step and use the available tools to solve the problem. "
         "Call `stop` when your work is done. Use `continue` if you require user input.\n"
         "Available tools:\n"
-        f"{json.dumps(tools.TOOL_SCHEMAS, indent=2)}\n"
+        f"{json.dumps(tool_schemas, indent=2)}\n"
     )
 
 
@@ -54,18 +59,23 @@ def _default_history_file() -> Optional[pathlib.Path]:
 @dataclass
 class Agent:
     """Interactive assistant handling messages and tool execution."""
+
     runtime: Runtime = field(default_factory=Runtime)
     model: Model = field(default_factory=_default_model)
     model_name: str = DEFAULT_MODEL
     persona: Persona = field(default_factory=lambda: DEFAULT_PERSONA)
-    system_msg: str = field(default_factory=lambda: build_system_msg(DEFAULT_PERSONA))
+    disabled_tools: List[str] = field(default_factory=list)
+    system_msg: Optional[str] = None
     history: List[Dict[str, Any]] = field(default_factory=list)
     history_file: Optional[pathlib.Path] = field(default_factory=_default_history_file)
 
     def __post_init__(self) -> None:
         """Initialize defaults after dataclass construction."""
-        if not self.system_msg:
-            self.system_msg = build_system_msg(self.persona)
+        if self.system_msg is None:
+            self.system_msg = build_system_msg(self.persona, self.disabled_tools)
+        else:
+            # preserve custom system messages
+            pass
         if self.history_file and isinstance(self.history_file, (str, pathlib.Path)):
             self.history_file = pathlib.Path(self.history_file)
             if self.history_file.is_file():
@@ -103,7 +113,7 @@ class Agent:
 
     def refresh_system_message(self) -> None:
         """Update the system prompt based on the current tool registry."""
-        self.system_msg = build_system_msg(self.persona)
+        self.system_msg = build_system_msg(self.persona, self.disabled_tools)
         if self.history and self.history[0].get("role") == "system":
             self.history[0]["content"] = self.system_msg
 
