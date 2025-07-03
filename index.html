@@ -534,7 +534,8 @@ See the <a href="examples/">Examples</a> section for runnable scripts.</p>
 <h2 id="basic-usage">Basic usage</h2>
 <p>Start an interactive session by running <code>pygent</code> in the terminal. Use the <code>--docker</code> option to run commands in a container (requires <code>pygent[docker]</code>); otherwise they execute locally. Use <code>/exit</code> to quit.
 Pass <code>--config path/to/pygent.toml</code> to load settings from a file.
-Alternatively run <code>pygent-ui</code> for a simple web interface (requires <code>pygent[ui]</code>).</p>
+Alternatively run <code>pygent ui</code> (or the legacy <code>pygent-ui</code> script) for a simple web interface
+(requires <code>pygent[ui]</code>).</p>
 <p>You can also use the Python API:</p>
 <pre><code class="language-python">from pygent import Agent
 ag = Agent()
