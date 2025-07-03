@@ -42,8 +42,17 @@ def cmd_new(agent: Agent, arg: str) -> Agent:
     return Agent(runtime=Runtime(use_docker=use_docker, workspace=workspace))
 
 
+def cmd_help(agent: Agent, arg: str) -> None:
+    """Display available commands."""
+    cmds = sorted(list(COMMANDS.keys()) + ["/exit"])
+    print("Available commands:")
+    for name in cmds:
+        print(f"  {name}")
+
+
 COMMANDS = {
     "/cmd": Command(cmd_cmd),
     "/cp": Command(cmd_cp),
     "/new": Command(cmd_new),
+    "/help": Command(cmd_help),
 }

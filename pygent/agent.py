@@ -195,6 +195,7 @@ def run_interactive(use_docker: Optional[bool] = None, workspace_name: Optional[
     console.print(
         f"[bold green]{agent.persona.name} ({mode})[/] iniciado. (digite /exit para sair)"
     )
+    console.print("Digite /help para ver os comandos disponíveis.")
     try:
         while True:
             user_msg = console.input("[cyan]user> [/]")

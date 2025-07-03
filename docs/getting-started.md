@@ -33,6 +33,10 @@ Each message is executed in the sandbox and the output printed. Use `/exit`
 to leave the session. You can also launch a simple web interface with
 `pygent-ui` (requires the `ui` extra).
 
+Use `/help` inside the CLI to list available commands. The helper shows
+`/cmd` to run a raw shell command, `/cp` to copy files into the workspace
+and `/new` to restart the conversation while keeping the current runtime.
+
 ### Tool usage
 
 During the conversation the assistant can call several built-in tools. `bash`
