@@ -19,7 +19,8 @@ Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enab
 
 Start an interactive session by running `pygent` in the terminal. Use the `--docker` option to run commands in a container (requires `pygent[docker]`); otherwise they execute locally. Use `/exit` to quit.
 Pass `--config path/to/pygent.toml` to load settings from a file.
-Alternatively run `pygent-ui` for a simple web interface (requires `pygent[ui]`).
+Alternatively run `pygent ui` (or the legacy `pygent-ui` script) for a simple web interface
+(requires `pygent[ui]`).
 
 You can also use the Python API:
 

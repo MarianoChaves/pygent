@@ -10,7 +10,7 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Optionally save the history to a JSON file for later recovery.
 * Persist the workspace across sessions by setting `PYGENT_WORKSPACE`.
 * Provides a small Python API for use in other projects.
-* Optional web interface via `pygent-ui`.
+* Optional web interface via `pygent ui` (also available as `pygent-ui`).
 * Register your own tools and customise the system prompt.
 
 ## Installation
@@ -62,7 +62,7 @@ Type messages normally; use `/exit` to end the session. Each command is executed
 in the container and the result shown in the terminal.
 Interactive programs that expect input (e.g. running `python` without a script)
 are not supported and will exit immediately.
-For a minimal web interface run `pygent-ui` instead (requires `pygent[ui]`).
+For a minimal web interface run `pygent ui` instead (requires `pygent[ui]`).
 
 
 ## API usage
