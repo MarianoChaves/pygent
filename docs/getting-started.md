@@ -37,6 +37,9 @@ Use `/help` inside the CLI to list available commands or `/help <cmd>`
 for details. The helper shows `/cmd` to run a raw shell command,
 `/cp` to copy files into the workspace and `/new` to restart the
 conversation while keeping the current runtime.
+The `/save DIR` command copies the workspace and relevant configuration
+for later use.
+Resume the session with `pygent --load DIR`.
 
 ### Tool usage
 
