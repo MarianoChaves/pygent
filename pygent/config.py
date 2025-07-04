@@ -93,4 +93,16 @@ def load_config(path: Optional[Union[str, os.PathLike[str]]] = None) -> Dict[str
             )
         else:
             os.environ["PYGENT_INIT_FILES"] = str(config["initial_files"])
+    if "banned_commands" in config and "PYGENT_BANNED_COMMANDS" not in os.environ:
+        banned = config["banned_commands"]
+        if isinstance(banned, list):
+            os.environ["PYGENT_BANNED_COMMANDS"] = os.pathsep.join(str(c) for c in banned)
+        else:
+            os.environ["PYGENT_BANNED_COMMANDS"] = str(banned)
+    if "banned_apps" in config and "PYGENT_BANNED_APPS" not in os.environ:
+        apps = config["banned_apps"]
+        if isinstance(apps, list):
+            os.environ["PYGENT_BANNED_APPS"] = os.pathsep.join(str(a) for a in apps)
+        else:
+            os.environ["PYGENT_BANNED_APPS"] = str(apps)
     return config

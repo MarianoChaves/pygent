@@ -28,7 +28,16 @@ class Runtime:
         use_docker: Optional[bool] = None,
         initial_files: Optional[list[str]] = None,
         workspace: Optional[Union[str, Path]] = None,
+        banned_commands: Optional[list[str]] = None,
+        banned_apps: Optional[list[str]] = None,
     ) -> None:
+        """Create a new execution runtime.
+
+        ``banned_commands`` and ``banned_apps`` can be used to restrict what
+        can be run. Environment variables ``PYGENT_BANNED_COMMANDS`` and
+        ``PYGENT_BANNED_APPS`` extend these lists using ``os.pathsep`` as the
+        delimiter.
+        """
         env_ws = os.getenv("PYGENT_WORKSPACE")
         if workspace is None and env_ws:
             workspace = env_ws
@@ -80,6 +89,15 @@ class Runtime:
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy(src, dest)
 
+        env_banned_cmds = os.getenv("PYGENT_BANNED_COMMANDS")
+        env_banned_apps = os.getenv("PYGENT_BANNED_APPS")
+        self.banned_commands = set(banned_commands or [])
+        if env_banned_cmds:
+            self.banned_commands.update(c.strip() for c in env_banned_cmds.split(os.pathsep) if c.strip())
+        self.banned_apps = set(banned_apps or [])
+        if env_banned_apps:
+            self.banned_apps.update(a.strip() for a in env_banned_apps.split(os.pathsep) if a.strip())
+
     @property
     def use_docker(self) -> bool:
         """Return ``True`` if commands run inside a Docker container."""
@@ -92,6 +110,15 @@ class Runtime:
         The executed command is always included in the returned string so the
         caller can display what was run.
         """
+        tokens = cmd.split()
+        if tokens:
+            from pathlib import Path
+
+            if Path(tokens[0]).name in self.banned_commands:
+                return f"$ {cmd}\n[error] command '{tokens[0]}' disabled"
+            for t in tokens:
+                if Path(t).name in self.banned_apps:
+                    return f"$ {cmd}\n[error] application '{Path(t).name}' disabled"
         if self._use_docker and self.container is not None:
             try:
                 res = self.container.exec_run(

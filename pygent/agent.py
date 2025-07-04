@@ -16,7 +16,10 @@ try:
 except Exception:  # pragma: no cover - tests stub out rich
     box = None
 from contextlib import nullcontext
-import questionary
+try:  # pragma: no cover - optional dependency
+    import questionary  # type: ignore
+except Exception:  # pragma: no cover - used in tests without questionary
+    questionary = None
 
 from .runtime import Runtime
 from . import tools, models, openai_compat
@@ -267,7 +270,11 @@ def run_interactive(
                         options = args.get("options")
                         if options:
                             prompt = args.get("prompt", "Choose:")
-                            next_msg = questionary.select(prompt, choices=options).ask()
+                            if questionary:
+                                next_msg = questionary.select(prompt, choices=options).ask()
+                            else:  # pragma: no cover - simple fallback for tests
+                                opts = "/".join(options)
+                                next_msg = input(f"{prompt} ({opts}): ")
                         break
     finally:
         agent.runtime.cleanup()

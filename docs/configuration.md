@@ -21,6 +21,8 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_TASK_PERSONAS` | List of personas for delegated agents separated by `os.pathsep`. | – |
 | `PYGENT_TASK_PERSONAS_JSON` | JSON array of persona objects with name and description for delegated agents. Overrides `PYGENT_TASK_PERSONAS` if set. | – |
 | `PYGENT_INIT_FILES` | List of files or directories copied into the workspace at startup, separated by `os.pathsep`. | – |
+| `PYGENT_BANNED_COMMANDS` | Commands that cannot be executed by the bash tool, separated by `os.pathsep`. | – |
+| `PYGENT_BANNED_APPS` | Applications that cannot appear in any command, separated by `os.pathsep`. | – |
 
 Instead of setting environment variables you can create a `pygent.toml` file in
 the current directory or in your home folder. Values defined there are loaded at
