@@ -522,6 +522,16 @@ exported in your shell or set via a <code>.env</code> file before running the CL
 <td>List of files or directories copied into the workspace at startup, separated by <code>os.pathsep</code>.</td>
 <td>–</td>
 </tr>
+<tr>
+<td><code>PYGENT_BANNED_COMMANDS</code></td>
+<td>Commands that cannot be executed by the bash tool, separated by <code>os.pathsep</code>.</td>
+<td>–</td>
+</tr>
+<tr>
+<td><code>PYGENT_BANNED_APPS</code></td>
+<td>Applications that cannot appear in any command, separated by <code>os.pathsep</code>.</td>
+<td>–</td>
+</tr>
 </tbody>
 </table>
 <p>Instead of setting environment variables you can create a <code>pygent.toml</code> file in
