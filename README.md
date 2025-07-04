@@ -12,6 +12,9 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Provides a small Python API for use in other projects.
 * Optional web interface via `pygent ui` (also available as `pygent-ui`).
 * Register your own tools and customise the system prompt.
+* Extend the CLI with custom commands.
+* Execute a `config.py` script on startup for advanced configuration.
+* Set environment variables from the command line.
 
 ## Installation
 
@@ -64,6 +67,13 @@ Interactive programs that expect input (e.g. running `python` without a script)
 are not supported and will exit immediately.
 For a minimal web interface run `pygent ui` instead (requires `pygent[ui]`).
 Use `/help` for a list of built-in commands or `/help <cmd>` for details.
+Use `/save DIR` to snapshot the current environment for later use.
+Resume from a snapshot with `pygent --load DIR` or by setting
+`PYGENT_SNAPSHOT=DIR`.
+Additional commands can be registered programmatically with
+`pygent.commands.register_command()`.
+The CLI loads a `config.py` script if present (or passed with `--pyconfig`)
+and environment variables may be set directly with `-e NAME=value`.
 
 
 ## API usage

@@ -13,6 +13,7 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_MAX_TASKS` | Maximum number of delegated tasks that can run concurrently. | `3` |
 | `PYGENT_HISTORY_FILE` | Path to a JSON file where the conversation history is saved. | – |
 | `PYGENT_WORKSPACE` | Directory used to persist the workspace between sessions. | – |
+| `PYGENT_SNAPSHOT` | Load environment and history from the given directory on startup. | – |
 | `PYGENT_STEP_TIMEOUT` | Default time limit in seconds for each step when running delegated tasks. | – |
 | `PYGENT_TASK_TIMEOUT` | Default overall time limit in seconds for delegated tasks. | – |
 | `PYGENT_PERSONA_NAME` | Name of the main agent persona. | `Pygent` |
@@ -47,6 +48,15 @@ You can also specify a configuration file explicitly when launching the CLI:
 ```bash
 pygent --config path/to/pygent.toml
 ```
+Environment variables can also be provided on the command line using
+the `-e` option:
+
+```bash
+pygent -e OPENAI_API_KEY=sk-... -e PYGENT_MODEL=gpt-4
+```
+If you need additional setup logic execute a Python file with
+`--pyconfig config.py`.
+To resume from a saved snapshot pass `--load DIR` or set `PYGENT_SNAPSHOT`.
 
 A practical example is included in
 [`examples/sample_config.toml`](https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml)

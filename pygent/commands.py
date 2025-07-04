@@ -2,7 +2,12 @@ from __future__ import annotations
 
 """Simple command handlers for the interactive CLI."""
 
-from typing import Callable, Optional
+from typing import Callable, Optional, Dict
+
+import os
+import json
+import shutil
+from pathlib import Path
 
 from .agent import Agent
 from .runtime import Runtime
@@ -62,9 +67,32 @@ def cmd_help(agent: Agent, arg: str) -> None:
     print("  /exit - quit the session")
 
 
+def cmd_save(agent: Agent, arg: str) -> None:
+    """Save workspace and environment to ``DIR`` for later use."""
+    if not arg:
+        print("usage: /save DIR")
+        return
+    dest = Path(arg).expanduser()
+    dest.mkdir(parents=True, exist_ok=True)
+    agent.runtime.export_file(".", dest / "workspace")
+    if agent.history_file and agent.history_file.exists():
+        shutil.copy(agent.history_file, dest / "history.json")
+    env = {k: v for k, v in os.environ.items() if k.startswith(("PYGENT_", "OPENAI_"))}
+    (dest / "env.json").write_text(json.dumps(env, indent=2), encoding="utf-8")
+    print(f"Saved environment to {dest}")
+
+
+def register_command(name: str, handler: Callable[[Agent, str], Optional[Agent]], description: str | None = None) -> None:
+    """Register a custom CLI command."""
+    if name in COMMANDS:
+        raise ValueError(f"command {name} already registered")
+    COMMANDS[name] = Command(handler, description)
+
+
 COMMANDS = {
     "/cmd": Command(cmd_cmd),
     "/cp": Command(cmd_cp),
     "/new": Command(cmd_new),
     "/help": Command(cmd_help),
+    "/save": Command(cmd_save),
 }

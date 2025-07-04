@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from typing import Optional, List
+import os
 
 import typer
 
-from .config import load_config
+from .config import load_config, run_py_config, load_snapshot
 
 
 app = typer.Typer(invoke_without_command=True, help="Pygent command line interface")
@@ -32,6 +33,23 @@ def main(
         "--workspace",
         help="name of workspace directory",
     ),
+    pyconfig: Optional[str] = typer.Option(
+        None,
+        "--pyconfig",
+        help="path to Python config file to execute",
+    ),
+    env: List[str] = typer.Option(
+        None,
+        "-e",
+        "--env",
+        help="set environment variable",
+        show_default=False,
+    ),
+    load: Optional[str] = typer.Option(
+        None,
+        "--load",
+        help="load snapshot directory",
+    ),
     omit_tool: List[str] = typer.Option(
         None,
         "--omit-tool",
@@ -41,6 +59,18 @@ def main(
 ) -> None:  # pragma: no cover - CLI wrapper
     """Start an interactive session when no subcommand is given."""
     load_config(config)
+    if load is None:
+        load = os.getenv("PYGENT_SNAPSHOT")
+    if load:
+        workspace = str(load_snapshot(load))
+    for item in env or []:
+        if "=" in item:
+            key, val = item.split("=", 1)
+            os.environ[key] = val
+    if pyconfig:
+        run_py_config(pyconfig)
+    else:
+        run_py_config("config.py")
     ctx.obj = {"docker": docker, "workspace": workspace, "omit_tool": omit_tool or []}
     if ctx.invoked_subcommand is None:
         from .agent import run_interactive

@@ -9,11 +9,44 @@ except ModuleNotFoundError:  # pragma: no cover - executed on older Python versi
     import tomli as tomllib  # type: ignore
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Union
+import importlib.util
+import json
 
 DEFAULT_CONFIG_FILES = [
     Path("pygent.toml"),
     Path.home() / ".pygent.toml",
 ]
+
+
+def load_snapshot(path: Union[str, os.PathLike[str]]) -> Path:
+    """Load environment variables and history from a snapshot directory."""
+
+    dest = Path(path)
+    env_file = dest / "env.json"
+    if env_file.is_file():
+        try:
+            data = json.loads(env_file.read_text())
+        except Exception:
+            data = {}
+        for k, v in data.items():
+            os.environ.setdefault(k, str(v))
+    ws = dest / "workspace"
+    os.environ["PYGENT_WORKSPACE"] = str(ws)
+    hist = dest / "history.json"
+    if hist.is_file():
+        os.environ["PYGENT_HISTORY_FILE"] = str(hist)
+    return ws
+
+
+def run_py_config(path: Union[str, os.PathLike[str]] = "config.py") -> None:
+    """Execute a Python configuration file if it exists."""
+    p = Path(path)
+    if not p.is_file():
+        return
+    spec = importlib.util.spec_from_file_location("pygent_config", p)
+    if spec and spec.loader:
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
 
 
 def load_config(path: Optional[Union[str, os.PathLike[str]]] = None) -> Dict[str, Any]:

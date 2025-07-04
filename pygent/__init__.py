@@ -2,7 +2,7 @@
 from importlib import metadata as _metadata
 from pathlib import Path
 
-from .config import load_config
+from .config import load_config, load_snapshot
 
 try:
     __version__: str = _metadata.version(__name__)
@@ -32,6 +32,7 @@ __all__ = [
     "Agent",
     "run_interactive",
     "load_config",
+    "load_snapshot",
     "Model",
     "OpenAIModel",
     "set_custom_model",
