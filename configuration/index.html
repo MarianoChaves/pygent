@@ -483,6 +483,11 @@ exported in your shell or set via a <code>.env</code> file before running the CL
 <td>–</td>
 </tr>
 <tr>
+<td><code>PYGENT_SNAPSHOT</code></td>
+<td>Load environment and history from the given directory on startup.</td>
+<td>–</td>
+</tr>
+<tr>
 <td><code>PYGENT_STEP_TIMEOUT</code></td>
 <td>Default time limit in seconds for each step when running delegated tasks.</td>
 <td>–</td>
@@ -539,6 +544,13 @@ initial_files = [&quot;bootstrap.py&quot;]
 <p>You can also specify a configuration file explicitly when launching the CLI:</p>
 <pre><code class="language-bash">pygent --config path/to/pygent.toml
 </code></pre>
+<p>Environment variables can also be provided on the command line using
+the <code>-e</code> option:</p>
+<pre><code class="language-bash">pygent -e OPENAI_API_KEY=sk-... -e PYGENT_MODEL=gpt-4
+</code></pre>
+<p>If you need additional setup logic execute a Python file with
+<code>--pyconfig config.py</code>.
+To resume from a saved snapshot pass <code>--load DIR</code> or set <code>PYGENT_SNAPSHOT</code>.</p>
 <p>A practical example is included in
 <a href="https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml"><code>examples/sample_config.toml</code></a>
 together with the script

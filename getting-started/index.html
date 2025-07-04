@@ -616,7 +616,10 @@ to leave the session. You can also launch a simple web interface with
 <p>Use <code>/help</code> inside the CLI to list available commands or <code>/help &lt;cmd&gt;</code>
 for details. The helper shows <code>/cmd</code> to run a raw shell command,
 <code>/cp</code> to copy files into the workspace and <code>/new</code> to restart the
-conversation while keeping the current runtime.</p>
+conversation while keeping the current runtime.
+The <code>/save DIR</code> command copies the workspace and relevant configuration
+for later use.
+Resume the session with <code>pygent --load DIR</code>.</p>
 <h3 id="tool-usage">Tool usage</h3>
 <p>During the conversation the assistant can call several built-in tools. <code>bash</code>
 runs shell commands and <code>write_file</code> creates files inside the workspace. For
