@@ -7,3 +7,5 @@ name = "TestBot"
 description = "writes tests"
 
 initial_files = ["examples/welcome.txt"]
+banned_commands = ["rm"]
+banned_apps = ["python"]

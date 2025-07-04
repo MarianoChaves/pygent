@@ -60,3 +60,18 @@ def test_runtime_use_docker_property():
     finally:
         rt.cleanup()
 
+
+def test_banned_command_blocked():
+    rt = Runtime(use_docker=False, banned_commands=["rm"])
+    out = rt.bash("rm -rf foo")
+    rt.cleanup()
+    assert "command 'rm' disabled" in out
+
+
+def test_banned_app_blocked_env(monkeypatch):
+    monkeypatch.setenv("PYGENT_BANNED_APPS", "python")
+    rt = Runtime(use_docker=False)
+    out = rt.bash("python script.py")
+    rt.cleanup()
+    assert "application 'python' disabled" in out
+
