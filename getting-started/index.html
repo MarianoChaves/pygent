@@ -22,7 +22,7 @@
     
     
       
-        <title>Guia de Início Rápido - Pygent</title>
+        <title>Getting Started - Pygent</title>
       
     
     
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Guia de Início Rápido
+              Getting Started
             
           </span>
         </div>
@@ -263,7 +263,7 @@
   
   
   <span class="md-ellipsis">
-    Visão Geral
+    Overview
     
   </span>
   
@@ -294,7 +294,7 @@
   
   
   <span class="md-ellipsis">
-    Guia de Início Rápido
+    Getting Started
     
   </span>
   
@@ -307,7 +307,7 @@
   
   
   <span class="md-ellipsis">
-    Guia de Início Rápido
+    Getting Started
     
   </span>
   
@@ -409,7 +409,7 @@
   
   
   <span class="md-ellipsis">
-    Interface de Linha de Comando (CLI)
+    Command Line Interface (CLI)
     
   </span>
   
@@ -431,7 +431,7 @@
   
   
   <span class="md-ellipsis">
-    Configuração
+    Configuration
     
   </span>
   
@@ -453,7 +453,7 @@
   
   
   <span class="md-ellipsis">
-    Ferramentas (Tools)
+    Tools
     
   </span>
   
@@ -475,7 +475,7 @@
   
   
   <span class="md-ellipsis">
-    Modelos Customizados
+    Custom Models
     
   </span>
   
@@ -497,7 +497,7 @@
   
   
   <span class="md-ellipsis">
-    Arquitetura
+    Architecture
     
   </span>
   
@@ -519,7 +519,7 @@
   
   
   <span class="md-ellipsis">
-    Exemplos
+    Examples
     
   </span>
   
@@ -541,7 +541,7 @@
   
   
   <span class="md-ellipsis">
-    Referência da API
+    API Reference
     
   </span>
   
@@ -662,12 +662,17 @@ sandboxed environment. By default a Docker container is used, but if Docker
 is unavailable the commands run locally instead. This page shows how to install
 the package and gives a few examples covering the main features.</p>
 <h2 id="installation">Installation</h2>
-<p>Install from source in editable mode so the CLI and Python modules are
-available. Include the optional extras to enable Docker support and the web UI:</p>
+<p>The recommended way to install Pygent is using pip:</p>
+<pre><code class="language-bash">pip install pygent
+</code></pre>
+<p>To include optional features like Docker support or the web UI, you can specify extras:</p>
 <pre><code class="language-bash">pip install pygent[docker,ui]
 </code></pre>
-<p>Python 3.9 or newer is required. If Docker is not installed omit the
-<code>[docker]</code> extras and commands will run on the host system.</p>
+<p>Python 3.9 or newer is required. If Docker is not installed on your system, you should omit the <code>[docker]</code> extra; commands that would use Docker will then run on the host system instead. Docker itself needs to be installed separately if you wish to use containerized execution.</p>
+<p>For developers or those wanting the latest unreleased features, Pygent can also be installed from source:</p>
+<pre><code class="language-bash">pip install -e .
+</code></pre>
+<p>You can include extras like <code>[docker,ui]</code> when installing from source as well (e.g., <code>pip install -e .[docker,ui]</code>).</p>
 <h2 id="interactive-session">Interactive session</h2>
 <p>Start an interactive session by running <code>pygent</code> in a terminal. Use the
 <code>--docker</code> flag to force container execution or <code>--no-docker</code> to run locally.

@@ -22,7 +22,7 @@
     
     
       
-        <title>Ferramentas (Tools) - Pygent</title>
+        <title>Tools - Pygent</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ferramentas-tools" class="md-skip">
+        <a href="#tools" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Ferramentas (Tools)
+              Tools
             
           </span>
         </div>
@@ -263,7 +263,7 @@
   
   
   <span class="md-ellipsis">
-    Visão Geral
+    Overview
     
   </span>
   
@@ -285,7 +285,7 @@
   
   
   <span class="md-ellipsis">
-    Guia de Início Rápido
+    Getting Started
     
   </span>
   
@@ -307,7 +307,7 @@
   
   
   <span class="md-ellipsis">
-    Interface de Linha de Comando (CLI)
+    Command Line Interface (CLI)
     
   </span>
   
@@ -329,7 +329,7 @@
   
   
   <span class="md-ellipsis">
-    Configuração
+    Configuration
     
   </span>
   
@@ -360,7 +360,7 @@
   
   
   <span class="md-ellipsis">
-    Ferramentas (Tools)
+    Tools
     
   </span>
   
@@ -373,7 +373,7 @@
   
   
   <span class="md-ellipsis">
-    Ferramentas (Tools)
+    Tools
     
   </span>
   
@@ -396,37 +396,46 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ferramentas-nativas" class="md-nav__link">
+  <a href="#native-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Ferramentas Nativas
+      Native Tools
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#ferramentas-de-tarefas" class="md-nav__link">
+  <a href="#task-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Ferramentas de Tarefas
+      Task Tools
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#criando-ferramentas-customizadas" class="md-nav__link">
+  <a href="#creating-custom-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Criando Ferramentas Customizadas
+      Creating Custom Tools
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Criando Ferramentas Customizadas">
+    <nav class="md-nav" aria-label="Creating Custom Tools">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usando-register_tool" class="md-nav__link">
+  <a href="#using-register_tool" class="md-nav__link">
     <span class="md-ellipsis">
-      Usando register_tool
+      Using register_tool
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-tool-decorator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using the @tool decorator
     </span>
   </a>
   
@@ -457,7 +466,7 @@
   
   
   <span class="md-ellipsis">
-    Modelos Customizados
+    Custom Models
     
   </span>
   
@@ -479,7 +488,7 @@
   
   
   <span class="md-ellipsis">
-    Arquitetura
+    Architecture
     
   </span>
   
@@ -501,7 +510,7 @@
   
   
   <span class="md-ellipsis">
-    Exemplos
+    Examples
     
   </span>
   
@@ -523,7 +532,7 @@
   
   
   <span class="md-ellipsis">
-    Referência da API
+    API Reference
     
   </span>
   
@@ -560,37 +569,46 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ferramentas-nativas" class="md-nav__link">
+  <a href="#native-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Ferramentas Nativas
+      Native Tools
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#ferramentas-de-tarefas" class="md-nav__link">
+  <a href="#task-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Ferramentas de Tarefas
+      Task Tools
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#criando-ferramentas-customizadas" class="md-nav__link">
+  <a href="#creating-custom-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      Criando Ferramentas Customizadas
+      Creating Custom Tools
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Criando Ferramentas Customizadas">
+    <nav class="md-nav" aria-label="Creating Custom Tools">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usando-register_tool" class="md-nav__link">
+  <a href="#using-register_tool" class="md-nav__link">
     <span class="md-ellipsis">
-      Usando register_tool
+      Using register_tool
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-the-tool-decorator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using the @tool decorator
     </span>
   </a>
   
@@ -620,122 +638,64 @@
   
 
 
-<h1 id="ferramentas-tools">Ferramentas (Tools)</h1>
-<p>As ferramentas são o coração da funcionalidade do Pygent, permitindo que o agente interaja com o sistema de arquivos, execute comandos e realize outras ações.</p>
-<h2 id="ferramentas-nativas">Ferramentas Nativas</h2>
-<p>O Pygent vem com um conjunto de ferramentas essenciais prontas para uso:</p>
+<h1 id="tools">Tools</h1>
+<p>Tools are at the heart of Pygent's functionality, allowing the agent to interact with the file system, execute commands, and perform other actions.</p>
+<h2 id="native-tools">Native Tools</h2>
+<p>Pygent comes with a set of essential tools ready to use:</p>
 <ul>
-<li><strong><code>bash</code></strong>: Executa um comando shell no ambiente de execução (local ou Docker).<ul>
-<li><strong>Parâmetros</strong>: <code>cmd</code> (string) - O comando a ser executado.</li>
+<li><strong><code>bash</code></strong>: Executes a shell command in the execution environment (local or Docker).<ul>
+<li><strong>Parameters</strong>: <code>cmd</code> (string) - The command to be executed.</li>
 </ul>
 </li>
-<li><strong><code>write_file</code></strong>: Cria ou sobrescreve um arquivo no workspace do agente.<ul>
-<li><strong>Parâmetros</strong>: <code>path</code> (string), <code>content</code> (string).</li>
+<li><strong><code>write_file</code></strong>: Creates or overwrites a file in the agent's workspace.<ul>
+<li><strong>Parameters</strong>: <code>path</code> (string), <code>content</code> (string).</li>
 </ul>
 </li>
-<li><strong><code>stop</code></strong>: Para o loop de execução autônoma do agente. Útil para sinalizar o fim de uma tarefa.</li>
-<li><strong><code>continue</code></strong>: Usado para solicitar uma resposta ou entrada do usuário, continuando a conversa.</li>
+<li><strong><code>stop</code></strong>: Stops the agent's autonomous execution loop. Useful for signaling the end of a task.</li>
+<li><strong><code>continue</code></strong>: Used to request a response or input from the user, continuing the conversation.</li>
 </ul>
-<h2 id="ferramentas-de-tarefas">Ferramentas de Tarefas</h2>
-<p>Para gerenciar subtarefas e agentes em segundo plano, o Pygent oferece ferramentas específicas que são ativadas ao registrar com <code>register_task_tools()</code>:</p>
+<h2 id="task-tools">Task Tools</h2>
+<p>To manage subtasks and background agents, Pygent offers specific tools that are activated by registering with <code>register_task_tools()</code>:</p>
 <ul>
-<li><strong><code>delegate_task</code></strong>: Cria uma nova tarefa em segundo plano com um novo agente.<ul>
-<li><strong>Parâmetros</strong>: <code>prompt</code> (string), <code>files</code> (lista de strings, opcional), <code>persona</code> (string, opcional), <code>timeout</code> (float, opcional).</li>
+<li><strong><code>delegate_task</code></strong>: Creates a new background task with a new agent.<ul>
+<li><strong>Parameters</strong>: <code>prompt</code> (string), <code>files</code> (list of strings, optional), <code>persona</code> (string, optional), <code>timeout</code> (float, optional).</li>
 </ul>
 </li>
-<li><strong><code>task_status</code></strong>: Verifica o status de uma tarefa delegada.<ul>
-<li><strong>Parâmetros</strong>: <code>task_id</code> (string).</li>
+<li><strong><code>task_status</code></strong>: Checks the status of a delegated task.<ul>
+<li><strong>Parameters</strong>: <code>task_id</code> (string).</li>
 </ul>
 </li>
-<li><strong><code>collect_file</code></strong>: Recupera um arquivo ou diretório de uma tarefa delegada para o workspace do agente principal.<ul>
-<li><strong>Parâmetros</strong>: <code>task_id</code> (string), <code>path</code> (string), <code>dest</code> (string, opcional).</li>
+<li><strong><code>collect_file</code></strong>: Retrieves a file or directory from a delegated task to the main agent's workspace.<ul>
+<li><strong>Parameters</strong>: <code>task_id</code> (string), <code>path</code> (string), <code>dest</code> (string, optional).</li>
 </ul>
 </li>
-<li><strong><code>list_personas</code></strong>: Retorna as personas disponíveis para tarefas delegadas.</li>
+<li><strong><code>list_personas</code></strong>: Returns the available personas for delegated tasks.</li>
 </ul>
-<h2 id="criando-ferramentas-customizadas">Criando Ferramentas Customizadas</h2>
-<p>Você pode estender facilmente o Pygent com suas próprias ferramentas.</p>
-<h3 id="usando-register_tool">Usando <code>register_tool</code></h3>
-<p>A maneira mais direta de registrar uma nova ferramenta é usando a função <code>register_tool</code>.</p>
+<h2 id="creating-custom-tools">Creating Custom Tools</h2>
+<p>You can easily extend Pygent with your own tools.</p>
+<h3 id="using-register_tool">Using <code>register_tool</code></h3>
+<p>The most direct way to register a new tool is using the <code>register_tool</code> function.</p>
 <pre><code class="language-python">from pygent import Agent, register_tool
 
-# A função da ferramenta sempre recebe o runtime como primeiro argumento
+# The tool function always receives the runtime as the first argument
 def hello(rt, name: str) -&gt; str:
     return f&quot;Hello {name}!&quot;
 
-# Registre a ferramenta
+# Register the tool
 register_tool(
-    &quot;hello&quot;, # Nome da ferramenta
-    &quot;Greet by name&quot;, # Descrição
-    {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;name&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;name&quot;]}, # Schema de parâmetros
-    hello # A função a ser chamada
+    &quot;hello&quot;, # Tool name
+    &quot;Greet by name&quot;, # Description
+    {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;name&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;name&quot;]}, # Parameter schema
+    hello # The function to be called
 )
 
 ag = Agent()
-# Agora o agente pode usar a ferramenta 'hello'
+# Now the agent can use the 'hello' tool
 ag.step(&quot;hello name='world'&quot;)
 ag.runtime.cleanup()
 </code></pre>
-<p>Com certeza! Para garantir que não haja problemas de formatação, aqui está o conteúdo completo do arquivo tools.md. Você pode copiar todo o texto abaixo e colar em um novo arquivo chamado tools.md no seu diretório docs/.</p>
-<p>Markdown</p>
-<h1 id="ferramentas-tools_1">Ferramentas (Tools)</h1>
-<p>As ferramentas são o coração da funcionalidade do Pygent, permitindo que o agente interaja com o sistema de arquivos, execute comandos e realize outras ações.</p>
-<h2 id="ferramentas-nativas_1">Ferramentas Nativas</h2>
-<p>O Pygent vem com um conjunto de ferramentas essenciais prontas para uso:</p>
-<ul>
-<li><strong><code>bash</code></strong>: Executa um comando shell no ambiente de execução (local ou Docker).<ul>
-<li><strong>Parâmetros</strong>: <code>cmd</code> (string) - O comando a ser executado.</li>
-</ul>
-</li>
-<li><strong><code>write_file</code></strong>: Cria ou sobrescreve um arquivo no workspace do agente.<ul>
-<li><strong>Parâmetros</strong>: <code>path</code> (string), <code>content</code> (string).</li>
-</ul>
-</li>
-<li><strong><code>stop</code></strong>: Para o loop de execução autônoma do agente. Útil para sinalizar o fim de uma tarefa.</li>
-<li><strong><code>continue</code></strong>: Usado para solicitar uma resposta ou entrada do usuário, continuando a conversa.</li>
-</ul>
-<h2 id="ferramentas-de-tarefas_1">Ferramentas de Tarefas</h2>
-<p>Para gerenciar subtarefas e agentes em segundo plano, o Pygent oferece ferramentas específicas que são ativadas ao registrar com <code>register_task_tools()</code>:</p>
-<ul>
-<li><strong><code>delegate_task</code></strong>: Cria uma nova tarefa em segundo plano com um novo agente.<ul>
-<li><strong>Parâmetros</strong>: <code>prompt</code> (string), <code>files</code> (lista de strings, opcional), <code>persona</code> (string, opcional), <code>timeout</code> (float, opcional).</li>
-</ul>
-</li>
-<li><strong><code>task_status</code></strong>: Verifica o status de uma tarefa delegada.<ul>
-<li><strong>Parâmetros</strong>: <code>task_id</code> (string).</li>
-</ul>
-</li>
-<li><strong><code>collect_file</code></strong>: Recupera um arquivo ou diretório de uma tarefa delegada para o workspace do agente principal.<ul>
-<li><strong>Parâmetros</strong>: <code>task_id</code> (string), <code>path</code> (string), <code>dest</code> (string, opcional).</li>
-</ul>
-</li>
-<li><strong><code>list_personas</code></strong>: Retorna as personas disponíveis para tarefas delegadas.</li>
-</ul>
-<h2 id="criando-ferramentas-customizadas_1">Criando Ferramentas Customizadas</h2>
-<p>Você pode estender facilmente o Pygent com suas próprias ferramentas.</p>
-<h3 id="usando-register_tool_1">Usando <code>register_tool</code></h3>
-<p>A maneira mais direta de registrar uma nova ferramenta é usando a função <code>register_tool</code>.</p>
-<pre><code class="language-python">from pygent import Agent, register_tool
-
-# A função da ferramenta sempre recebe o runtime como primeiro argumento
-def hello(rt, name: str) -&gt; str:
-    return f&quot;Hello {name}!&quot;
-
-# Registre a ferramenta
-register_tool(
-    &quot;hello&quot;, # Nome da ferramenta
-    &quot;Greet by name&quot;, # Descrição
-    {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;name&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;name&quot;]}, # Schema de parâmetros
-    hello # A função a ser chamada
-)
-
-ag = Agent()
-# Agora o agente pode usar a ferramenta 'hello'
-ag.step(&quot;hello name='world'&quot;)
-ag.runtime.cleanup()
-</code></pre>
-<h2 id="usando-o-decorador-tool">Usando o decorador @tool</h2>
-<p>Como alternativa, você pode usar o decorador @tool para um registro mais conciso:</p>
+<h3 id="using-the-tool-decorator">Using the <code>@tool</code> decorator</h3>
+<p>Alternatively, you can use the <code>@tool</code> decorator for a more concise registration:</p>
 <pre><code class="language-python">from pygent import tool, Agent
 
 @tool(

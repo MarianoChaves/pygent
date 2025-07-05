@@ -22,7 +22,7 @@
     
     
       
-        <title>Interface de Linha de Comando (CLI) - Pygent</title>
+        <title>Command Line Interface (CLI) - Pygent</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#interface-de-linha-de-comando-cli" class="md-skip">
+        <a href="#command-line-interface-cli" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Interface de Linha de Comando (CLI)
+              Command Line Interface (CLI)
             
           </span>
         </div>
@@ -263,7 +263,7 @@
   
   
   <span class="md-ellipsis">
-    Visão Geral
+    Overview
     
   </span>
   
@@ -285,7 +285,7 @@
   
   
   <span class="md-ellipsis">
-    Guia de Início Rápido
+    Getting Started
     
   </span>
   
@@ -316,7 +316,7 @@
   
   
   <span class="md-ellipsis">
-    Interface de Linha de Comando (CLI)
+    Command Line Interface (CLI)
     
   </span>
   
@@ -329,7 +329,7 @@
   
   
   <span class="md-ellipsis">
-    Interface de Linha de Comando (CLI)
+    Command Line Interface (CLI)
     
   </span>
   
@@ -352,18 +352,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#sessao-interativa" class="md-nav__link">
+  <a href="#interactive-session" class="md-nav__link">
     <span class="md-ellipsis">
-      Sessão Interativa
+      Interactive Session
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#comandos-internos" class="md-nav__link">
+  <a href="#internal-commands" class="md-nav__link">
     <span class="md-ellipsis">
-      Comandos Internos
+      Internal Commands
     </span>
   </a>
   
@@ -389,7 +389,7 @@
   
   
   <span class="md-ellipsis">
-    Configuração
+    Configuration
     
   </span>
   
@@ -411,7 +411,7 @@
   
   
   <span class="md-ellipsis">
-    Ferramentas (Tools)
+    Tools
     
   </span>
   
@@ -433,7 +433,7 @@
   
   
   <span class="md-ellipsis">
-    Modelos Customizados
+    Custom Models
     
   </span>
   
@@ -455,7 +455,7 @@
   
   
   <span class="md-ellipsis">
-    Arquitetura
+    Architecture
     
   </span>
   
@@ -477,7 +477,7 @@
   
   
   <span class="md-ellipsis">
-    Exemplos
+    Examples
     
   </span>
   
@@ -499,7 +499,7 @@
   
   
   <span class="md-ellipsis">
-    Referência da API
+    API Reference
     
   </span>
   
@@ -536,18 +536,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#sessao-interativa" class="md-nav__link">
+  <a href="#interactive-session" class="md-nav__link">
     <span class="md-ellipsis">
-      Sessão Interativa
+      Interactive Session
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#comandos-internos" class="md-nav__link">
+  <a href="#internal-commands" class="md-nav__link">
     <span class="md-ellipsis">
-      Comandos Internos
+      Internal Commands
     </span>
   </a>
   
@@ -572,29 +572,29 @@
   
 
 
-<h1 id="interface-de-linha-de-comando-cli">Interface de Linha de Comando (CLI)</h1>
-<p>A CLI do Pygent oferece uma maneira interativa de interagir com o assistente, permitindo a execução de comandos, o gerenciamento de arquivos e a configuração do ambiente em tempo de real.</p>
-<h2 id="sessao-interativa">Sessão Interativa</h2>
-<p>Para iniciar uma sessão interativa, simplesmente execute <code>pygent</code> no seu terminal. Você pode usar várias opções para configurar a sessão:</p>
+<h1 id="command-line-interface-cli">Command Line Interface (CLI)</h1>
+<p>The Pygent CLI offers an interactive way to engage with the assistant, allowing for command execution, file management, and real-time environment configuration.</p>
+<h2 id="interactive-session">Interactive Session</h2>
+<p>To start an interactive session, simply run <code>pygent</code> in your terminal. You can use various options to configure the session:</p>
 <ul>
-<li><code>--docker</code>/<code>--no-docker</code>: Força a execução de comandos dentro de um contêiner Docker ou localmente.</li>
-<li><code>--config &lt;caminho&gt;</code>: Carrega a configuração de um arquivo TOML específico.</li>
-<li><code>--workspace &lt;nome&gt;</code>: Define um diretório de trabalho para a sessão.</li>
-<li><code>--load &lt;dir&gt;</code>: Carrega um snapshot de um ambiente salvo anteriormente, incluindo o workspace, histórico e variáveis de ambiente.</li>
-<li><code>--confirm-bash</code>: Pede confirmação antes de executar qualquer comando com a ferramenta <code>bash</code>.</li>
-<li><code>--ban-cmd &lt;comando&gt;</code>: Desabilita a execução de um comando específico.</li>
+<li><code>--docker</code>/<code>--no-docker</code>: Forces command execution inside a Docker container or locally.</li>
+<li><code>--config &lt;path&gt;</code>: Loads configuration from a specific TOML file.</li>
+<li><code>--workspace &lt;name&gt;</code>: Defines a working directory for the session.</li>
+<li><code>--load &lt;dir&gt;</code>: Loads a snapshot of a previously saved environment, including the workspace, history, and environment variables.</li>
+<li><code>--confirm-bash</code>: Prompts for confirmation before executing any command with the <code>bash</code> tool.</li>
+<li><code>--ban-cmd &lt;command&gt;</code>: Disables the execution of a specific command.</li>
 </ul>
-<h2 id="comandos-internos">Comandos Internos</h2>
-<p>Dentro da sessão interativa, você pode usar os seguintes comandos que começam com <code>/</code>:</p>
+<h2 id="internal-commands">Internal Commands</h2>
+<p>Within the interactive session, you can use the following commands that start with <code>/</code>:</p>
 <ul>
-<li><code>/help [comando]</code>: Mostra a lista de comandos disponíveis ou a ajuda para um comando específico.</li>
-<li><code>/cmd &lt;comando&gt;</code>: Executa um comando shell diretamente no ambiente de <code>runtime</code> (local ou Docker).</li>
-<li><code>/cp &lt;origem&gt; [destino]</code>: Copia um arquivo do seu sistema local para o workspace do agente.</li>
-<li><code>/new</code>: Reinicia a conversa, limpando o histórico, mas mantendo o <code>runtime</code> atual (e o workspace, se for persistente).</li>
-<li><code>/save &lt;dir&gt;</code>: Salva o estado atual, incluindo o workspace, o histórico da conversa e as variáveis de ambiente, em um diretório para uso posterior.</li>
-<li><code>/tools [list|enable|disable &lt;nome&gt;]</code>: Lista as ferramentas disponíveis ou ativa/desativa uma ferramenta específica durante a sessão.</li>
-<li><code>/banned [list|add|remove &lt;nome&gt;]</code>: Lista, adiciona ou remove comandos da lista de comandos proibidos no <code>runtime</code>.</li>
-<li><code>/exit</code>: Encerra a sessão interativa.</li>
+<li><code>/help [command]</code>: Shows the list of available commands or help for a specific command.</li>
+<li><code>/cmd &lt;command&gt;</code>: Executes a shell command directly in the <code>runtime</code> environment (local or Docker).</li>
+<li><code>/cp &lt;source&gt; [destination]</code>: Copies a file from your local system to the agent's workspace.</li>
+<li><code>/new</code>: Restarts the conversation, clearing the history but keeping the current <code>runtime</code> (and workspace, if persistent).</li>
+<li><code>/save &lt;dir&gt;</code>: Saves the current state, including the workspace, conversation history, and environment variables, to a directory for later use.</li>
+<li><code>/tools [list|enable|disable &lt;name&gt;]</code>: Lists available tools or enables/disables a specific tool during the session.</li>
+<li><code>/banned [list|add|remove &lt;name&gt;]</code>: Lists, adds, or removes commands from the list of banned commands in the <code>runtime</code>.</li>
+<li><code>/exit</code>: Ends the interactive session.</li>
 </ul>
 
 
