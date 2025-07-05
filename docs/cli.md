@@ -1,27 +1,27 @@
-# Interface de Linha de Comando (CLI)
+# Command Line Interface (CLI)
 
-A CLI do Pygent oferece uma maneira interativa de interagir com o assistente, permitindo a execução de comandos, o gerenciamento de arquivos e a configuração do ambiente em tempo de real.
+The Pygent CLI offers an interactive way to engage with the assistant, allowing for command execution, file management, and real-time environment configuration.
 
-## Sessão Interativa
+## Interactive Session
 
-Para iniciar uma sessão interativa, simplesmente execute `pygent` no seu terminal. Você pode usar várias opções para configurar a sessão:
+To start an interactive session, simply run `pygent` in your terminal. You can use various options to configure the session:
 
-* `--docker`/`--no-docker`: Força a execução de comandos dentro de um contêiner Docker ou localmente.
-* `--config <caminho>`: Carrega a configuração de um arquivo TOML específico.
-* `--workspace <nome>`: Define um diretório de trabalho para a sessão.
-* `--load <dir>`: Carrega um snapshot de um ambiente salvo anteriormente, incluindo o workspace, histórico e variáveis de ambiente.
-* `--confirm-bash`: Pede confirmação antes de executar qualquer comando com a ferramenta `bash`.
-* `--ban-cmd <comando>`: Desabilita a execução de um comando específico.
+* `--docker`/`--no-docker`: Forces command execution inside a Docker container or locally.
+* `--config <path>`: Loads configuration from a specific TOML file.
+* `--workspace <name>`: Defines a working directory for the session.
+* `--load <dir>`: Loads a snapshot of a previously saved environment, including the workspace, history, and environment variables.
+* `--confirm-bash`: Prompts for confirmation before executing any command with the `bash` tool.
+* `--ban-cmd <command>`: Disables the execution of a specific command.
 
-## Comandos Internos
+## Internal Commands
 
-Dentro da sessão interativa, você pode usar os seguintes comandos que começam com `/`:
+Within the interactive session, you can use the following commands that start with `/`:
 
-* `/help [comando]`: Mostra a lista de comandos disponíveis ou a ajuda para um comando específico.
-* `/cmd <comando>`: Executa um comando shell diretamente no ambiente de `runtime` (local ou Docker).
-* `/cp <origem> [destino]`: Copia um arquivo do seu sistema local para o workspace do agente.
-* `/new`: Reinicia a conversa, limpando o histórico, mas mantendo o `runtime` atual (e o workspace, se for persistente).
-* `/save <dir>`: Salva o estado atual, incluindo o workspace, o histórico da conversa e as variáveis de ambiente, em um diretório para uso posterior.
-* `/tools [list|enable|disable <nome>]`: Lista as ferramentas disponíveis ou ativa/desativa uma ferramenta específica durante a sessão.
-* `/banned [list|add|remove <nome>]`: Lista, adiciona ou remove comandos da lista de comandos proibidos no `runtime`.
-* `/exit`: Encerra a sessão interativa.
+* `/help [command]`: Shows the list of available commands or help for a specific command.
+* `/cmd <command>`: Executes a shell command directly in the `runtime` environment (local or Docker).
+* `/cp <source> [destination]`: Copies a file from your local system to the agent's workspace.
+* `/new`: Restarts the conversation, clearing the history but keeping the current `runtime` (and workspace, if persistent).
+* `/save <dir>`: Saves the current state, including the workspace, conversation history, and environment variables, to a directory for later use.
+* `/tools [list|enable|disable <name>]`: Lists available tools or enables/disables a specific tool during the session.
+* `/banned [list|add|remove <name>]`: Lists, adds, or removes commands from the list of banned commands in the `runtime`.
+* `/exit`: Ends the interactive session.

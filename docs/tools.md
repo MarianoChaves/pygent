@@ -1,121 +1,61 @@
-# Ferramentas (Tools)
+# Tools
 
-As ferramentas são o coração da funcionalidade do Pygent, permitindo que o agente interaja com o sistema de arquivos, execute comandos e realize outras ações.
+Tools are at the heart of Pygent's functionality, allowing the agent to interact with the file system, execute commands, and perform other actions.
 
-## Ferramentas Nativas
+## Native Tools
 
-O Pygent vem com um conjunto de ferramentas essenciais prontas para uso:
+Pygent comes with a set of essential tools ready to use:
 
-* **`bash`**: Executa um comando shell no ambiente de execução (local ou Docker).
-    * **Parâmetros**: `cmd` (string) - O comando a ser executado.
-* **`write_file`**: Cria ou sobrescreve um arquivo no workspace do agente.
-    * **Parâmetros**: `path` (string), `content` (string).
-* **`stop`**: Para o loop de execução autônoma do agente. Útil para sinalizar o fim de uma tarefa.
-* **`continue`**: Usado para solicitar uma resposta ou entrada do usuário, continuando a conversa.
+* **`bash`**: Executes a shell command in the execution environment (local or Docker).
+    * **Parameters**: `cmd` (string) - The command to be executed.
+* **`write_file`**: Creates or overwrites a file in the agent's workspace.
+    * **Parameters**: `path` (string), `content` (string).
+* **`stop`**: Stops the agent's autonomous execution loop. Useful for signaling the end of a task.
+* **`continue`**: Used to request a response or input from the user, continuing the conversation.
 
-## Ferramentas de Tarefas
+## Task Tools
 
-Para gerenciar subtarefas e agentes em segundo plano, o Pygent oferece ferramentas específicas que são ativadas ao registrar com `register_task_tools()`:
+To manage subtasks and background agents, Pygent offers specific tools that are activated by registering with `register_task_tools()`:
 
-* **`delegate_task`**: Cria uma nova tarefa em segundo plano com um novo agente.
-    * **Parâmetros**: `prompt` (string), `files` (lista de strings, opcional), `persona` (string, opcional), `timeout` (float, opcional).
-* **`task_status`**: Verifica o status de uma tarefa delegada.
-    * **Parâmetros**: `task_id` (string).
-* **`collect_file`**: Recupera um arquivo ou diretório de uma tarefa delegada para o workspace do agente principal.
-    * **Parâmetros**: `task_id` (string), `path` (string), `dest` (string, opcional).
-* **`list_personas`**: Retorna as personas disponíveis para tarefas delegadas.
+* **`delegate_task`**: Creates a new background task with a new agent.
+    * **Parameters**: `prompt` (string), `files` (list of strings, optional), `persona` (string, optional), `timeout` (float, optional).
+* **`task_status`**: Checks the status of a delegated task.
+    * **Parameters**: `task_id` (string).
+* **`collect_file`**: Retrieves a file or directory from a delegated task to the main agent's workspace.
+    * **Parameters**: `task_id` (string), `path` (string), `dest` (string, optional).
+* **`list_personas`**: Returns the available personas for delegated tasks.
 
-## Criando Ferramentas Customizadas
+## Creating Custom Tools
 
-Você pode estender facilmente o Pygent com suas próprias ferramentas.
+You can easily extend Pygent with your own tools.
 
-### Usando `register_tool`
+### Using `register_tool`
 
-A maneira mais direta de registrar uma nova ferramenta é usando a função `register_tool`.
-
-```python
-from pygent import Agent, register_tool
-
-# A função da ferramenta sempre recebe o runtime como primeiro argumento
-def hello(rt, name: str) -> str:
-    return f"Hello {name}!"
-
-# Registre a ferramenta
-register_tool(
-    "hello", # Nome da ferramenta
-    "Greet by name", # Descrição
-    {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}, # Schema de parâmetros
-    hello # A função a ser chamada
-)
-
-ag = Agent()
-# Agora o agente pode usar a ferramenta 'hello'
-ag.step("hello name='world'")
-ag.runtime.cleanup()
-```
-
-Com certeza! Para garantir que não haja problemas de formatação, aqui está o conteúdo completo do arquivo tools.md. Você pode copiar todo o texto abaixo e colar em um novo arquivo chamado tools.md no seu diretório docs/.
-
-Markdown
-
-# Ferramentas (Tools)
-
-As ferramentas são o coração da funcionalidade do Pygent, permitindo que o agente interaja com o sistema de arquivos, execute comandos e realize outras ações.
-
-## Ferramentas Nativas
-
-O Pygent vem com um conjunto de ferramentas essenciais prontas para uso:
-
-* **`bash`**: Executa um comando shell no ambiente de execução (local ou Docker).
-    * **Parâmetros**: `cmd` (string) - O comando a ser executado.
-* **`write_file`**: Cria ou sobrescreve um arquivo no workspace do agente.
-    * **Parâmetros**: `path` (string), `content` (string).
-* **`stop`**: Para o loop de execução autônoma do agente. Útil para sinalizar o fim de uma tarefa.
-* **`continue`**: Usado para solicitar uma resposta ou entrada do usuário, continuando a conversa.
-
-## Ferramentas de Tarefas
-
-Para gerenciar subtarefas e agentes em segundo plano, o Pygent oferece ferramentas específicas que são ativadas ao registrar com `register_task_tools()`:
-
-* **`delegate_task`**: Cria uma nova tarefa em segundo plano com um novo agente.
-    * **Parâmetros**: `prompt` (string), `files` (lista de strings, opcional), `persona` (string, opcional), `timeout` (float, opcional).
-* **`task_status`**: Verifica o status de uma tarefa delegada.
-    * **Parâmetros**: `task_id` (string).
-* **`collect_file`**: Recupera um arquivo ou diretório de uma tarefa delegada para o workspace do agente principal.
-    * **Parâmetros**: `task_id` (string), `path` (string), `dest` (string, opcional).
-* **`list_personas`**: Retorna as personas disponíveis para tarefas delegadas.
-
-## Criando Ferramentas Customizadas
-
-Você pode estender facilmente o Pygent com suas próprias ferramentas.
-
-### Usando `register_tool`
-
-A maneira mais direta de registrar uma nova ferramenta é usando a função `register_tool`.
+The most direct way to register a new tool is using the `register_tool` function.
 
 ```python
 from pygent import Agent, register_tool
 
-# A função da ferramenta sempre recebe o runtime como primeiro argumento
+# The tool function always receives the runtime as the first argument
 def hello(rt, name: str) -> str:
     return f"Hello {name}!"
 
-# Registre a ferramenta
+# Register the tool
 register_tool(
-    "hello", # Nome da ferramenta
-    "Greet by name", # Descrição
-    {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}, # Schema de parâmetros
-    hello # A função a ser chamada
+    "hello", # Tool name
+    "Greet by name", # Description
+    {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}, # Parameter schema
+    hello # The function to be called
 )
 
 ag = Agent()
-# Agora o agente pode usar a ferramenta 'hello'
+# Now the agent can use the 'hello' tool
 ag.step("hello name='world'")
 ag.runtime.cleanup()
 ```
 
-## Usando o decorador @tool
-Como alternativa, você pode usar o decorador @tool para um registro mais conciso:
+### Using the `@tool` decorator
+Alternatively, you can use the `@tool` decorator for a more concise registration:
 
 ```python
 from pygent import tool, Agent

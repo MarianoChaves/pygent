@@ -1,20 +1,20 @@
-# Bem-vindo ao Pygent
+# Welcome to Pygent
 
-**Pygent** é um assistente de codificação minimalista e poderoso, projetado para executar tarefas em um ambiente seguro e isolado. Por padrão, ele utiliza contêineres Docker para garantir que os comandos sejam executados de forma segura, mas também pode operar localmente se o Docker não estiver disponível.
+**Pygent** is a minimalist and powerful coding assistant designed to execute tasks in a secure and isolated environment. By default, it uses Docker containers to ensure commands are run safely, but it can also operate locally if Docker is unavailable.
 
-Esteja você procurando automatizar tarefas de desenvolvimento, gerar código ou simplesmente experimentar um assistente de IA seguro, o Pygent oferece as ferramentas e a flexibilidade de que você precisa.
+Whether you're looking to automate development tasks, generate code, or simply experiment with a secure AI assistant, Pygent offers the tools and flexibility you need.
 
-## Destaques
+## Highlights
 
-* **Execução Segura**: Comandos executados em contêineres Docker efêmeros por padrão.
-* **Flexibilidade**: Integra-se com modelos de linguagem compatíveis com a API da OpenAI.
-* **Extensibilidade**: Crie suas próprias ferramentas, personalize os prompts do sistema e estenda a CLI com comandos customizados.
-* **Persistência**: Salve e recupere o estado do seu workspace entre as sessões.
-* **Interface Dupla**: Use o Pygent através de uma CLI interativa ou de uma interface web simples.
+* **Secure Execution**: Commands run in ephemeral Docker containers by default.
+* **Flexibility**: Integrates with language models compatible with the OpenAI API.
+* **Extensibility**: Create your own tools, customize system prompts, and extend the CLI with custom commands.
+* **Persistence**: Save and recover your workspace state between sessions.
+* **Dual Interface**: Use Pygent via an interactive CLI or a simple web interface.
 
-## Por onde começar?
+## Where to start?
 
-* **Novo no Pygent?** Confira o nosso **[Guia de Início Rápido](getting-started.md)** para instalar e executar seu primeiro agente.
-* **Quer usar a CLI?** A página sobre a **[Interface de Linha de Comando (CLI)](cli.md)** tem todos os detalhes.
-* **Pronto para customizar?** Aprenda a criar **[Ferramentas](tools.md)** e **[Modelos Customizados](custom-models.md)**.
-* **Deseja entender como funciona?** A seção de **[Arquitetura](architecture.md)** oferece uma visão geral dos componentes internos.
+* **New to Pygent?** Check out our **[Getting Started Guide](getting-started.md)** to install and run your first agent.
+* **Want to use the CLI?** The **[Command Line Interface (CLI)](cli.md)** page has all the details.
+* **Ready to customize?** Learn how to create **[Tools](tools.md)** and **[Custom Models](custom-models.md)**.
+* **Want to understand how it works?** The **[Architecture](architecture.md)** section provides an overview of the internal components.

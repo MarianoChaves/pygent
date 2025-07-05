@@ -1,11 +1,11 @@
 # Pygent
 
-Pygent is a coding assistant that executes each request inside an isolated Docker container whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead. Full documentation is available in the `docs/` directory and at [marianochaves.github.io/pygent](https://marianochaves.github.io/pygent/).
+Pygent is a coding assistant that executes each request inside an isolated Docker container (meaning the container is discarded after use) whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead. Full documentation is available in the `docs/` directory and at [marianochaves.github.io/pygent](https://marianochaves.github.io/pygent/).
 
 ## Features
 
 * Runs commands in ephemeral containers (default image `python:3.12-slim`).
-* Integrates with OpenAI-compatible models to orchestrate each step.
+* Integrates with OpenAI-compatible models (models adhering to the OpenAI API specification) to orchestrate each step.
 * Persists the conversation history during the session.
 * Optionally save the history to a JSON file for later recovery.
 * Persist the workspace across sessions by setting `PYGENT_WORKSPACE`.
@@ -18,14 +18,29 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 
 ## Installation
 
-Installing from source is recommended:
+The recommended way to install Pygent is using pip:
+
+```bash
+pip install pygent
+```
+
+To include optional features like Docker support or the web UI, you can specify extras:
+
+```bash
+pip install pygent[docker,ui]
+```
+
+Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
+To run commands in Docker containers, Docker must be installed separately.
+
+If you are a developer or want the latest unreleased changes, you can install from source:
 
 ```bash
 pip install -e .
 ```
 
 Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
-To run commands in Docker containers also install `pygent[docker]`.
+To run commands in Docker containers, Docker must be installed separately. If installing from source, you can include Docker support with `pip install -e .[docker]`.
 
 ## Configuration
 
@@ -138,7 +153,7 @@ pip install -e .[test]
 pytest
 ```
 
-Use `mkdocs serve` to build the documentation locally.
+Use `mkdocs serve` to build the documentation locally and serve it on a local webserver.
 
 ## License
 

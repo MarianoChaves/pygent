@@ -17,3 +17,23 @@ This section documents the main classes and helpers exposed by **Pygent**. The c
 ## Tools
 
 ::: pygent.tools
+
+## Models
+
+::: pygent.models
+
+## Config
+
+::: pygent.config
+
+## Errors
+
+::: pygent.errors
+
+## OpenAI Compatibility (`openai_compat`)
+
+::: pygent.openai_compat
+
+## Commands
+
+::: pygent.commands
