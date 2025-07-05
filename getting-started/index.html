@@ -677,7 +677,10 @@ the package and gives a few examples covering the main features.</p>
 <p>Start an interactive session by running <code>pygent</code> in a terminal. Use the
 <code>--docker</code> flag to force container execution or <code>--no-docker</code> to run locally.
 The CLI prints the persona name and whether commands run <code>local</code> or in
-<code>Docker</code> when the session starts so you know which agent is active.</p>
+<code>Docker</code> when the session starts so you know which agent is active.
+At the beginning of each request, the assistant proposes a short plan for how it
+intends to solve the task and waits for your approval before executing any
+commands. This helps you keep control over the session.</p>
 <pre><code class="language-bash">$ pygent --docker
 vc&gt; echo &quot;Hello&quot;
 </code></pre>
