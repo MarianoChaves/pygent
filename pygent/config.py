@@ -35,6 +35,9 @@ def load_snapshot(path: Union[str, os.PathLike[str]]) -> Path:
     hist = dest / "history.json"
     if hist.is_file():
         os.environ["PYGENT_HISTORY_FILE"] = str(hist)
+    log = dest / "cli.log"
+    if log.is_file():
+        os.environ["PYGENT_LOG_FILE"] = str(log)
     return ws
 
 

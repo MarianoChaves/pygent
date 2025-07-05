@@ -66,6 +66,15 @@ def _default_history_file() -> Optional[pathlib.Path]:
     return pathlib.Path(env) if env else None
 
 
+def _default_log_file() -> Optional[pathlib.Path]:
+    env = os.getenv("PYGENT_LOG_FILE")
+    return pathlib.Path(env) if env else None
+
+
+def _default_confirm_bash() -> bool:
+    return os.getenv("PYGENT_CONFIRM_BASH", "0") not in {"", "0", "false", "False"}
+
+
 @dataclass
 class Agent:
     """Interactive assistant handling messages and tool execution."""
@@ -77,9 +86,12 @@ class Agent:
     history: List[Dict[str, Any]] = field(default_factory=list)
     history_file: Optional[pathlib.Path] = field(default_factory=_default_history_file)
     disabled_tools: List[str] = field(default_factory=list)
+    log_file: Optional[pathlib.Path] = field(default_factory=_default_log_file)
+    confirm_bash: bool = field(default_factory=_default_confirm_bash)
 
     def __post_init__(self) -> None:
         """Initialize defaults after dataclass construction."""
+        self._log_fp = None
         if not self.system_msg:
             self.system_msg = build_system_msg(self.persona, self.disabled_tools)
         if self.history_file and isinstance(self.history_file, (str, pathlib.Path)):
@@ -96,6 +108,19 @@ class Agent:
                 ]
         if not self.history:
             self.append_history({"role": "system", "content": self.system_msg})
+        if self.log_file is None:
+            if hasattr(self.runtime, "base_dir"):
+                self.log_file = pathlib.Path(getattr(self.runtime, "base_dir")) / "cli.log"
+            else:
+                self.log_file = pathlib.Path("cli.log")
+        if isinstance(self.log_file, (str, pathlib.Path)):
+            self.log_file = pathlib.Path(self.log_file)
+            os.environ.setdefault("PYGENT_LOG_FILE", str(self.log_file))
+            self.log_file.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                self._log_fp = self.log_file.open("a", encoding="utf-8")
+            except Exception:
+                self._log_fp = None
 
     def _message_dict(self, msg: Any) -> Dict[str, Any]:
         if isinstance(msg, dict):
@@ -116,6 +141,12 @@ class Agent:
     def append_history(self, msg: Any) -> None:
         self.history.append(msg)
         self._save_history()
+        if self._log_fp:
+            try:
+                self._log_fp.write(json.dumps(self._message_dict(msg)) + "\n")
+                self._log_fp.flush()
+            except Exception:
+                pass
 
     def refresh_system_message(self) -> None:
         """Update the system prompt based on the current tool registry."""
@@ -148,6 +179,25 @@ class Agent:
 
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
+                if self.confirm_bash and call.function.name == "bash":
+                    args = json.loads(call.function.arguments or "{}")
+                    cmd = args.get("cmd", "")
+                    prompt = f"Run command: {cmd}?"
+                    if questionary:
+                        ok = questionary.confirm(prompt).ask()
+                    else:  # pragma: no cover - fallback for tests
+                        ok = input(f"{prompt} [y/N]: ").lower().startswith("y")
+                    if not ok:
+                        output = f"$ {cmd}\n[aborted]"
+                        self.append_history({"role": "tool", "content": output, "tool_call_id": call.id})
+                        console.print(
+                            Panel(
+                                output,
+                                title=f"{self.persona.name} tool:{call.function.name}",
+                                box=box.ROUNDED if box else None,
+                            )
+                        )
+                        continue
                 status_cm = (
                     console.status(
                         f"[green]Running {call.function.name}...", spinner="line"
@@ -227,17 +277,28 @@ class Agent:
 
         return last_msg
 
+    def close(self) -> None:
+        """Close any open resources."""
+        if self._log_fp:
+            try:
+                self._log_fp.close()
+            finally:
+                self._log_fp = None
+
 
 def run_interactive(
     use_docker: Optional[bool] = None,
     workspace_name: Optional[str] = None,
     disabled_tools: Optional[List[str]] = None,
+    confirm_bash: Optional[bool] = None,
+    banned_commands: Optional[List[str]] = None,
 ) -> None:  # pragma: no cover
     """Start an interactive session in the terminal."""
     ws = pathlib.Path.cwd() / workspace_name if workspace_name else None
     agent = Agent(
-        runtime=Runtime(use_docker=use_docker, workspace=ws),
+        runtime=Runtime(use_docker=use_docker, workspace=ws, banned_commands=banned_commands),
         disabled_tools=disabled_tools or [],
+        confirm_bash=bool(confirm_bash) if confirm_bash is not None else _default_confirm_bash(),
     )
     from .commands import COMMANDS
     mode = "Docker" if agent.runtime.use_docker else "local"
@@ -253,6 +314,12 @@ def run_interactive(
             else:
                 user_msg = next_msg
                 next_msg = None
+            if agent._log_fp:
+                try:
+                    agent._log_fp.write(f"user> {user_msg}\n")
+                    agent._log_fp.flush()
+                except Exception:
+                    pass
             cmd = user_msg.split(maxsplit=1)[0]
             args = user_msg[len(cmd):].strip() if " " in user_msg else ""
             if cmd in {"/exit", "quit", "q"}:
@@ -276,5 +343,14 @@ def run_interactive(
                                 opts = "/".join(options)
                                 next_msg = input(f"{prompt} ({opts}): ")
                         break
+    except Exception as exc:  # pragma: no cover - interactive only
+        from .commands import cmd_save
+        dest = pathlib.Path.cwd() / f"crash_{uuid.uuid4().hex[:8]}"
+        cmd_save(agent, str(dest))
+        console.print(
+            f"[red]Error: {exc}. Workspace saved to {dest}. Load with `pygent --load {dest}`[/]"
+        )
+        raise
     finally:
+        agent.close()
         agent.runtime.cleanup()
