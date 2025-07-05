@@ -34,6 +34,9 @@ Start an interactive session by running `pygent` in a terminal. Use the
 `--docker` flag to force container execution or `--no-docker` to run locally.
 The CLI prints the persona name and whether commands run `local` or in
 `Docker` when the session starts so you know which agent is active.
+At the beginning of each request, the assistant proposes a short plan for how it
+intends to solve the task and waits for your approval before executing any
+commands. This helps you keep control over the session.
 
 ```bash
 $ pygent --docker

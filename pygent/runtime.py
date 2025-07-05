@@ -104,7 +104,7 @@ class Runtime:
         return self._use_docker
 
     # ---------------- public API ----------------
-    def bash(self, cmd: str, timeout: int = 30) -> str:
+    def bash(self, cmd: str, timeout: int = 600) -> str:
         """Run a command in the container or locally and return the output.
 
         The executed command is always included in the returned string so the
