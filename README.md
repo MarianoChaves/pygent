@@ -15,6 +15,8 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Extend the CLI with custom commands.
 * Execute a `config.py` script on startup for advanced configuration.
 * Set environment variables from the command line.
+* Each session begins with a short plan that you can approve before execution.
+* The assistant can leverage the `bash` tool to run shell commands in a sandboxed environment.
 
 ## Installation
 

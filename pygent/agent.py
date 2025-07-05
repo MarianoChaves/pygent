@@ -40,10 +40,14 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
         for s in tools.TOOL_SCHEMAS
         if not disabled_tools or s["function"]["name"] not in disabled_tools
     ]
+    has_bash = any(s["function"]["name"] == "bash" for s in schemas)
 
     return (
         f"You are {persona.name}. {persona.description}\n"
-        "Think step by step and use the available tools to solve the problem. "
+        "First, outline a short plan describing how you intend to solve the user's request."
+        " Present the plan and wait for approval before executing."
+        " Think step by step and use the available tools to solve the problem. "
+        f"{'You can run shell commands in a sandboxed environment using the `bash` tool. ' if has_bash else ''}"
         "Call `stop` when your work is done. Use `continue` if you require user input.\n"
         "Available tools:\n"
         f"{json.dumps(schemas, indent=2)}\n"
