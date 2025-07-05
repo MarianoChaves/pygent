@@ -1,25 +1,25 @@
-# Arquitetura
+# Architecture
 
-Entender a arquitetura do Pygent ajuda a customizar e estender o projeto de forma eficaz. O sistema é composto por alguns componentes principais que trabalham em conjunto.
+Understanding Pygent's architecture helps in effectively customizing and extending the project. The system is composed of a few main components that work together.
 
-## Componentes Principais
+## Core Components
 
-* **`Agent`**: O `Agent` é o orquestrador central. Ele mantém o histórico da conversa, interage com o modelo de linguagem para decidir o próximo passo e despacha as chamadas para as ferramentas. Cada agente possui seu próprio estado, incluindo a persona e as ferramentas habilitadas.
+* **`Agent`**: The `Agent` is the central orchestrator. It maintains the conversation history, interacts with the language model to decide the next step, and dispatches calls to tools. Each agent has its own state, including its persona and enabled tools.
 
-* **`Runtime`**: O `Runtime` representa o ambiente de execução isolado. Ele é responsável por executar comandos (`bash`), interagir com o sistema de arquivos (`write_file`, `read_file`) e gerenciar o ciclo de vida do ambiente (por exemplo, um contêiner Docker). Se o Docker não estiver disponível, o `runtime` executa os comandos localmente. Cada agente tem sua própria instância de `runtime`, garantindo o isolamento entre tarefas.
+* **`Runtime`**: The `Runtime` represents the isolated execution environment. It is responsible for executing commands (`bash`), interacting with the file system (`write_file`, `read_file`), and managing the environment's lifecycle (e.g., a Docker container). If Docker is unavailable, the `runtime` executes commands locally. Each agent has its own `runtime` instance, ensuring isolation between tasks.
 
-* **`Model`**: O `Model` é uma interface (protocolo) que abstrai a comunicação com um modelo de linguagem (LLM). A implementação padrão, `OpenAIModel`, interage com APIs compatíveis com a OpenAI. Você pode fornecer sua própria implementação para se conectar a diferentes back-ends de modelo.
+* **`Model`**: The `Model` is an interface (protocol) that abstracts communication with a language model (LLM). The default implementation, `OpenAIModel`, interacts with OpenAI-compatible APIs. You can provide your own implementation to connect to different model backends.
 
-* **`TaskManager`**: O `TaskManager` gerencia a execução de tarefas em segundo plano. Quando você usa a ferramenta `delegate_task`, o `TaskManager` cria um novo `Agent` com seu próprio `Runtime` para executar a tarefa de forma assíncrona, permitindo que o agente principal continue seu trabalho ou monitore o progresso da subtarefa.
+* **`TaskManager`**: The `TaskManager` manages the execution of background tasks. When you use the `delegate_task` tool, the `TaskManager` creates a new `Agent` with its own `Runtime` to execute the task asynchronously. This allows the main agent to continue its work or monitor the subtask's progress.
 
-## Fluxo de uma Requisição
+## Request Flow
 
-1.  O usuário envia uma mensagem para o `Agent` através da CLI ou da API.
-2.  O `Agent` adiciona a mensagem do usuário ao histórico da conversa.
-3.  O `Agent` envia o histórico completo para o `Model`.
-4.  O `Model` retorna uma resposta, que pode ser uma mensagem de texto ou uma solicitação para chamar uma ou mais ferramentas (`tool_calls`).
-5.  Se for uma mensagem de texto, o `Agent` a exibe para o usuário.
-6.  Se for uma chamada de ferramenta, o `Agent` invoca a função correspondente (ex: `tools._bash`), passando os argumentos necessários para o `Runtime`.
-7.  O `Runtime` executa a ação (por exemplo, um comando `ls` no contêiner Docker).
-8.  O resultado da execução é retornado ao `Agent`.
-9.  O `Agent` adiciona o resultado da ferramenta ao histórico e, tipicamente, chama o `Model` novamente para que ele possa processar o resultado e decidir o próximo passo, continuando o ciclo até que a tarefa seja concluída (sinalizado pela ferramenta `stop`).
+1.  The user sends a message to the `Agent` via the CLI or API.
+2.  The `Agent` adds the user's message to the conversation history.
+3.  The `Agent` sends the complete history to the `Model`.
+4.  The `Model` returns a response, which can be a text message or a request to call one or more tools (`tool_calls`).
+5.  If it's a text message, the `Agent` displays it to the user.
+6.  If it's a tool call, the `Agent` invokes the corresponding function (e.g., `tools._bash`), passing the necessary arguments to the `Runtime`.
+7.  The `Runtime` executes the action (e.g., an `ls` command in the Docker container).
+8.  The result of the execution is returned to the `Agent`.
+9.  The `Agent` adds the tool's result to the history and typically calls the `Model` again so it can process the result and decide the next step, continuing the cycle until the task is completed (signaled by the `stop` tool).
