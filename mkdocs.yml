@@ -21,12 +21,15 @@ theme:
     - content.code.copy
     - navigation.instant
 nav:
-  - Home: index.md
-  - Getting Started: getting-started.md
-  - Configuration: configuration.md
-  - Examples: examples.md
-  - Custom Models: custom-models.md
-  - API Reference: api-reference.md
+  - 'Visão Geral': index.md
+  - 'Guia de Início Rápido': getting-started.md
+  - 'Interface de Linha de Comando (CLI)': cli.md
+  - 'Configuração': configuration.md
+  - 'Ferramentas (Tools)': tools.md
+  - 'Modelos Customizados': custom-models.md
+  - 'Arquitetura': architecture.md
+  - 'Exemplos': examples.md
+  - 'Referência da API': api-reference.md
 plugins:
   - search
   - mkdocstrings:

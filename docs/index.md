@@ -1,44 +1,20 @@
-# Pygent
+# Bem-vindo ao Pygent
 
-Pygent is a minimal coding assistant that runs tasks inside an isolated Docker container whenever available. If Docker is not configured the commands run locally. This manual summarises the main commands and configuration options. See [Configuration](configuration.md) for a list of environment variables.
+**Pygent** é um assistente de codificação minimalista e poderoso, projetado para executar tarefas em um ambiente seguro e isolado. Por padrão, ele utiliza contêineres Docker para garantir que os comandos sejam executados de forma segura, mas também pode operar localmente se o Docker não estiver disponível.
 
-The latest version of this guide is published online at [marianochaves.github.io/pygent](https://marianochaves.github.io/pygent/).
-See the [Examples](examples.md) section for runnable scripts.
+Esteja você procurando automatizar tarefas de desenvolvimento, gerar código ou simplesmente experimentar um assistente de IA seguro, o Pygent oferece as ferramentas e a flexibilidade de que você precisa.
 
-See [Getting Started](getting-started.md) for a quick tutorial or jump to the [API Reference](api-reference.md) for details about the available classes.
+## Destaques
 
-## Installation
+* **Execução Segura**: Comandos executados em contêineres Docker efêmeros por padrão.
+* **Flexibilidade**: Integra-se com modelos de linguagem compatíveis com a API da OpenAI.
+* **Extensibilidade**: Crie suas próprias ferramentas, personalize os prompts do sistema e estenda a CLI com comandos customizados.
+* **Persistência**: Salve e recupere o estado do seu workspace entre as sessões.
+* **Interface Dupla**: Use o Pygent através de uma CLI interativa ou de uma interface web simples.
 
-```bash
-pip install pygent
-```
+## Por onde começar?
 
-Python ≥ 3.9 is required. Docker is optional; install `pygent[docker]` to enable container execution. The default model is `gpt-4.1-mini`.
-
-## Basic usage
-
-Start an interactive session by running `pygent` in the terminal. Use the `--docker` option to run commands in a container (requires `pygent[docker]`); otherwise they execute locally. Use `/exit` to quit.
-Pass `--config path/to/pygent.toml` to load settings from a file.
-Alternatively run `pygent ui` (or the legacy `pygent-ui` script) for a simple web interface
-(requires `pygent[ui]`).
-
-You can also use the Python API:
-
-```python
-from pygent import Agent
-ag = Agent()
-ag.step("echo test")
-ag.runtime.cleanup()
-```
-
-Custom models are supported by implementing the ``Model`` protocol and passing
-the instance to ``Agent``. They can also trigger tools by returning a message
-with ``tool_calls`` as shown in the ``custom_model_with_tool.py`` example.
-See the dedicated [Custom Models](custom-models.md) page for extended
-examples and advanced usage.
-
-## Development
-
-Install optional dependencies with `pip install -e .[test,docs]` and run `pytest` to execute the tests. Use `mkdocs serve` to build this documentation locally.
-
-See the README file for more detailed information.
+* **Novo no Pygent?** Confira o nosso **[Guia de Início Rápido](getting-started.md)** para instalar e executar seu primeiro agente.
+* **Quer usar a CLI?** A página sobre a **[Interface de Linha de Comando (CLI)](cli.md)** tem todos os detalhes.
+* **Pronto para customizar?** Aprenda a criar **[Ferramentas](tools.md)** e **[Modelos Customizados](custom-models.md)**.
+* **Deseja entender como funciona?** A seção de **[Arquitetura](architecture.md)** oferece uma visão geral dos componentes internos.
