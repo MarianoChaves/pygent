@@ -56,6 +56,17 @@ def main(
         help="disable a specific tool",
         show_default=False,
     ),
+    confirm_bash: Optional[bool] = typer.Option(
+        None,
+        "--confirm-bash/--no-confirm-bash",
+        help="ask confirmation before running bash commands",
+    ),
+    ban_cmd: List[str] = typer.Option(
+        None,
+        "--ban-cmd",
+        help="command to ban (repeatable)",
+        show_default=False,
+    ),
 ) -> None:  # pragma: no cover - CLI wrapper
     """Start an interactive session when no subcommand is given."""
     load_config(config)
@@ -71,11 +82,23 @@ def main(
         run_py_config(pyconfig)
     else:
         run_py_config("config.py")
-    ctx.obj = {"docker": docker, "workspace": workspace, "omit_tool": omit_tool or []}
+    ctx.obj = {
+        "docker": docker,
+        "workspace": workspace,
+        "omit_tool": omit_tool or [],
+        "confirm_bash": confirm_bash,
+        "ban_cmd": ban_cmd or [],
+    }
     if ctx.invoked_subcommand is None:
         from .agent import run_interactive
 
-        run_interactive(use_docker=docker, workspace_name=workspace, disabled_tools=omit_tool or [])
+        run_interactive(
+            use_docker=docker,
+            workspace_name=workspace,
+            disabled_tools=omit_tool or [],
+            confirm_bash=confirm_bash,
+            banned_commands=ban_cmd or [],
+        )
         raise typer.Exit()
 
 

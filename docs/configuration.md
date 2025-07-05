@@ -23,6 +23,8 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_INIT_FILES` | List of files or directories copied into the workspace at startup, separated by `os.pathsep`. | – |
 | `PYGENT_BANNED_COMMANDS` | Commands that cannot be executed by the bash tool, separated by `os.pathsep`. | – |
 | `PYGENT_BANNED_APPS` | Applications that cannot appear in any command, separated by `os.pathsep`. | – |
+| `PYGENT_LOG_FILE` | Path to the CLI log file. | `workspace/cli.log` |
+| `PYGENT_CONFIRM_BASH` | Require confirmation before running bash commands (set to `1` to enable). | `0` |
 
 Instead of setting environment variables you can create a `pygent.toml` file in
 the current directory or in your home folder. Values defined there are loaded at

@@ -59,6 +59,8 @@ Use `--docker` to run commands inside a container (requires
 to force local execution. When the session starts the CLI shows the
 persona name and whether it is running locally or in Docker so you
 can easily tell which agent is active.
+Pass `--confirm-bash` if you want to approve each bash command before it runs.
+Use `--ban-cmd CMD` to disallow specific commands entirely (repeat to ban multiple).
 Pass `--config path/to/pygent.toml` to load settings from a file.
 
 Type messages normally; use `/exit` to end the session. Each command is executed
@@ -68,6 +70,8 @@ are not supported and will exit immediately.
 For a minimal web interface run `pygent ui` instead (requires `pygent[ui]`).
 Use `/help` for a list of built-in commands or `/help <cmd>` for details.
 Use `/save DIR` to snapshot the current environment for later use.
+Use `/tools` to enable or disable tools during the session.
+Use `/banned` to list or update banned commands.
 Resume from a snapshot with `pygent --load DIR` or by setting
 `PYGENT_SNAPSHOT=DIR`.
 Additional commands can be registered programmatically with

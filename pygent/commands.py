@@ -11,6 +11,7 @@ from pathlib import Path
 
 from .agent import Agent
 from .runtime import Runtime
+from . import tools
 
 
 class Command:
@@ -79,7 +80,59 @@ def cmd_save(agent: Agent, arg: str) -> None:
         shutil.copy(agent.history_file, dest / "history.json")
     env = {k: v for k, v in os.environ.items() if k.startswith(("PYGENT_", "OPENAI_"))}
     (dest / "env.json").write_text(json.dumps(env, indent=2), encoding="utf-8")
+    if agent.log_file and Path(agent.log_file).exists():
+        shutil.copy(agent.log_file, dest / "cli.log")
     print(f"Saved environment to {dest}")
+
+
+def cmd_tools(agent: Agent, arg: str) -> None:
+    """Enable/disable tools at runtime or list them."""
+    parts = arg.split()
+    if not parts or parts[0] == "list":
+        for name in sorted(tools.TOOLS):
+            suffix = " (disabled)" if name in agent.disabled_tools else ""
+            print(f"{name}{suffix}")
+        return
+    if len(parts) != 2 or parts[0] not in {"enable", "disable"}:
+        print("usage: /tools [list|enable NAME|disable NAME]")
+        return
+    action, name = parts
+    if action == "enable":
+        if name in agent.disabled_tools:
+            agent.disabled_tools.remove(name)
+            agent.refresh_system_message()
+            print(f"Enabled {name}")
+        else:
+            print(f"{name} already enabled")
+    else:
+        if name not in agent.disabled_tools:
+            agent.disabled_tools.append(name)
+            agent.refresh_system_message()
+            print(f"Disabled {name}")
+        else:
+            print(f"{name} already disabled")
+
+
+def cmd_banned(agent: Agent, arg: str) -> None:
+    """List or modify banned commands."""
+    parts = arg.split()
+    if not parts or parts[0] == "list":
+        for name in sorted(agent.runtime.banned_commands):
+            print(name)
+        return
+    if len(parts) != 2 or parts[0] not in {"add", "remove"}:
+        print("usage: /banned [list|add CMD|remove CMD]")
+        return
+    action, name = parts
+    if action == "add":
+        agent.runtime.banned_commands.add(name)
+        print(f"Added {name}")
+    else:
+        if name in agent.runtime.banned_commands:
+            agent.runtime.banned_commands.remove(name)
+            print(f"Removed {name}")
+        else:
+            print(f"{name} not banned")
 
 
 def register_command(name: str, handler: Callable[[Agent, str], Optional[Agent]], description: str | None = None) -> None:
@@ -95,4 +148,6 @@ COMMANDS = {
     "/new": Command(cmd_new),
     "/help": Command(cmd_help),
     "/save": Command(cmd_save),
+    "/tools": Command(cmd_tools),
+    "/banned": Command(cmd_banned),
 }
