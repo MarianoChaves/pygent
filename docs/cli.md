@@ -10,7 +10,7 @@ To start an interactive session, simply run `pygent` in your terminal. You can u
 * `--config <path>`: Loads configuration from a specific TOML file.
 * `--workspace <name>`: Defines a working directory for the session.
 * `--load <dir>`: Loads a snapshot of a previously saved environment, including the workspace, history, and environment variables.
-* `--confirm-bash`: Prompts for confirmation before executing any command with the `bash` tool.
+* `--confirm-bash`: Prompts for confirmation before executing any command with the `bash` tool. The command is shown in the terminal before asking for permission.
 * `--ban-cmd <command>`: Disables the execution of a specific command.
 
 ## Internal Commands

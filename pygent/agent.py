@@ -224,7 +224,14 @@ class Agent:
                 if self.confirm_bash and call.function.name == "bash":
                     args = json.loads(call.function.arguments or "{}")
                     cmd = args.get("cmd", "")
-                    prompt = f"Run command: {cmd}?"
+                    console.print(
+                        Panel(
+                            f"$ {cmd}",
+                            title=f"{self.persona.name} pending bash",
+                            box=box.ROUNDED if box else None,
+                        )
+                    )
+                    prompt = "Run this command?"
                     if questionary:
                         ok = questionary.confirm(prompt).ask()
                     else:  # pragma: no cover - fallback for tests
