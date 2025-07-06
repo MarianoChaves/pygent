@@ -39,4 +39,14 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [pygent]
+          paths: [.]  # Look for modules in the current directory
+          options:
+            show_root_heading: True
+            show_source: True
+            members_order: source  # Order members as they appear in source
+            show_bases: True  # Show base classes
+            show_signature_annotations: True  # Show type annotations in signatures
+            separate_signature: True  # Separate signature from docstring
+            docstring_section_style: spacy # Use spacy style for docstring sections
+            merge_init_into_class: True # Merge __init__ docstring into class docstring
+            show_if_no_docstring: True # Show members even if they don't have a docstring
