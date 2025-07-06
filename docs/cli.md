@@ -17,9 +17,9 @@ To start an interactive session, simply run `pygent` in your terminal. You can u
 
 Within the interactive session, you can use the following commands that start with `/`:
 
-* `/help [command]`: Shows the list of available commands or help for a specific command.
-* `/cmd <command>`: Executes a shell command directly in the `runtime` environment (local or Docker).
-* `/cp <source> [destination]`: Copies a file from your local system to the agent's workspace.
+* `/help [command]`: Shows a detailed list of available commands, including their descriptions and usage patterns. If a specific command is provided (e.g., `/help /cp`), it displays detailed help for that command.
+* `/cmd <command>`: Executes a shell command directly in the `runtime` environment (local or Docker). Example: `/cmd ls -la`
+* `/cp <source> [destination]`: Copies a file from your local system to the agent's workspace. Example: `/cp my_script.py agent_scripts/`
 * `/new`: Restarts the conversation, clearing the history but keeping the current `runtime` (and workspace, if persistent).
 * `/save <dir>`: Saves the current state, including the workspace, conversation history, and environment variables, to a directory for later use.
 * `/tools [list|enable|disable <name>]`: Lists available tools or enables/disables a specific tool during the session.
