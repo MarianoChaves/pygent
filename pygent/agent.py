@@ -385,8 +385,11 @@ def run_interactive(
                     agent._log_fp.flush()
                 except Exception:
                     pass
-            cmd = user_msg.split(maxsplit=1)[0]
-            args = user_msg[len(cmd):].strip() if " " in user_msg else ""
+            if not user_msg.strip():
+                continue
+            parts = user_msg.split(maxsplit=1)
+            cmd = parts[0]
+            args = parts[1] if len(parts) == 2 else ""
             if cmd in {"/exit", "quit", "q"}:
                 break
             if cmd in COMMANDS:
