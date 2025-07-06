@@ -47,6 +47,6 @@ class DummyRuntime:
 
 
 def test_custom_model_tool():
-    ag = Agent(runtime=DummyRuntime(), model=BashModel())
+    ag = Agent(runtime=DummyRuntime(), model=BashModel(), confirm_bash=False)
     ag.step('run')
     assert any(isinstance(m, dict) and m.get('role') == 'tool' for m in ag.history)

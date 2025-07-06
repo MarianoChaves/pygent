@@ -11,7 +11,7 @@ Pygent comes with a set of essential tools ready to use:
 * **`write_file`**: Creates or overwrites a file in the agent's workspace.
     * **Parameters**: `path` (string), `content` (string).
 * **`stop`**: Stops the agent's autonomous execution loop. Useful for signaling the end of a task.
-* **`continue`**: Used to request a response or input from the user, continuing the conversation.
+* **`ask_user`**: Used to request a response or input from the user, continuing the conversation.
 
 ## Task Tools
 

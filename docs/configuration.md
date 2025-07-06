@@ -24,7 +24,7 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_BANNED_COMMANDS` | Commands that cannot be executed by the bash tool, separated by `os.pathsep`. | – |
 | `PYGENT_BANNED_APPS` | Applications that cannot appear in any command, separated by `os.pathsep`. | – |
 | `PYGENT_LOG_FILE` | Path to the CLI log file. | `workspace/cli.log` |
-| `PYGENT_CONFIRM_BASH` | Require confirmation before running bash commands (set to `1` to enable). | `0` |
+| `PYGENT_CONFIRM_BASH` | Require confirmation before running bash commands (set to `0` to disable). When enabled, the command is displayed before prompting. | `1` |
 
 Instead of setting environment variables you can create a `pygent.toml` file in
 the current directory or in your home folder. Values defined there are loaded at

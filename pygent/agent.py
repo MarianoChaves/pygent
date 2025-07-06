@@ -5,6 +5,7 @@ import os
 import pathlib
 import uuid
 import time
+import shutil
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional
 
@@ -33,24 +34,61 @@ DEFAULT_PERSONA = Persona(
 
 
 def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = None) -> str:
-    """Return the system prompt for ``persona`` with given tools."""
+    """Build the system prompt for ``persona`` with the active tools."""
 
+    # Active tool schemas
     schemas = [
-        s
-        for s in tools.TOOL_SCHEMAS
+        s for s in tools.TOOL_SCHEMAS
         if not disabled_tools or s["function"]["name"] not in disabled_tools
     ]
     has_bash = any(s["function"]["name"] == "bash" for s in schemas)
 
+    # 1) Dynamic prefix
+    try:
+        user = os.getlogin()
+    except Exception:
+        user = os.getenv("USER", "unknown")
+    dynamic_lines = [
+        f"User: {user}",
+        f"Working directory: {os.getcwd()}",
+    ]
+    if shutil.which("rg"):
+        dynamic_lines.append(
+            "Hint: prefer `rg` over `grep`/`ls -R`; it is faster and honours .gitignore."
+        )
+    dynamic_prefix = "\n".join(dynamic_lines)
+
+    # 2) Fixed operation block
+    fixed_block = (
+        "You are operating as and within a terminal-based coding assistant. "
+        "Your task is to satisfy the user's request with precision and safety. "
+        "When context is missing, rely on the available tools to inspect files or execute commands. "
+    )
+
+    # 3) Workflow block
+    workflow_block = (
+        "First, present a concise plan (≤ 5 lines) and end by asking the user permission to procceed."
+        "After approval, move step by step, briefly stating which tool you invoke and why. "
+        "If you require additional input, use the `ask_user` tool. "
+        "When the task is fully complete, use the `stop` tool."
+    )
+
+    # 4) Optional bash note
+    bash_note = (
+        "You can execute shell commands in an isolated environment via the `bash` tool, "
+        "including installing dependencies." if has_bash else ""
+    )
+
+    # 5) Tools block
+    tools_block = f"Available tools:\n{json.dumps(schemas, indent=2)}"
+
     return (
-        f"You are {persona.name}. {persona.description}\n"
-        "First, outline a short plan describing how you intend to solve the user's request."
-        " Present the plan and wait for approval before executing."
-        " Think step by step and use the available tools to solve the problem. "
-        f"{'You can run shell commands in a sandboxed environment using the `bash` tool. ' if has_bash else ''}"
-        "Call `stop` when your work is done. Use `continue` if you require user input.\n"
-        "Available tools:\n"
-        f"{json.dumps(schemas, indent=2)}\n"
+        f"{dynamic_prefix}\n\n"
+        f"{fixed_block}\n\n"
+        f"You are {persona.name}. {persona.description}\n\n"
+        f"{workflow_block}\n"
+        f"{bash_note}\n\n"
+        f"{tools_block}\n"
     )
 
 
@@ -76,7 +114,7 @@ def _default_log_file() -> Optional[pathlib.Path]:
 
 
 def _default_confirm_bash() -> bool:
-    return os.getenv("PYGENT_CONFIRM_BASH", "0") not in {"", "0", "false", "False"}
+    return os.getenv("PYGENT_CONFIRM_BASH", "1") not in {"", "0", "false", "False"}
 
 
 @dataclass
@@ -186,7 +224,14 @@ class Agent:
                 if self.confirm_bash and call.function.name == "bash":
                     args = json.loads(call.function.arguments or "{}")
                     cmd = args.get("cmd", "")
-                    prompt = f"Run command: {cmd}?"
+                    console.print(
+                        Panel(
+                            f"$ {cmd}",
+                            title=f"{self.persona.name} pending bash",
+                            box=box.ROUNDED if box else None,
+                        )
+                    )
+                    prompt = "Run this command?"
                     if questionary:
                         ok = questionary.confirm(prompt).ask()
                     else:  # pragma: no cover - fallback for tests
@@ -214,7 +259,7 @@ class Agent:
                 self.append_history(
                     {"role": "tool", "content": output, "tool_call_id": call.id}
                 )
-                if call.function.name not in {"continue", "stop"}:
+                if call.function.name not in {"ask_user", "stop"}:
                     console.print(
                         Panel(
                             output,
@@ -275,9 +320,9 @@ class Agent:
                 self._timed_out = True
                 break
             calls = assistant_msg.tool_calls or []
-            if any(c.function.name in ("stop", "continue") for c in calls):
+            if any(c.function.name in ("stop", "ask_user") for c in calls):
                 break
-            msg = "continue"
+            msg = "ask_user"
 
         return last_msg
 
@@ -336,7 +381,7 @@ def run_interactive(
             last = agent.run_until_stop(user_msg)
             if last and last.tool_calls:
                 for call in last.tool_calls:
-                    if call.function.name == "continue":
+                    if call.function.name == "ask_user":
                         args = json.loads(call.function.arguments or "{}")
                         options = args.get("options")
                         if options:
