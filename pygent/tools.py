@@ -106,7 +106,7 @@ def _stop(rt: Runtime) -> str:  # pragma: no cover - side-effect free
 
 
 @tool(
-    name="continue",
+    name="ask_user",
     description=(
         "Request user answer or input. If in your previous message you asked for user"
         " input, you can use this tool to continue the conversation. Optionally"
@@ -128,7 +128,7 @@ def _stop(rt: Runtime) -> str:  # pragma: no cover - side-effect free
         "required": [],
     },
 )
-def _continue(
+def _ask_user(
     rt: Runtime, prompt: str | None = None, options: Optional[list[str]] = None
 ) -> str:  # pragma: no cover - side-effect free
     return "Continuing the conversation."

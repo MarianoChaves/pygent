@@ -72,7 +72,7 @@ class DummyRuntime:
 
 
 def test_run_until_stop():
-    ag = Agent(runtime=DummyRuntime(), model=DummyModel())
+    ag = Agent(runtime=DummyRuntime(), model=DummyModel(), confirm_bash=False)
     ag.run_until_stop('start', max_steps=5)
     assert any(call.function.name == 'stop'
                for msg in ag.history

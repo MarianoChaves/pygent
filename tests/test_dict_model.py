@@ -49,6 +49,6 @@ class DummyRuntime:
 
 
 def test_dict_model_tool():
-    ag = Agent(runtime=DummyRuntime(), model=DictModel())
+    ag = Agent(runtime=DummyRuntime(), model=DictModel(), confirm_bash=False)
     ag.step("run")
     assert any(isinstance(m, dict) and m.get("role") == "tool" for m in ag.history)
