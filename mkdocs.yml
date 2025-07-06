@@ -1,36 +1,39 @@
 site_name: Pygent
 site_url: https://marianochaves.github.io/pygent/
 repo_url: https://github.com/marianochaves/pygent
+nav:
+  - Overview: index.md
+  - Getting Started: getting-started.md
+  - Command Line Interface (CLI): cli.md
+  - Configuration: configuration.md
+  - Tools: tools.md
+  - Custom Models: custom-models.md
+  - Architecture: architecture.md
+  - Examples: examples.md
+  - API Reference: api-reference.md
 theme:
   name: material
   language: en
+  logo: file_00000000b9e861f88eb06edc1f30e443.png
   palette:
-    - scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
     - scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
-      media: '(prefers-color-scheme: dark)'
+      primary: black
+      accent: '#1AFFA3'
+  font: false
   features:
-    - content.code.copy
     - navigation.instant
-nav:
-  - 'Overview': index.md
-  - 'Getting Started': getting-started.md
-  - 'Command Line Interface (CLI)': cli.md
-  - 'Configuration': configuration.md
-  - 'Tools': tools.md
-  - 'Custom Models': custom-models.md
-  - 'Architecture': architecture.md
-  - 'Examples': examples.md
-  - 'API Reference': api-reference.md
+    - content.code.copy
+extra_css:
+  - extra.css
+extra_javascript:
+  - extra.js
+markdown_extensions:
+  - admonition
+  - footnotes
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
 plugins:
   - search
   - mkdocstrings:
