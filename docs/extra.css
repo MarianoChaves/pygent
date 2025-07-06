@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@700&family=Fira+Code&display=swap');
+:root {
+  --bg-color: #0d0d0d;
+  --text-color: #ffffff;
+  --accent-color: #1AFFA3;
+  --hover-color: #A259FF;
+  --card-bg: #1E2A38;
+  --radius: 6px;
+}
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+}
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-typeset h4, .md-typeset h5, .md-typeset h6 {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+}
+code, pre {
+  font-family: 'Fira Code', monospace;
+}
+a {
+  color: var(--accent-color);
+  transition: color 150ms ease-out;
+}
+a:hover, a:focus {
+  color: var(--hover-color);
+}
+.md-nav__link--active {
+  border-left: 2px solid var(--accent-color);
+}
+.md-typeset h1 {
+  position: relative;
+  animation: glitch 3s infinite;
+}
+@keyframes glitch {
+  0%,100% { left: 0; opacity: 1; }
+  50% { left: 2px; opacity: 0.9; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset h1 { animation: none; }
+  .cursor { animation: none; }
+}
+.cursor {
+  display: inline-block;
+  width: 0.6ch;
+  margin-left: .1em;
+  background: var(--accent-color);
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { to { visibility: hidden; } }
+.md-sidebar__inner::before {
+  content: '';
+  display: block;
+  height: 64px;
+  background: url('file_00000000b9e861f88eb06edc1f30e443.png') center/contain no-repeat;
+}
+* { scrollbar-color: var(--accent-color) var(--card-bg); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--card-bg); }
+::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: var(--radius); }
+.md-typeset .admonition, .md-typeset details {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
