@@ -14,8 +14,18 @@ from .runtime import Runtime
 from . import tools
 
 from rich.console import Console
-from rich.table import Table
-from rich.text import Text
+try:  # optional rich features
+    from rich import __version__ as _rich_version  # noqa: F401
+    from rich.table import Table
+    from rich.text import Text
+except Exception:  # pragma: no cover - tests may stub out rich
+    import rich as _rich
+    if not hasattr(_rich, "__version__"):
+        _rich.__version__ = "0"
+    if not hasattr(_rich, "__file__"):
+        _rich.__file__ = "rich-not-installed"
+    Table = None  # type: ignore
+    Text = None  # type: ignore
 
 
 class Command:
@@ -71,7 +81,10 @@ def cmd_help(agent: Agent, arg: str) -> None:
     if arg:
         command_name = arg if arg.startswith('/') else f'/{arg}'
         cmd = COMMANDS.get(command_name)
-        if cmd:
+        if not cmd:
+            console.print(f"No help available for {arg}", style="bold red")
+            return
+        if Table and Text:
             table = Table(title=f"Help: {command_name}", show_header=False, box=None, padding=(0, 2))
             table.add_row(Text("Description:", style="bold cyan"), cmd.description)
             if cmd.usage:
@@ -79,21 +92,29 @@ def cmd_help(agent: Agent, arg: str) -> None:
             else:
                 table.add_row(Text("Usage:", style="bold cyan"), command_name)
             console.print(table)
-        else:
-            console.print(f"No help available for {arg}", style="bold red")
+        else:  # plain fallback
+            print(f"{command_name} - {cmd.description}")
+            print(f"Usage: {cmd.usage or command_name}")
         return
 
-    table = Table(title="Available Commands", title_style="bold magenta", show_header=True, header_style="bold cyan")
-    table.add_column("Command", style="dim", width=15)
-    table.add_column("Description")
-    table.add_column("Usage", width=30)
+    if Table and Text:
+        table = Table(title="Available Commands", title_style="bold magenta", show_header=True, header_style="bold cyan")
+        table.add_column("Command", style="dim", width=15)
+        table.add_column("Description")
+        table.add_column("Usage", width=30)
 
-    for name, command in sorted(COMMANDS.items()):
-        usage = command.usage or name
-        table.add_row(name, command.description, usage)
-    table.add_row("/exit", "Quit the session.", "/exit")
+        for name, command in sorted(COMMANDS.items()):
+            usage = command.usage or name
+            table.add_row(name, command.description, usage)
+        table.add_row("/exit", "Quit the session.", "/exit")
 
-    console.print(table)
+        console.print(table)
+    else:
+        print("Available Commands:")
+        for name, command in sorted(COMMANDS.items()):
+            usage = command.usage or name
+            print(f"{name} - {command.description} ({usage})")
+        print("/exit - quit the session (/exit)")
 
 
 def cmd_save(agent: Agent, arg: str) -> None:
@@ -163,7 +184,12 @@ def cmd_banned(agent: Agent, arg: str) -> None:
             print(f"{name} not banned")
 
 
-def register_command(name: str, handler: Callable[[Agent, str], Optional[Agent]], description: str | None = None) -> None:
+def register_command(
+    name: str,
+    handler: Callable[[Agent, str], Optional[Agent]],
+    description: str | None = None,
+    usage: str | None = None,
+) -> None:
     """Register a custom CLI command."""
     if name in COMMANDS:
         raise ValueError(f"command {name} already registered")
