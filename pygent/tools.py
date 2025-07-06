@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import json
 from typing import Any, Callable, Dict, List, Optional
+import mimetypes
+from pathlib import Path
 from copy import deepcopy
 
 from .runtime import Runtime
@@ -200,6 +202,29 @@ def _collect_file(rt: Runtime, task_id: str, path: str, dest: Optional[str] = No
 def _download_file(rt: Runtime, path: str, binary: bool = False) -> str:
     """Return the contents of a file from the workspace."""
     return rt.read_file(path, binary=binary)
+
+
+@tool(
+    name="read_image",
+    description="Return a data URL for an image in the workspace.",
+    parameters={
+        "type": "object",
+        "properties": {
+            "path": {"type": "string", "description": "Path to the image file"}
+        },
+        "required": ["path"],
+    },
+)
+def _read_image(rt: Runtime, path: str) -> str:
+    """Encode ``path`` and return a data URL."""
+    data = rt.read_file(path, binary=True)
+    if data.startswith("file "):
+        return data
+    mime, _ = mimetypes.guess_type(path)
+    if not mime or not mime.startswith("image/"):
+        ext = Path(path).suffix.lstrip(".") or "png"
+        mime = f"image/{ext}"
+    return f"data:{mime};base64,{data}"
 
 # snapshot of the default built-in registry
 BUILTIN_TOOLS = TOOLS.copy()

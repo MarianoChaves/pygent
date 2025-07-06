@@ -27,6 +27,7 @@ sys.modules.setdefault('rich.syntax', syntax_mod)     # Adicionado
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from pygent import tools, register_tool, Agent, clear_tools, reset_tools, remove_tool
+from pygent.runtime import Runtime
 
 class DummyRuntime:
     def bash(self, cmd: str):
@@ -95,5 +96,13 @@ def test_ask_user_tool_schema_allows_options():
     schema = [s for s in tools.TOOL_SCHEMAS if s["function"]["name"] == "ask_user"][0]
     props = schema["function"]["parameters"]["properties"]
     assert "options" in props
+
+
+def test_read_image_data_url(tmp_path):
+    rt = Runtime(use_docker=False, workspace=tmp_path)
+    img = tmp_path / "img.png"
+    img.write_bytes(b"\x89PNG\r\n")
+    result = tools._read_image(rt, path="img.png")
+    assert result.startswith("data:image/png;base64,")
 
 
