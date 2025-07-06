@@ -42,11 +42,15 @@ plugins:
           paths: [.]  # Look for modules in the current directory
           options:
             show_root_heading: True
-            show_source: True
-            members_order: source  # Order members as they appear in source
-            show_bases: True  # Show base classes
-            show_signature_annotations: True  # Show type annotations in signatures
-            separate_signature: True  # Separate signature from docstring
-            docstring_section_style: spacy # Use spacy style for docstring sections
-            merge_init_into_class: True # Merge __init__ docstring into class docstring
-            show_if_no_docstring: True # Show members even if they don't have a docstring
+            # show_source: True  # Disabled for now to address long lines
+            members_order: source
+            show_bases: True
+            show_signature_annotations: True
+            # separate_signature: True # Disabled for now, might contribute to line length issues
+            docstring_section_style: spacy
+            merge_init_into_class: True
+            show_if_no_docstring: True
+            # Options to potentially help with long lines and improve readability
+            line_length: 80 # Attempt to wrap lines
+            show_symbol_type_toc: True # Add symbol types to ToC for better navigation
+            annotations_path: brief # Use brief paths for annotations
