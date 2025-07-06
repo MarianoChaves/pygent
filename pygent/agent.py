@@ -13,6 +13,14 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.markdown import Markdown
 try:
+    from rich import __version__ as _rich_version  # noqa: F401
+except Exception:  # pragma: no cover - tests may stub out rich
+    import rich as _rich
+    if not hasattr(_rich, "__version__"):
+        _rich.__version__ = "0"
+    if not hasattr(_rich, "__file__"):
+        _rich.__file__ = "rich-not-installed"
+try:
     from rich import box  # type: ignore
 except Exception:  # pragma: no cover - tests stub out rich
     box = None
