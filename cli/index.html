@@ -567,9 +567,9 @@
 <h2 id="internal-commands">Internal Commands</h2>
 <p>Within the interactive session, you can use the following commands that start with <code>/</code>:</p>
 <ul>
-<li><code>/help [command]</code>: Shows the list of available commands or help for a specific command.</li>
-<li><code>/cmd &lt;command&gt;</code>: Executes a shell command directly in the <code>runtime</code> environment (local or Docker).</li>
-<li><code>/cp &lt;source&gt; [destination]</code>: Copies a file from your local system to the agent's workspace.</li>
+<li><code>/help [command]</code>: Shows a detailed list of available commands, including their descriptions and usage patterns. If a specific command is provided (e.g., <code>/help /cp</code>), it displays detailed help for that command.</li>
+<li><code>/cmd &lt;command&gt;</code>: Executes a shell command directly in the <code>runtime</code> environment (local or Docker). Example: <code>/cmd ls -la</code></li>
+<li><code>/cp &lt;source&gt; [destination]</code>: Copies a file from your local system to the agent's workspace. Example: <code>/cp my_script.py agent_scripts/</code></li>
 <li><code>/new</code>: Restarts the conversation, clearing the history but keeping the current <code>runtime</code> (and workspace, if persistent).</li>
 <li><code>/save &lt;dir&gt;</code>: Saves the current state, including the workspace, conversation history, and environment variables, to a directory for later use.</li>
 <li><code>/tools [list|enable|disable &lt;name&gt;]</code>: Lists available tools or enables/disables a specific tool during the session.</li>

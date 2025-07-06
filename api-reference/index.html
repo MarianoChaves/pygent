@@ -1445,6 +1445,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pygent.commands.Command.usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pygent.commands.Command.__call__" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__call__
@@ -2553,6 +2562,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#pygent.commands.Command.usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pygent.commands.Command.__call__" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__call__
@@ -2931,15 +2949,7 @@
 
             <details class="quote">
               <summary>Source code in <code>pygent/agent.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">142</span>
 <span class="normal">143</span>
 <span class="normal">144</span>
 <span class="normal">145</span>
@@ -2962,7 +2972,15 @@
 <span class="normal">162</span>
 <span class="normal">163</span>
 <span class="normal">164</span>
-<span class="normal">165</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize defaults after dataclass construction.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_log_fp</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_msg</span><span class="p">:</span>
@@ -3014,15 +3032,15 @@
 
             <details class="quote">
               <summary>Source code in <code>pygent/agent.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
-<span class="normal">191</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_save_history</span><span class="p">()</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_fp</span><span class="p">:</span>
@@ -3053,11 +3071,11 @@
 
             <details class="quote">
               <summary>Source code in <code>pygent/agent.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">193</span>
-<span class="normal">194</span>
-<span class="normal">195</span>
-<span class="normal">196</span>
-<span class="normal">197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">refresh_system_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">refresh_system_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the system prompt based on the current tool registry.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">system_msg</span> <span class="o">=</span> <span class="n">build_system_msg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">disabled_tools</span><span class="p">)</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;system&quot;</span><span class="p">:</span>
@@ -3084,15 +3102,7 @@
 
             <details class="quote">
               <summary>Source code in <code>pygent/agent.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
@@ -3166,7 +3176,22 @@
 <span class="normal">278</span>
 <span class="normal">279</span>
 <span class="normal">280</span>
-<span class="normal">281</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute one round of interaction with the model.&quot;&quot;&quot;</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">refresh_system_message</span><span class="p">()</span>
@@ -3197,23 +3222,28 @@
                 <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
                     <span class="n">Panel</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;$ </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> pending bash&quot;</span><span class="p">,</span>
-                        <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="o">.</span><span class="n">ROUNDED</span> <span class="k">if</span> <span class="n">box</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[bold yellow]</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> pending bash[/]&quot;</span><span class="p">,</span>
+                        <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+                        <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="o">.</span><span class="n">HEAVY_HEAD</span> <span class="k">if</span> <span class="n">box</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
                 <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;Run this command?&quot;</span>
                 <span class="k">if</span> <span class="n">questionary</span><span class="p">:</span>
-                    <span class="n">ok</span> <span class="o">=</span> <span class="n">questionary</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+                    <span class="n">ok</span> <span class="o">=</span> <span class="n">questionary</span><span class="o">.</span><span class="n">confirm</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
                 <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover - fallback for tests</span>
-                    <span class="n">ok</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2"> [y/N]: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+                    <span class="n">ok_input</span> <span class="o">=</span> <span class="n">console</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s2"> [Y/n]: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="n">ok</span> <span class="o">=</span> <span class="n">ok_input</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">ok_input</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
-                    <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;$ </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="se">\n</span><span class="s2">[aborted]&quot;</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;$ </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="se">\n</span><span class="s2">[bold red]Aborted by user.[/]&quot;</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">append_history</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">output</span><span class="p">,</span> <span class="s2">&quot;tool_call_id&quot;</span><span class="p">:</span> <span class="n">call</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
                     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
                         <span class="n">Panel</span><span class="p">(</span>
                             <span class="n">output</span><span class="p">,</span>
-                            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> tool:</span><span class="si">{</span><span class="n">call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[bold red]</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> tool:</span><span class="si">{</span><span class="n">call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">[/]&quot;</span><span class="p">,</span>
+                            <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
                             <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="o">.</span><span class="n">ROUNDED</span> <span class="k">if</span> <span class="n">box</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                     <span class="k">continue</span>
@@ -3233,18 +3263,20 @@
                 <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
                     <span class="n">Panel</span><span class="p">(</span>
                         <span class="n">output</span><span class="p">,</span>
-                        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> tool:</span><span class="si">{</span><span class="n">call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[bold bright_blue]</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> tool:</span><span class="si">{</span><span class="n">call</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">[/]&quot;</span><span class="p">,</span>
+                        <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;bright_blue&quot;</span><span class="p">,</span>
                         <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="o">.</span><span class="n">ROUNDED</span> <span class="k">if</span> <span class="n">box</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">markdown_response</span> <span class="o">=</span> <span class="n">Markdown</span><span class="p">(</span><span class="n">assistant_msg</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">markdown_response</span> <span class="o">=</span> <span class="n">Markdown</span><span class="p">(</span><span class="n">assistant_msg</span><span class="o">.</span><span class="n">content</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="c1"># Ensure content is not None</span>
         <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
             <span class="n">Panel</span><span class="p">(</span>
                 <span class="n">markdown_response</span><span class="p">,</span>
-                <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> replied&quot;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[bold green]</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> replied[/]&quot;</span><span class="p">,</span>
                 <span class="n">title_align</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
-                <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">,</span>
+                <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
                 <span class="n">box</span><span class="o">=</span><span class="n">box</span><span class="o">.</span><span class="n">ROUNDED</span> <span class="k">if</span> <span class="n">box</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
@@ -3271,22 +3303,7 @@
 
             <details class="quote">
               <summary>Source code in <code>pygent/agent.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">283</span>
-<span class="normal">284</span>
-<span class="normal">285</span>
-<span class="normal">286</span>
-<span class="normal">287</span>
-<span class="normal">288</span>
-<span class="normal">289</span>
-<span class="normal">290</span>
-<span class="normal">291</span>
-<span class="normal">292</span>
-<span class="normal">293</span>
-<span class="normal">294</span>
-<span class="normal">295</span>
-<span class="normal">296</span>
-<span class="normal">297</span>
-<span class="normal">298</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">298</span>
 <span class="normal">299</span>
 <span class="normal">300</span>
 <span class="normal">301</span>
@@ -3315,7 +3332,22 @@
 <span class="normal">324</span>
 <span class="normal">325</span>
 <span class="normal">326</span>
-<span class="normal">327</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_until_stop</span><span class="p">(</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_until_stop</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">user_msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">max_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
@@ -3382,13 +3414,13 @@
 
             <details class="quote">
               <summary>Source code in <code>pygent/agent.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">329</span>
-<span class="normal">330</span>
-<span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Close any open resources.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_fp</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -6230,7 +6262,7 @@ Returns the configuration dictionary.</p>
 
 
 <h3 id="pygent.commands.COMMANDS" class="doc doc-heading">
-            <code class=" language-python"><span class="n">COMMANDS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;/cmd&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_cmd</span><span class="p">),</span> <span class="s1">&#39;/cp&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_cp</span><span class="p">),</span> <span class="s1">&#39;/new&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_new</span><span class="p">),</span> <span class="s1">&#39;/help&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_help</span><span class="p">),</span> <span class="s1">&#39;/save&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_save</span><span class="p">),</span> <span class="s1">&#39;/tools&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_tools</span><span class="p">),</span> <span class="s1">&#39;/banned&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_banned</span><span class="p">)}</span></code>
+            <code class=" language-python"><span class="n">COMMANDS</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Command</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;/cmd&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_cmd</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Run a raw shell command in the sandbox.&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;/cmd &lt;command&gt;&#39;</span><span class="p">),</span> <span class="s1">&#39;/cp&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_cp</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Copy a file into the workspace.&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;/cp SRC [DEST]&#39;</span><span class="p">),</span> <span class="s1">&#39;/new&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_new</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Restart the conversation with a fresh history.&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;/new&#39;</span><span class="p">),</span> <span class="s1">&#39;/help&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_help</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Display available commands.&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;/help [command]&#39;</span><span class="p">),</span> <span class="s1">&#39;/save&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_save</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Save workspace and environment to DIR for later use.&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;/save DIR&#39;</span><span class="p">),</span> <span class="s1">&#39;/tools&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_tools</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Enable/disable tools at runtime or list them.&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;/tools [list|enable NAME|disable NAME]&#39;</span><span class="p">),</span> <span class="s1">&#39;/banned&#39;</span><span class="p">:</span> <span class="n">Command</span><span class="p">(</span><span class="n">cmd_banned</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;List or modify banned commands.&#39;</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;/banned [list|add CMD|remove CMD]&#39;</span><span class="p">)}</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
@@ -6251,7 +6283,7 @@ Returns the configuration dictionary.</p>
 
 
 <h3 id="pygent.commands.Command" class="doc doc-heading">
-              <code class=" language-python"><span class="n">Command</span><span class="p">(</span><span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+              <code class=" language-python"><span class="n">Command</span><span class="p">(</span><span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">usage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
 
@@ -6269,11 +6301,13 @@ Returns the configuration dictionary.</p>
 
                   <details class="quote">
                     <summary>Source code in <code>pygent/commands.py</code></summary>
-                    <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+                    <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">usage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span> <span class="ow">or</span> <span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span>
 </code></pre></div></td></tr></table></div>
                   </details>
 
@@ -6327,6 +6361,26 @@ Returns the configuration dictionary.</p>
 
 </div>
 
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="pygent.commands.Command.usage" class="doc doc-heading">
+            <code class=" language-python"><span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
 
 
 <div class="doc doc-object doc-function">
@@ -6343,8 +6397,8 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]:</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -6377,13 +6431,15 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_cmd</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_cmd</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run a raw shell command in the sandbox.&quot;&quot;&quot;</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">bash</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -6401,30 +6457,38 @@ Returns the configuration dictionary.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Copy a file into the workspace: <code>/cp SRC [DEST]</code>.</p>
+        <p>Copy a file into the workspace.</p>
 
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
-<span class="normal">35</span>
-<span class="normal">36</span>
-<span class="normal">37</span>
-<span class="normal">38</span>
-<span class="normal">39</span>
-<span class="normal">40</span>
-<span class="normal">41</span>
-<span class="normal">42</span>
-<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_cp</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Copy a file into the workspace: ``/cp SRC [DEST]``.&quot;&quot;&quot;</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_cp</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Copy a file into the workspace.&quot;&quot;&quot;</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">parts</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;usage: /cp SRC [DEST]&quot;</span><span class="p">)</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Usage: /cp SRC [DEST]&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold red&quot;</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="n">src</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">dest</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold red&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -6447,18 +6511,22 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">46</span>
-<span class="normal">47</span>
-<span class="normal">48</span>
-<span class="normal">49</span>
-<span class="normal">50</span>
-<span class="normal">51</span>
-<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_new</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_new</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Agent</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Restart the conversation with a fresh history.&quot;&quot;&quot;</span>
     <span class="n">persistent</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">_persistent</span>
     <span class="n">use_docker</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">use_docker</span>
     <span class="n">workspace</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">base_dir</span> <span class="k">if</span> <span class="n">persistent</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="n">agent</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+    <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Starting a new session.&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Agent</span><span class="p">(</span><span class="n">runtime</span><span class="o">=</span><span class="n">Runtime</span><span class="p">(</span><span class="n">use_docker</span><span class="o">=</span><span class="n">use_docker</span><span class="p">,</span> <span class="n">workspace</span><span class="o">=</span><span class="n">workspace</span><span class="p">))</span>
 </code></pre></div></td></tr></table></div>
             </details>
@@ -6482,33 +6550,87 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_help</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_help</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Display available commands.&quot;&quot;&quot;</span>
+    <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="n">arg</span><span class="p">:</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="n">COMMANDS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cmd</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No help available for </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">command_name</span> <span class="o">=</span> <span class="n">arg</span> <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s1">&#39;/</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">COMMANDS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">command_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cmd</span><span class="p">:</span>
+            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No help available for </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold red&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">Table</span> <span class="ow">and</span> <span class="n">Text</span><span class="p">:</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Help: </span><span class="si">{</span><span class="n">command_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">show_header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">box</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;Description:&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">),</span> <span class="n">cmd</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cmd</span><span class="o">.</span><span class="n">usage</span><span class="p">:</span>
+                <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;Usage:&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">),</span> <span class="n">cmd</span><span class="o">.</span><span class="n">usage</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;Usage:&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">),</span> <span class="n">command_name</span><span class="p">)</span>
+            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># plain fallback</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">command_name</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usage: </span><span class="si">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">usage</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">command_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available commands:&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">command</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">COMMANDS</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;5</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">command</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  /exit - quit the session&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Table</span> <span class="ow">and</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Available Commands&quot;</span><span class="p">,</span> <span class="n">title_style</span><span class="o">=</span><span class="s2">&quot;bold magenta&quot;</span><span class="p">,</span> <span class="n">show_header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header_style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Command&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;dim&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Usage&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">command</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">COMMANDS</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">usage</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">usage</span> <span class="ow">or</span> <span class="n">name</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">usage</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="s2">&quot;/exit&quot;</span><span class="p">,</span> <span class="s2">&quot;Quit the session.&quot;</span><span class="p">,</span> <span class="s2">&quot;/exit&quot;</span><span class="p">)</span>
+
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available Commands:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">command</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">COMMANDS</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">usage</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">usage</span> <span class="ow">or</span> <span class="n">name</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">command</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">usage</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;/exit - quit the session (/exit)&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -6531,21 +6653,21 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span>
-<span class="normal">74</span>
-<span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span>
-<span class="normal">78</span>
-<span class="normal">79</span>
-<span class="normal">80</span>
-<span class="normal">81</span>
-<span class="normal">82</span>
-<span class="normal">83</span>
-<span class="normal">84</span>
-<span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_save</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_save</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Save workspace and environment to ``DIR`` for later use.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">arg</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;usage: /save DIR&quot;</span><span class="p">)</span>
@@ -6582,32 +6704,32 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
-<span class="normal">107</span>
-<span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
-<span class="normal">111</span>
-<span class="normal">112</span>
-<span class="normal">113</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_tools</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_tools</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable/disable tools at runtime or list them.&quot;&quot;&quot;</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">parts</span> <span class="ow">or</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
@@ -6655,26 +6777,26 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_banned</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">cmd_banned</span><span class="p">(</span><span class="n">agent</span><span class="p">:</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;List or modify banned commands.&quot;&quot;&quot;</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">parts</span> <span class="ow">or</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
@@ -6704,7 +6826,7 @@ Returns the configuration dictionary.</p>
 
 
 <h3 id="pygent.commands.register_command" class="doc doc-heading">
-            <code class=" language-python"><span class="n">register_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+            <code class=" language-python"><span class="n">register_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">usage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
 
 </h3>
 
@@ -6716,15 +6838,25 @@ Returns the configuration dictionary.</p>
 
             <details class="quote">
               <summary>Source code in <code>pygent/commands.py</code></summary>
-              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
-<span class="normal">139</span>
-<span class="normal">140</span>
-<span class="normal">141</span>
-<span class="normal">142</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register_command</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+              <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register_command</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Agent</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Agent</span><span class="p">]],</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">usage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a custom CLI command.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">COMMANDS</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;command </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> already registered&quot;</span><span class="p">)</span>
-    <span class="n">COMMANDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Command</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+    <span class="n">COMMANDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Command</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">usage</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
