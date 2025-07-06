@@ -13,13 +13,18 @@ from .agent import Agent
 from .runtime import Runtime
 from . import tools
 
+from rich.console import Console
+from rich.table import Table
+from rich.text import Text
+
 
 class Command:
     """CLI command definition."""
 
-    def __init__(self, handler: Callable[[Agent, str], Optional[Agent]], description: str | None = None):
+    def __init__(self, handler: Callable[[Agent, str], Optional[Agent]], description: str | None = None, usage: str | None = None):
         self.handler = handler
         self.description = description or (handler.__doc__ or "")
+        self.usage = usage
 
     def __call__(self, agent: Agent, arg: str) -> Optional[Agent]:
         return self.handler(agent, arg)
@@ -28,19 +33,24 @@ class Command:
 def cmd_cmd(agent: Agent, arg: str) -> None:
     """Run a raw shell command in the sandbox."""
     output = agent.runtime.bash(arg)
-    print(output)
+    console = Console()
+    console.print(output)
 
 
 def cmd_cp(agent: Agent, arg: str) -> None:
-    """Copy a file into the workspace: ``/cp SRC [DEST]``."""
+    """Copy a file into the workspace."""
     parts = arg.split()
+    console = Console()
     if not parts:
-        print("usage: /cp SRC [DEST]")
+        console.print("Usage: /cp SRC [DEST]", style="bold red")
         return
     src = parts[0]
     dest = parts[1] if len(parts) > 1 else None
-    msg = agent.runtime.upload_file(src, dest)
-    print(msg)
+    try:
+        msg = agent.runtime.upload_file(src, dest)
+        console.print(msg)
+    except Exception as e:
+        console.print(f"Error: {e}", style="bold red")
 
 
 def cmd_new(agent: Agent, arg: str) -> Agent:
@@ -49,23 +59,41 @@ def cmd_new(agent: Agent, arg: str) -> Agent:
     use_docker = agent.runtime.use_docker
     workspace = agent.runtime.base_dir if persistent else None
     agent.runtime.cleanup()
+    console = Console()
+    console.print("Starting a new session.", style="green")
     return Agent(runtime=Runtime(use_docker=use_docker, workspace=workspace))
 
 
 def cmd_help(agent: Agent, arg: str) -> None:
     """Display available commands."""
+    console = Console()
+
     if arg:
-        cmd = COMMANDS.get(arg)
+        command_name = arg if arg.startswith('/') else f'/{arg}'
+        cmd = COMMANDS.get(command_name)
         if cmd:
-            print(f"{arg} - {cmd.description}")
+            table = Table(title=f"Help: {command_name}", show_header=False, box=None, padding=(0, 2))
+            table.add_row(Text("Description:", style="bold cyan"), cmd.description)
+            if cmd.usage:
+                table.add_row(Text("Usage:", style="bold cyan"), cmd.usage)
+            else:
+                table.add_row(Text("Usage:", style="bold cyan"), command_name)
+            console.print(table)
         else:
-            print(f"No help available for {arg}")
+            console.print(f"No help available for {arg}", style="bold red")
         return
 
-    print("Available commands:")
+    table = Table(title="Available Commands", title_style="bold magenta", show_header=True, header_style="bold cyan")
+    table.add_column("Command", style="dim", width=15)
+    table.add_column("Description")
+    table.add_column("Usage", width=30)
+
     for name, command in sorted(COMMANDS.items()):
-        print(f"  {name:<5} - {command.description}")
-    print("  /exit - quit the session")
+        usage = command.usage or name
+        table.add_row(name, command.description, usage)
+    table.add_row("/exit", "Quit the session.", "/exit")
+
+    console.print(table)
 
 
 def cmd_save(agent: Agent, arg: str) -> None:
@@ -139,15 +167,15 @@ def register_command(name: str, handler: Callable[[Agent, str], Optional[Agent]]
     """Register a custom CLI command."""
     if name in COMMANDS:
         raise ValueError(f"command {name} already registered")
-    COMMANDS[name] = Command(handler, description)
+    COMMANDS[name] = Command(handler, description, usage)
 
 
-COMMANDS = {
-    "/cmd": Command(cmd_cmd),
-    "/cp": Command(cmd_cp),
-    "/new": Command(cmd_new),
-    "/help": Command(cmd_help),
-    "/save": Command(cmd_save),
-    "/tools": Command(cmd_tools),
-    "/banned": Command(cmd_banned),
+COMMANDS: Dict[str, Command] = {
+    "/cmd": Command(cmd_cmd, description="Run a raw shell command in the sandbox.", usage="/cmd <command>"),
+    "/cp": Command(cmd_cp, description="Copy a file into the workspace.", usage="/cp SRC [DEST]"),
+    "/new": Command(cmd_new, description="Restart the conversation with a fresh history.", usage="/new"),
+    "/help": Command(cmd_help, description="Display available commands.", usage="/help [command]"),
+    "/save": Command(cmd_save, description="Save workspace and environment to DIR for later use.", usage="/save DIR"),
+    "/tools": Command(cmd_tools, description="Enable/disable tools at runtime or list them.", usage="/tools [list|enable NAME|disable NAME]"),
+    "/banned": Command(cmd_banned, description="List or modify banned commands.", usage="/banned [list|add CMD|remove CMD]"),
 }

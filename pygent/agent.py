@@ -227,23 +227,28 @@ class Agent:
                     console.print(
                         Panel(
                             f"$ {cmd}",
-                            title=f"{self.persona.name} pending bash",
-                            box=box.ROUNDED if box else None,
+                            title=f"[bold yellow]{self.persona.name} pending bash[/]",
+                            border_style="yellow",
+                            box=box.HEAVY_HEAD if box else None,
+                            title_align="left",
                         )
                     )
                     prompt = "Run this command?"
                     if questionary:
-                        ok = questionary.confirm(prompt).ask()
+                        ok = questionary.confirm(prompt, default=True).ask()
                     else:  # pragma: no cover - fallback for tests
-                        ok = input(f"{prompt} [y/N]: ").lower().startswith("y")
+                        ok_input = console.input(f"{prompt} [Y/n]: ").lower()
+                        ok = ok_input == "" or ok_input.startswith("y")
                     if not ok:
-                        output = f"$ {cmd}\n[aborted]"
+                        output = f"$ {cmd}\n[bold red]Aborted by user.[/]"
                         self.append_history({"role": "tool", "content": output, "tool_call_id": call.id})
                         console.print(
                             Panel(
                                 output,
-                                title=f"{self.persona.name} tool:{call.function.name}",
+                                title=f"[bold red]{self.persona.name} tool:{call.function.name}[/]",
+                                border_style="red",
                                 box=box.ROUNDED if box else None,
+                                title_align="left",
                             )
                         )
                         continue
@@ -263,18 +268,20 @@ class Agent:
                     console.print(
                         Panel(
                             output,
-                            title=f"{self.persona.name} tool:{call.function.name}",
+                            title=f"[bold bright_blue]{self.persona.name} tool:{call.function.name}[/]",
+                            border_style="bright_blue",
                             box=box.ROUNDED if box else None,
+                            title_align="left",
                         )
                     )
         else:
-            markdown_response = Markdown(assistant_msg.content)
+            markdown_response = Markdown(assistant_msg.content or "") # Ensure content is not None
             console.print(
                 Panel(
                     markdown_response,
-                    title=f"{self.persona.name} replied",
+                    title=f"[bold green]{self.persona.name} replied[/]",
                     title_align="left",
-                    border_style="cyan",
+                    border_style="green",
                     box=box.ROUNDED if box else None,
                 )
             )
@@ -352,15 +359,16 @@ def run_interactive(
     from .commands import COMMANDS
     mode = "Docker" if agent.runtime.use_docker else "local"
     console.print(
-        f"[bold green]{agent.persona.name} ({mode})[/] started. (type /exit to quit)"
+        f"[bold green]{agent.persona.name} ({mode})[/] started. (Type /exit to quit)"
     )
-    console.print("Type /help for available commands.")
+    console.print("Type /help for a list of available commands.")
     try:
         next_msg: Optional[str] = None
         while True:
             if next_msg is None:
-                user_msg = console.input("[cyan]user> [/]")
+                user_msg = console.input("[bold steel_blue]>>> [/]")
             else:
+                console.print(f"[bold steel_blue]>>> [/]{next_msg}", highlight=False)
                 user_msg = next_msg
                 next_msg = None
             if agent._log_fp:
@@ -397,9 +405,17 @@ def run_interactive(
         dest = pathlib.Path.cwd() / f"crash_{uuid.uuid4().hex[:8]}"
         cmd_save(agent, str(dest))
         console.print(
-            f"[red]Error: {exc}. Workspace saved to {dest}. Load with `pygent --load {dest}`[/]"
+            Panel(
+                f"An unexpected error occurred: [bold red]{exc}[/]\n"
+                f"Your workspace has been saved to [cyan]{dest}[/].\n"
+                f"You can restore it using: [bold yellow]pygent --load {dest}[/]",
+                title="[bold red]Critical Error[/]",
+                border_style="red",
+                box=box.DOUBLE if box else None,
+            )
         )
-        raise
+        # raise # Optionally re-raise the exception if needed for debugging or higher-level handling
     finally:
+        console.print("[dim]Closing session...[/]")
         agent.close()
         agent.runtime.cleanup()
