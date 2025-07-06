@@ -672,8 +672,9 @@ for details. The helper shows <code>/cmd</code> to run a raw shell command,
 <code>/cp</code> to copy files into the workspace and <code>/new</code> to restart the
 conversation while keeping the current runtime.
 Use <code>/tools</code> to enable or disable specific tools on the fly.
-Pass <code>--confirm-bash</code> when launching the CLI to require confirmation
-before running any <code>bash</code> command.
+Pass <code>--no-confirm-bash</code> if you want to skip the default confirmation
+before running any <code>bash</code> command. When confirmation is enabled,
+the agent displays the command before asking for approval.
 Add <code>--ban-cmd NAME</code> to prevent certain commands entirely.
 The <code>/save DIR</code> command copies the workspace, the CLI log and relevant
 configuration for later use.  Resume the session with
