@@ -75,3 +75,23 @@ def test_banned_app_blocked_env(monkeypatch):
     rt.cleanup()
     assert "application 'python' disabled" in out
 
+
+def test_bash_streaming(monkeypatch):
+    rt = Runtime(use_docker=False)
+    captured: list[str] = []
+
+    def cb(line: str) -> None:
+        captured.append(line)
+
+    cmd = (
+        "python -u -c 'import sys, time; "
+        "print(\"one\"); sys.stdout.flush(); "
+        "time.sleep(0.1); print(\"two\")'"
+    )
+    out = rt.bash(cmd, stream=cb)
+    rt.cleanup()
+    assert captured[0].startswith("$ python")
+    assert any("one" in l for l in captured)
+    assert any("two" in l for l in captured)
+    assert "one" in out and "two" in out
+
