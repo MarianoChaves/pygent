@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://pygent-ai.com/cli/">
+        <link rel="canonical" href="https://pygent-ai.com/custom-system-message/">
       
       
-        <link rel="prev" href="../getting-started/">
+        <link rel="prev" href="../custom-models/">
       
       
-        <link rel="next" href="../configuration/">
+        <link rel="next" href="../architecture/">
       
       
       <link rel="icon" href="../file_00000000b9e861f88eb06edc1f30e443.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Command Line Interface (CLI) - Pygent</title>
+        <title>Custom System Message - Pygent</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#command-line-interface-cli" class="md-skip">
+        <a href="#custom-system-message" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Command Line Interface (CLI)
+              Custom System Message
             
           </span>
         </div>
@@ -279,32 +279,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Command Line Interface (CLI)
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
         
   
   
@@ -315,44 +293,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interactive Session
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#internal-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Internal Commands
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -427,10 +367,19 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../custom-system-message/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -441,6 +390,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -531,32 +481,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interactive Session
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#internal-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Internal Commands
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -574,30 +498,24 @@
   
 
 
-<h1 id="command-line-interface-cli">Command Line Interface (CLI)</h1>
-<p>The Pygent CLI offers an interactive way to engage with the assistant, allowing for command execution, file management, and real-time environment configuration.</p>
-<h2 id="interactive-session">Interactive Session</h2>
-<p>To start an interactive session, simply run <code>pygent</code> in your terminal. You can use various options to configure the session:</p>
-<ul>
-<li><code>--docker</code>/<code>--no-docker</code>: Forces command execution inside a Docker container or locally.</li>
-<li><code>--config &lt;path&gt;</code>: Loads configuration from a specific TOML file.</li>
-<li><code>--workspace &lt;name&gt;</code>: Defines a working directory for the session.</li>
-<li><code>--load &lt;dir&gt;</code>: Loads a snapshot of a previously saved environment, including the workspace, history, and environment variables.</li>
-<li><code>--confirm-bash</code>: Prompts for confirmation before executing any command with the <code>bash</code> tool. The command is shown in the terminal before asking for permission.</li>
-<li><code>--ban-cmd &lt;command&gt;</code>: Disables the execution of a specific command.</li>
-</ul>
-<h2 id="internal-commands">Internal Commands</h2>
-<p>Within the interactive session, you can use the following commands that start with <code>/</code>:</p>
-<ul>
-<li><code>/help [command]</code>: Shows a detailed list of available commands, including their descriptions and usage patterns. If a specific command is provided (e.g., <code>/help /cp</code>), it displays detailed help for that command.</li>
-<li><code>/cmd &lt;command&gt;</code>: Executes a shell command directly in the <code>runtime</code> environment (local or Docker). Example: <code>/cmd ls -la</code></li>
-<li><code>/cp &lt;source&gt; [destination]</code>: Copies a file from your local system to the agent's workspace. Example: <code>/cp my_script.py agent_scripts/</code></li>
-<li><code>/new</code>: Restarts the conversation, clearing the history but keeping the current <code>runtime</code> (and workspace, if persistent).</li>
-<li><code>/save &lt;dir&gt;</code>: Saves the current state, including the workspace, conversation history, and environment variables, to a directory for later use.</li>
-<li><code>/tools [list|enable|disable &lt;name&gt;]</code>: Lists available tools or enables/disables a specific tool during the session.</li>
-<li><code>/banned [list|add|remove &lt;name&gt;]</code>: Lists, adds, or removes commands from the list of banned commands in the <code>runtime</code>.</li>
-<li><code>/exit</code>: Ends the interactive session.</li>
-</ul>
+<h1 id="custom-system-message">Custom System Message</h1>
+<p>Pygent builds the initial system prompt dynamically based on the persona
+and the currently active tools. If you want full control over this
+message you can supply your own builder function.</p>
+<p>Use <code>set_system_message_builder</code> to register a callable that returns the
+system prompt. A convenient place to do this is in a <code>config.py</code> file
+loaded on start-up.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># config.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygent.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_system_message_builder</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">my_system_builder</span><span class="p">(</span><span class="n">persona</span><span class="p">,</span> <span class="n">disabled_tools</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: ready to work&quot;</span>
+
+<span class="n">set_system_message_builder</span><span class="p">(</span><span class="n">my_system_builder</span><span class="p">)</span>
+</code></pre></div>
+<p>Pass <code>None</code> to <code>set_system_message_builder</code> to restore the default
+prompt generation logic.</p>
 
 
 
