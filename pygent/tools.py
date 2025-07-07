@@ -55,13 +55,26 @@ def tool(name: str, description: str, parameters: Dict[str, Any]):
 
 
 def execute_tool(call: Any, rt: Runtime) -> str:  # pragma: no cover
-    """Dispatch a tool call."""
+    """Dispatch a tool call.
+
+    Any exception raised by the tool is caught and returned as an error
+    string so callers don't crash the CLI.
+    """
+
     name = call.function.name
-    args: Dict[str, Any] = json.loads(call.function.arguments)
+    try:
+        args: Dict[str, Any] = json.loads(call.function.arguments or "{}")
+    except Exception as exc:  # pragma: no cover - defensive
+        return f"[error] invalid arguments for {name}: {exc}"
+
     func = TOOLS.get(name)
     if func is None:
         return f"⚠️ unknown tool {name}"
-    return func(rt, **args)
+
+    try:
+        return func(rt, **args)
+    except Exception as exc:  # pragma: no cover - tool errors
+        return f"[error] {exc}"
 
 
 # ---- built-ins ----
