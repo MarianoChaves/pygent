@@ -1,5 +1,5 @@
 site_name: Pygent
-site_url: https://marianochaves.github.io/pygent/
+site_url: https://pygent-ai.com/
 repo_url: https://github.com/marianochaves/pygent
 nav:
   - Overview: index.md
@@ -15,6 +15,7 @@ theme:
   name: material
   language: en
   logo: file_00000000b9e861f88eb06edc1f30e443.png
+  favicon: file_00000000b9e861f88eb06edc1f30e443.png
   palette:
     - scheme: slate
       primary: black
