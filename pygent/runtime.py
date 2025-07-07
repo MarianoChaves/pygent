@@ -135,6 +135,19 @@ class Runtime:
 
         if self._use_docker and self.container is not None:
             try:
+                if stream is not None:
+                    res = self.container.exec_run(
+                        cmd,
+                        workdir="/workspace",
+                        stream=True,
+                        tty=False,
+                        stdin=False,
+                    )
+                    for chunk in res.output:
+                        text = chunk.decode()
+                        output_parts.append(text)
+                        stream(text)
+                    return "".join(output_parts)
                 res = self.container.exec_run(
                     cmd,
                     workdir="/workspace",
@@ -148,8 +161,6 @@ class Runtime:
                 )
                 text = (stdout or b"").decode() + (stderr or b"").decode()
                 output_parts.append(text)
-                if stream and text:
-                    stream(text)
                 return "".join(output_parts)
             except Exception as exc:
                 err = f"[error] {exc}"
