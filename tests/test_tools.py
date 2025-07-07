@@ -75,6 +75,29 @@ def test_register_and_execute_custom_tool():
     assert tools.execute_tool(call, DummyRuntime()) == 'hi bob'
 
 
+def test_execute_tool_handles_exception():
+    def boom(rt):
+        raise RuntimeError('fail')
+
+    register_tool(
+        "boom",
+        "fail",
+        {"type": "object", "properties": {}},
+        lambda rt: boom(rt),
+    )
+
+    call = type('Call', (), {
+        'function': type('Func', (), {
+            'name': 'boom',
+            'arguments': '{}'
+        })
+    })()
+
+    out = tools.execute_tool(call, DummyRuntime())
+    assert 'error' in out.lower()
+    remove_tool('boom')
+
+
 def test_clear_and_reset_tools_updates_prompt():
     clear_tools()
     ag = Agent()
