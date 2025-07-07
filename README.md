@@ -125,6 +125,19 @@ set_custom_model(MyModel())
 
 All new agents and delegated tasks will use this model unless another one is passed explicitly.
 
+You can also override how the assistant builds the system prompt:
+
+```python
+from pygent.agent import set_system_message_builder
+
+def my_builder(persona, disabled_tools=None):
+    return f"{persona.name}: ready to work"
+
+set_system_message_builder(my_builder)
+```
+
+Passing `None` restores the default prompt generation.
+
 ### Using OpenAI and other providers
 
 Set your OpenAI key:

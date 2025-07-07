@@ -21,7 +21,11 @@ except _metadata.PackageNotFoundError:  # pragma: no cover - fallback for tests
     else:
         __version__ = "0.0.0"
 
-from .agent import Agent, run_interactive  # noqa: E402,F401, must come after __version__
+from .agent import (
+    Agent,
+    run_interactive,
+    set_system_message_builder,
+)
 from .models import Model, OpenAIModel, set_custom_model  # noqa: E402,F401
 from .errors import PygentError, APIError  # noqa: E402,F401
 from .tools import register_tool, tool, clear_tools, reset_tools, remove_tool  # noqa: E402,F401
@@ -36,6 +40,7 @@ __all__ = [
     "Model",
     "OpenAIModel",
     "set_custom_model",
+    "set_system_message_builder",
     "PygentError",
     "APIError",
     "register_tool",

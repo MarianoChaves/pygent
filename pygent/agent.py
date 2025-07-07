@@ -8,7 +8,7 @@ import time
 import shutil
 import platform
 from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Callable
 
 from rich.console import Console
 from rich.panel import Panel
@@ -36,6 +36,18 @@ from . import tools, models, openai_compat
 from .models import Model, OpenAIModel
 from .persona import Persona
 
+# optional custom builder for the system message
+_SYSTEM_MSG_BUILDER: Optional[Callable[[Persona, Optional[List[str]]], str]] = None
+
+
+def set_system_message_builder(
+    builder: Optional[Callable[[Persona, Optional[List[str]]], str]]
+) -> None:
+    """Register a callable to build the system prompt."""
+
+    global _SYSTEM_MSG_BUILDER
+    _SYSTEM_MSG_BUILDER = builder
+
 DEFAULT_PERSONA = Persona(
     os.getenv("PYGENT_PERSONA_NAME", "Pygent"),
     os.getenv("PYGENT_PERSONA", "a sandboxed coding assistant."),
@@ -44,6 +56,9 @@ DEFAULT_PERSONA = Persona(
 
 def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = None) -> str:
     """Build the system prompt for ``persona`` with the active tools."""
+
+    if _SYSTEM_MSG_BUILDER:
+        return _SYSTEM_MSG_BUILDER(persona, disabled_tools)
 
     # Active tool schemas
     schemas = [
