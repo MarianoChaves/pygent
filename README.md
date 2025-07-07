@@ -1,6 +1,6 @@
 # Pygent
 
-Pygent is a coding assistant that executes each request inside an isolated Docker container (meaning the container is discarded after use) whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead. Full documentation is available in the `docs/` directory and at [pygent-ai.com](www.pygent-ai.com).
+Pygent is a coding assistant that executes each request inside an isolated Docker container (meaning the container is discarded after use) whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead. Full documentation is available in the `docs/` directory and at [pygent-ai.com](htts://pygent-ai.com).
 
 ## Features
 
