@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://marianochaves.github.io/pygent/</loc>
+         <loc>https://pygent-ai.com/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/api-reference/</loc>
+         <loc>https://pygent-ai.com/api-reference/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/architecture/</loc>
+         <loc>https://pygent-ai.com/architecture/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/cli/</loc>
+         <loc>https://pygent-ai.com/cli/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/configuration/</loc>
+         <loc>https://pygent-ai.com/configuration/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/custom-models/</loc>
+         <loc>https://pygent-ai.com/custom-models/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/examples/</loc>
+         <loc>https://pygent-ai.com/examples/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/getting-started/</loc>
+         <loc>https://pygent-ai.com/getting-started/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
     <url>
-         <loc>https://marianochaves.github.io/pygent/tools/</loc>
+         <loc>https://pygent-ai.com/tools/</loc>
          <lastmod>2025-07-07</lastmod>
     </url>
 </urlset>
