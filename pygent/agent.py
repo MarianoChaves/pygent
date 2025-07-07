@@ -6,6 +6,7 @@ import pathlib
 import uuid
 import time
 import shutil
+import platform
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional
 
@@ -58,6 +59,7 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
         user = os.getenv("USER", "unknown")
     dynamic_lines = [
         f"User: {user}",
+        f"OS: {platform.system()}",
         f"Working directory: {os.getcwd()}",
     ]
     if shutil.which("rg"):
