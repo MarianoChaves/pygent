@@ -275,9 +275,17 @@ class Agent:
                     {"role": "tool", "content": output, "tool_call_id": call.id}
                 )
                 if call.function.name not in {"ask_user", "stop"}:
+                    display_output = output
+                    if call.function.name == "read_image" and output.startswith("data:image"):
+                        try:
+                            args = json.loads(call.function.arguments or "{}")
+                            path = args.get("path", "<unknown>")
+                        except Exception:
+                            path = "<unknown>"
+                        display_output = f"returned data URL for {path}"
                     console.print(
                         Panel(
-                            output,
+                            display_output,
                             title=f"[bold bright_blue]{self.persona.name} tool:{call.function.name}[/]",
                             border_style="bright_blue",
                             box=box.ROUNDED if box else None,
