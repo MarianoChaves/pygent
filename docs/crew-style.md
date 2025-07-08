@@ -1,59 +1,59 @@
 # Multi-Agent Collaboration
 
-Pygent pode coordenar diversos agentes em paralelo por meio da classe `TaskManager`. Essa abordagem lembra sistemas como o Crew AI, em que tarefas são distribuídas para agentes especializados.
+Pygent can coordinate multiple agents in parallel using the `TaskManager` class. This approach resembles systems like Crew AI where tasks are distributed to specialised agents.
 
-## Definindo personas
+## Defining personas
 
-Crie uma lista de `Persona` para representar os papéis dos agentes que irão compor a "equipe":
+Create a list of `Persona` objects representing the roles of the agents that will form the "crew":
 
 ```python
 from pygent import Agent, TaskManager
 from pygent.persona import Persona
 
 personas = [
-    Persona("escritor", "produz arquivos"),
-    Persona("revisor", "analisa o resultado"),
+    Persona("writer", "produces files"),
+    Persona("reviewer", "checks the result"),
 ]
 
 manager = TaskManager(personas=personas)
 ```
 
-## Delegando tarefas
+## Delegating tasks
 
-Use `start_task` para lançar subtarefas em background. Defina a persona desejada e, opcionalmente, envie arquivos de apoio:
+Use `start_task` to launch background subtasks. Specify the desired persona and optionally send supporting files:
 
 ```python
 main = Agent()
 
-# Envie um agente escritor para gerar um arquivo
-escrita = manager.start_task(
-    "write_file path='nota.txt' content='ola'\nstop",
+# Send a writer agent to generate a file
+writing = manager.start_task(
+    "write_file path='note.txt' content='hi'\nstop",
     main.runtime,
-    persona="escritor",
+    persona="writer",
 )
 
-# Outro agente lê o arquivo e imprime no console
-leitura = manager.start_task(
-    "bash cmd='cat nota.txt'\nstop",
+# Another agent reads the file and prints it to the console
+reading = manager.start_task(
+    "bash cmd='cat note.txt'\nstop",
     main.runtime,
-    files=["nota.txt"],
-    persona="revisor",
+    files=["note.txt"],
+    persona="reviewer",
 )
 ```
 
-## Acompanhar e coletar resultados
+## Monitoring and collecting results
 
-O `TaskManager` permite verificar o status e copiar arquivos de volta para o agente principal:
+The `TaskManager` lets you check task status and copy files back to the main agent:
 
 ```python
 import time
-for tid in [escrita, leitura]:
+for tid in [writing, reading]:
     while manager.status(tid) == "running":
         time.sleep(1)
-    print("Status da tarefa", tid + ":", manager.status(tid))
+    print("Task status", tid + ":", manager.status(tid))
 
-print(manager.collect_file(main.runtime, escrita, "nota.txt"))
+print(manager.collect_file(main.runtime, writing, "note.txt"))
 main.runtime.cleanup()
 ```
 
-Com essas chamadas é possível montar fluxos de trabalho em cadeia ou paralelos, obtendo um comportamento semelhante ao de frameworks de múltiplos agentes como o Crew AI.
+With these calls you can build chained or parallel workflows, achieving behaviour similar to multi-agent frameworks like Crew AI.
