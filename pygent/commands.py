@@ -184,6 +184,20 @@ def cmd_banned(agent: Agent, arg: str) -> None:
             print(f"{name} not banned")
 
 
+def cmd_confirm_bash(agent: Agent, arg: str) -> None:
+    """Show or toggle confirmation for bash commands."""
+    arg = arg.strip().lower()
+    if not arg:
+        status = "on" if agent.confirm_bash else "off"
+        print(status)
+        return
+    if arg not in {"on", "off"}:
+        print("usage: /confirm-bash [on|off]")
+        return
+    agent.confirm_bash = arg == "on"
+    print("confirmation " + ("enabled" if agent.confirm_bash else "disabled"))
+
+
 def register_command(
     name: str,
     handler: Callable[[Agent, str], Optional[Agent]],
@@ -204,4 +218,5 @@ COMMANDS: Dict[str, Command] = {
     "/save": Command(cmd_save, description="Save workspace and environment to DIR for later use.", usage="/save DIR"),
     "/tools": Command(cmd_tools, description="Enable/disable tools at runtime or list them.", usage="/tools [list|enable NAME|disable NAME]"),
     "/banned": Command(cmd_banned, description="List or modify banned commands.", usage="/banned [list|add CMD|remove CMD]"),
+    "/confirm-bash": Command(cmd_confirm_bash, description="Toggle confirmation before running bash commands.", usage="/confirm-bash [on|off]"),
 }
