@@ -442,27 +442,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#definindo-personas" class="md-nav__link">
+  <a href="#defining-personas" class="md-nav__link">
     <span class="md-ellipsis">
-      Definindo personas
+      Defining personas
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#delegando-tarefas" class="md-nav__link">
+  <a href="#delegating-tasks" class="md-nav__link">
     <span class="md-ellipsis">
-      Delegando tarefas
+      Delegating tasks
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#acompanhar-e-coletar-resultados" class="md-nav__link">
+  <a href="#monitoring-and-collecting-results" class="md-nav__link">
     <span class="md-ellipsis">
-      Acompanhar e coletar resultados
+      Monitoring and collecting results
     </span>
   </a>
   
@@ -569,27 +569,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#definindo-personas" class="md-nav__link">
+  <a href="#defining-personas" class="md-nav__link">
     <span class="md-ellipsis">
-      Definindo personas
+      Defining personas
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#delegando-tarefas" class="md-nav__link">
+  <a href="#delegating-tasks" class="md-nav__link">
     <span class="md-ellipsis">
-      Delegando tarefas
+      Delegating tasks
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#acompanhar-e-coletar-resultados" class="md-nav__link">
+  <a href="#monitoring-and-collecting-results" class="md-nav__link">
     <span class="md-ellipsis">
-      Acompanhar e coletar resultados
+      Monitoring and collecting results
     </span>
   </a>
   
@@ -615,50 +615,50 @@
 
 
 <h1 id="multi-agent-collaboration">Multi-Agent Collaboration</h1>
-<p>Pygent pode coordenar diversos agentes em paralelo por meio da classe <code>TaskManager</code>. Essa abordagem lembra sistemas como o Crew AI, em que tarefas são distribuídas para agentes especializados.</p>
-<h2 id="definindo-personas">Definindo personas</h2>
-<p>Crie uma lista de <code>Persona</code> para representar os papéis dos agentes que irão compor a "equipe":</p>
+<p>Pygent can coordinate multiple agents in parallel using the <code>TaskManager</code> class. This approach resembles systems like Crew AI where tasks are distributed to specialised agents.</p>
+<h2 id="defining-personas">Defining personas</h2>
+<p>Create a list of <code>Persona</code> objects representing the roles of the agents that will form the "crew":</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pygent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">TaskManager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pygent.persona</span><span class="w"> </span><span class="kn">import</span> <span class="n">Persona</span>
 
 <span class="n">personas</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Persona</span><span class="p">(</span><span class="s2">&quot;escritor&quot;</span><span class="p">,</span> <span class="s2">&quot;produz arquivos&quot;</span><span class="p">),</span>
-    <span class="n">Persona</span><span class="p">(</span><span class="s2">&quot;revisor&quot;</span><span class="p">,</span> <span class="s2">&quot;analisa o resultado&quot;</span><span class="p">),</span>
+    <span class="n">Persona</span><span class="p">(</span><span class="s2">&quot;writer&quot;</span><span class="p">,</span> <span class="s2">&quot;produces files&quot;</span><span class="p">),</span>
+    <span class="n">Persona</span><span class="p">(</span><span class="s2">&quot;reviewer&quot;</span><span class="p">,</span> <span class="s2">&quot;checks the result&quot;</span><span class="p">),</span>
 <span class="p">]</span>
 
 <span class="n">manager</span> <span class="o">=</span> <span class="n">TaskManager</span><span class="p">(</span><span class="n">personas</span><span class="o">=</span><span class="n">personas</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="delegando-tarefas">Delegando tarefas</h2>
-<p>Use <code>start_task</code> para lançar subtarefas em background. Defina a persona desejada e, opcionalmente, envie arquivos de apoio:</p>
+<h2 id="delegating-tasks">Delegating tasks</h2>
+<p>Use <code>start_task</code> to launch background subtasks. Specify the desired persona and optionally send supporting files:</p>
 <div class="highlight"><pre><span></span><code><span class="n">main</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">()</span>
 
-<span class="c1"># Envie um agente escritor para gerar um arquivo</span>
-<span class="n">escrita</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span>
-    <span class="s2">&quot;write_file path=&#39;nota.txt&#39; content=&#39;ola&#39;</span><span class="se">\n</span><span class="s2">stop&quot;</span><span class="p">,</span>
+<span class="c1"># Send a writer agent to generate a file</span>
+<span class="n">writing</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span>
+    <span class="s2">&quot;write_file path=&#39;note.txt&#39; content=&#39;hi&#39;</span><span class="se">\n</span><span class="s2">stop&quot;</span><span class="p">,</span>
     <span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span>
-    <span class="n">persona</span><span class="o">=</span><span class="s2">&quot;escritor&quot;</span><span class="p">,</span>
+    <span class="n">persona</span><span class="o">=</span><span class="s2">&quot;writer&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># Outro agente lê o arquivo e imprime no console</span>
-<span class="n">leitura</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span>
-    <span class="s2">&quot;bash cmd=&#39;cat nota.txt&#39;</span><span class="se">\n</span><span class="s2">stop&quot;</span><span class="p">,</span>
+<span class="c1"># Another agent reads the file and prints it to the console</span>
+<span class="n">reading</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span>
+    <span class="s2">&quot;bash cmd=&#39;cat note.txt&#39;</span><span class="se">\n</span><span class="s2">stop&quot;</span><span class="p">,</span>
     <span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span>
-    <span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nota.txt&quot;</span><span class="p">],</span>
-    <span class="n">persona</span><span class="o">=</span><span class="s2">&quot;revisor&quot;</span><span class="p">,</span>
+    <span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;note.txt&quot;</span><span class="p">],</span>
+    <span class="n">persona</span><span class="o">=</span><span class="s2">&quot;reviewer&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
-<h2 id="acompanhar-e-coletar-resultados">Acompanhar e coletar resultados</h2>
-<p>O <code>TaskManager</code> permite verificar o status e copiar arquivos de volta para o agente principal:</p>
+<h2 id="monitoring-and-collecting-results">Monitoring and collecting results</h2>
+<p>The <code>TaskManager</code> lets you check task status and copy files back to the main agent:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="k">for</span> <span class="n">tid</span> <span class="ow">in</span> <span class="p">[</span><span class="n">escrita</span><span class="p">,</span> <span class="n">leitura</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">tid</span> <span class="ow">in</span> <span class="p">[</span><span class="n">writing</span><span class="p">,</span> <span class="n">reading</span><span class="p">]:</span>
     <span class="k">while</span> <span class="n">manager</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;running&quot;</span><span class="p">:</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status da tarefa&quot;</span><span class="p">,</span> <span class="n">tid</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">manager</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">tid</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task status&quot;</span><span class="p">,</span> <span class="n">tid</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">manager</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">tid</span><span class="p">))</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">collect_file</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span> <span class="n">escrita</span><span class="p">,</span> <span class="s2">&quot;nota.txt&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">collect_file</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span> <span class="n">writing</span><span class="p">,</span> <span class="s2">&quot;note.txt&quot;</span><span class="p">))</span>
 <span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
 </code></pre></div>
-<p>Com essas chamadas é possível montar fluxos de trabalho em cadeia ou paralelos, obtendo um comportamento semelhante ao de frameworks de múltiplos agentes como o Crew AI.</p>
+<p>With these calls you can build chained or parallel workflows, achieving behaviour similar to multi-agent frameworks like Crew AI.</p>
 
 
 
