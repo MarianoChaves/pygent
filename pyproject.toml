@@ -1,6 +1,6 @@
 [project]
 name = "pygent"
-version = "0.2.12"
+version = "0.2.13"
 description = "Pygent is a minimalist coding assistant that runs commands in a Docker container when available and falls back to local execution."
 readme = "README.md"
 authors = [ { name = "Mariano Chaves", email = "mchaves.software@gmail.com" } ]
@@ -20,7 +20,7 @@ docker = ["docker>=7.0.0"]
 ui = ["gradio"]
 
 [project.urls]
-Documentation = "https://pygent-ai.com"
+Documentation = "https://marianochaves.github.io/pygent"
 Repository = "https://github.com/marianochaves/pygent"
 
 [project.scripts]
