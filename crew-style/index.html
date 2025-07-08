@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://pygent-ai.com/configuration/">
+        <link rel="canonical" href="https://pygent-ai.com/crew-style/">
       
       
-        <link rel="prev" href="../cli/">
+        <link rel="prev" href="../custom-system-message/">
       
       
-        <link rel="next" href="../tools/">
+        <link rel="next" href="../architecture/">
       
       
       <link rel="icon" href="../file_00000000b9e861f88eb06edc1f30e443.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Configuration - Pygent</title>
+        <title>Multi-Agent Collaboration - Pygent</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configuration" class="md-skip">
+        <a href="#multi-agent-collaboration" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Configuration
+              Multi-Agent Collaboration
             
           </span>
         </div>
@@ -301,19 +301,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
@@ -324,7 +315,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -399,10 +389,32 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../crew-style/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Multi-Agent Collaboration
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -413,6 +425,53 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definindo-personas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definindo personas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delegando-tarefas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Delegando tarefas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acompanhar-e-coletar-resultados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acompanhar e coletar resultados
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -503,6 +562,41 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definindo-personas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definindo personas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delegando-tarefas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Delegando tarefas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acompanhar-e-coletar-resultados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acompanhar e coletar resultados
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -520,155 +614,51 @@
   
 
 
-<h1 id="configuration">Configuration</h1>
-<p>This page summarises the environment variables that control Pygent.  They can be
-exported in your shell or set via a <code>.env</code> file before running the CLI.</p>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>OPENAI_API_KEY</code></td>
-<td>API key for OpenAI or any compatible service.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>OPENAI_BASE_URL</code></td>
-<td>Base URL for the API endpoint.</td>
-<td><code>https://api.openai.com/v1</code></td>
-</tr>
-<tr>
-<td><code>PYGENT_MODEL</code></td>
-<td>Model name used for requests.</td>
-<td><code>gpt-4.1-mini</code></td>
-</tr>
-<tr>
-<td><code>PYGENT_IMAGE</code></td>
-<td>Docker image used for sandboxed execution.</td>
-<td><code>python:3.12-slim</code></td>
-</tr>
-<tr>
-<td><code>PYGENT_USE_DOCKER</code></td>
-<td>Set to <code>0</code> to run commands locally. Otherwise the runtime will try to use Docker if available.</td>
-<td>auto</td>
-</tr>
-<tr>
-<td><code>PYGENT_MAX_TASKS</code></td>
-<td>Maximum number of delegated tasks that can run concurrently.</td>
-<td><code>3</code></td>
-</tr>
-<tr>
-<td><code>PYGENT_HISTORY_FILE</code></td>
-<td>Path to a JSON file where the conversation history is saved.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_WORKSPACE</code></td>
-<td>Directory used to persist the workspace between sessions.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_SNAPSHOT</code></td>
-<td>Load environment and history from the given directory on startup.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_STEP_TIMEOUT</code></td>
-<td>Default time limit in seconds for each step when running delegated tasks.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_TASK_TIMEOUT</code></td>
-<td>Default overall time limit in seconds for delegated tasks.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_PERSONA_NAME</code></td>
-<td>Name of the main agent persona.</td>
-<td><code>Pygent</code></td>
-</tr>
-<tr>
-<td><code>PYGENT_PERSONA</code></td>
-<td>Description of the main agent persona.</td>
-<td>"a sandboxed coding assistant."</td>
-</tr>
-<tr>
-<td><code>PYGENT_TASK_PERSONAS</code></td>
-<td>List of personas for delegated agents separated by <code>os.pathsep</code>.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_TASK_PERSONAS_JSON</code></td>
-<td>JSON array of persona objects with name and description for delegated agents. Overrides <code>PYGENT_TASK_PERSONAS</code> if set.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_INIT_FILES</code></td>
-<td>List of files or directories copied into the workspace at startup, separated by <code>os.pathsep</code>.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_BANNED_COMMANDS</code></td>
-<td>Commands that cannot be executed by the bash tool, separated by <code>os.pathsep</code>.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_BANNED_APPS</code></td>
-<td>Applications that cannot appear in any command, separated by <code>os.pathsep</code>.</td>
-<td>–</td>
-</tr>
-<tr>
-<td><code>PYGENT_LOG_FILE</code></td>
-<td>Path to the CLI log file.</td>
-<td><code>workspace/cli.log</code></td>
-</tr>
-<tr>
-<td><code>PYGENT_CONFIRM_BASH</code></td>
-<td>Require confirmation before running bash commands (set to <code>0</code> to disable). When enabled, the command is displayed before prompting.</td>
-<td><code>1</code></td>
-</tr>
-</tbody>
-</table>
-<p>Instead of setting environment variables you can create a <code>pygent.toml</code> file in
-the current directory or in your home folder. Values defined there are loaded at
-startup if the corresponding variables are unset. Example:</p>
-<div class="highlight"><pre><span></span><code><span class="n">persona_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;FriendlyBot&quot;</span>
-<span class="n">persona</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;a friendly bot&quot;</span>
+<h1 id="multi-agent-collaboration">Multi-Agent Collaboration</h1>
+<p>Pygent pode coordenar diversos agentes em paralelo por meio da classe <code>TaskManager</code>. Essa abordagem lembra sistemas como o Crew AI, em que tarefas são distribuídas para agentes especializados.</p>
+<h2 id="definindo-personas">Definindo personas</h2>
+<p>Crie uma lista de <code>Persona</code> para representar os papéis dos agentes que irão compor a "equipe":</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pygent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span><span class="p">,</span> <span class="n">TaskManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygent.persona</span><span class="w"> </span><span class="kn">import</span> <span class="n">Persona</span>
 
-<span class="k">[[task_personas]]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tester&quot;</span>
-<span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;runs tests&quot;</span>
+<span class="n">personas</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Persona</span><span class="p">(</span><span class="s2">&quot;escritor&quot;</span><span class="p">,</span> <span class="s2">&quot;produz arquivos&quot;</span><span class="p">),</span>
+    <span class="n">Persona</span><span class="p">(</span><span class="s2">&quot;revisor&quot;</span><span class="p">,</span> <span class="s2">&quot;analisa o resultado&quot;</span><span class="p">),</span>
+<span class="p">]</span>
 
-<span class="k">[[task_personas]]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;developer&quot;</span>
-<span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;implements features&quot;</span>
+<span class="n">manager</span> <span class="o">=</span> <span class="n">TaskManager</span><span class="p">(</span><span class="n">personas</span><span class="o">=</span><span class="n">personas</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="delegando-tarefas">Delegando tarefas</h2>
+<p>Use <code>start_task</code> para lançar subtarefas em background. Defina a persona desejada e, opcionalmente, envie arquivos de apoio:</p>
+<div class="highlight"><pre><span></span><code><span class="n">main</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">()</span>
 
-<span class="n">initial_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;bootstrap.py&quot;</span><span class="p">]</span>
+<span class="c1"># Envie um agente escritor para gerar um arquivo</span>
+<span class="n">escrita</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span>
+    <span class="s2">&quot;write_file path=&#39;nota.txt&#39; content=&#39;ola&#39;</span><span class="se">\n</span><span class="s2">stop&quot;</span><span class="p">,</span>
+    <span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span>
+    <span class="n">persona</span><span class="o">=</span><span class="s2">&quot;escritor&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Outro agente lê o arquivo e imprime no console</span>
+<span class="n">leitura</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">start_task</span><span class="p">(</span>
+    <span class="s2">&quot;bash cmd=&#39;cat nota.txt&#39;</span><span class="se">\n</span><span class="s2">stop&quot;</span><span class="p">,</span>
+    <span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span>
+    <span class="n">files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nota.txt&quot;</span><span class="p">],</span>
+    <span class="n">persona</span><span class="o">=</span><span class="s2">&quot;revisor&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
-<p>The keys map to the environment variables of the same name.</p>
-<p>You can also specify a configuration file explicitly when launching the CLI:</p>
-<p><div class="highlight"><pre><span></span><code>pygent<span class="w"> </span>--config<span class="w"> </span>path/to/pygent.toml
+<h2 id="acompanhar-e-coletar-resultados">Acompanhar e coletar resultados</h2>
+<p>O <code>TaskManager</code> permite verificar o status e copiar arquivos de volta para o agente principal:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="k">for</span> <span class="n">tid</span> <span class="ow">in</span> <span class="p">[</span><span class="n">escrita</span><span class="p">,</span> <span class="n">leitura</span><span class="p">]:</span>
+    <span class="k">while</span> <span class="n">manager</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;running&quot;</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status da tarefa&quot;</span><span class="p">,</span> <span class="n">tid</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">manager</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">tid</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">collect_file</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span> <span class="n">escrita</span><span class="p">,</span> <span class="s2">&quot;nota.txt&quot;</span><span class="p">))</span>
+<span class="n">main</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
 </code></pre></div>
-Environment variables can also be provided on the command line using
-the <code>-e</code> option:</p>
-<p><div class="highlight"><pre><span></span><code>pygent<span class="w"> </span>-e<span class="w"> </span><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-...<span class="w"> </span>-e<span class="w"> </span><span class="nv">PYGENT_MODEL</span><span class="o">=</span>gpt-4
-</code></pre></div>
-If you need additional setup logic execute a Python file with
-<code>--pyconfig config.py</code>.
-To resume from a saved snapshot pass <code>--load DIR</code> or set <code>PYGENT_SNAPSHOT</code>.</p>
-<p>A practical example is included in
-<a href="https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml"><code>examples/sample_config.toml</code></a>
-together with the script
-<a href="https://github.com/marianochaves/pygent/blob/main/examples/config_file_example.py"><code>config_file_example.py</code></a>, which delegates a testing task:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>examples/config_file_example.py
-</code></pre></div>
-<p>See <a href="../getting-started/">Getting Started</a> for installation instructions and the
-<a href="../api-reference/">API Reference</a> for details about the available classes.</p>
+<p>Com essas chamadas é possível montar fluxos de trabalho em cadeia ou paralelos, obtendo um comportamento semelhante ao de frameworks de múltiplos agentes como o Crew AI.</p>
 
 
 
