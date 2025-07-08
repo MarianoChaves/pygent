@@ -91,12 +91,31 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
     )
 
     # 3) Workflow block
-    workflow_block = (
-        "First, present a concise plan (≤ 5 lines) and end by asking the user permission to procceed."
-        "After approval, move step by step, briefly stating which tool you invoke and why. "
-        "If you require additional input, use the `ask_user` tool. "
-        "When the task is fully complete, use the `stop` tool."
+    has_ask = any(s["function"]["name"] == "ask_user" for s in schemas)
+    has_stop = any(s["function"]["name"] == "stop" for s in schemas)
+
+    first_line = "First, present a concise plan (≤ 5 lines)"
+    if has_ask:
+        first_line += " and end by asking the user permission to procceed."
+    else:
+        first_line += "."
+
+    second_line = (
+        "After approval, move step by step, briefly stating which tool you invoke and why."
+        if has_ask
+        else "Then move step by step, briefly stating which tool you invoke and why."
     )
+
+    workflow_parts = [first_line, second_line]
+    if has_ask:
+        workflow_parts.append("If you require additional input, use the `ask_user` tool.")
+    workflow_parts.append(
+        "Before finalizing, verify and test that the request is fully satisfied. "
+        "If not, keep iterating until no more improvements can be made."
+    )
+    if has_stop:
+        workflow_parts.append("When the task is fully complete, use the `stop` tool.")
+    workflow_block = " ".join(workflow_parts)
 
     # 4) Optional bash note
     bash_note = (

@@ -129,3 +129,32 @@ def test_read_image_data_url(tmp_path):
     assert result.startswith("data:image/png;base64,")
 
 
+def test_workflow_block_respects_ask_user():
+    reset_tools()
+    ag = Agent()
+    assert "ask_user" in ag.system_msg
+    assert "procceed" in ag.system_msg
+
+    remove_tool("ask_user")
+    ag2 = Agent()
+    assert "ask_user" not in ag2.system_msg
+    assert "procceed" not in ag2.system_msg
+    reset_tools()
+
+
+def test_workflow_block_respects_stop_tool():
+    reset_tools()
+    ag = Agent()
+    assert "stop" in ag.system_msg
+
+    remove_tool("stop")
+    ag2 = Agent()
+    assert "stop" not in ag2.system_msg
+    reset_tools()
+
+
+def test_workflow_block_includes_review_instruction():
+    ag = Agent()
+    assert "verify and test" in ag.system_msg
+
+
