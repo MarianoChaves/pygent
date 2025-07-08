@@ -24,4 +24,5 @@ Within the interactive session, you can use the following commands that start wi
 * `/save <dir>`: Saves the current state, including the workspace, conversation history, and environment variables, to a directory for later use.
 * `/tools [list|enable|disable <name>]`: Lists available tools or enables/disables a specific tool during the session.
 * `/banned [list|add|remove <name>]`: Lists, adds, or removes commands from the list of banned commands in the `runtime`.
+* `/confirm-bash [on|off]`: Enables or disables confirmation before running `bash` commands during the session.
 * `/exit`: Ends the interactive session.

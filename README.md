@@ -89,6 +89,7 @@ Use `/help` for a list of built-in commands or `/help <cmd>` for details.
 Use `/save DIR` to snapshot the current environment for later use.
 Use `/tools` to enable or disable tools during the session.
 Use `/banned` to list or update banned commands.
+Use `/confirm-bash on|off` to toggle confirmation before running bash commands.
 Resume from a snapshot with `pygent --load DIR` or by setting
 `PYGENT_SNAPSHOT=DIR`.
 Additional commands can be registered programmatically with

@@ -55,6 +55,7 @@ Use `/tools` to enable or disable specific tools on the fly.
 Pass `--no-confirm-bash` if you want to skip the default confirmation
 before running any `bash` command. When confirmation is enabled,
 the agent displays the command before asking for approval.
+You can toggle this behaviour at runtime with `/confirm-bash on|off`.
 Add `--ban-cmd NAME` to prevent certain commands entirely.
 The `/save DIR` command copies the workspace, the CLI log and relevant
 configuration for later use.  Resume the session with
