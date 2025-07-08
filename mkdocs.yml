@@ -9,6 +9,7 @@ nav:
   - Tools: tools.md
   - Custom Models: custom-models.md
   - Custom System Message: custom-system-message.md
+  - Multi-Agent Collaboration: crew-style.md
   - Architecture: architecture.md
   - Examples: examples.md
   - API Reference: api-reference.md
