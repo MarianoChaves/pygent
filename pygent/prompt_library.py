@@ -23,9 +23,11 @@ def autonomous_builder(persona: Persona, disabled_tools: Optional[List[str]] = N
     return (
         base
         + "\nAct autonomously without expecting user input."
-        + " Test your work before calling the `stop` tool and provide a"
-        + " short summary of what you accomplished and any remaining issues."
-        + " Offer an initial solution and continue iterating if needed."
+        + " Provide a complete, professional solution using state-of-the-art"
+        + " methods unless a simpler approach is requested."
+        + " Test your work before calling the `stop` tool and summarise what"
+        + " you accomplished along with any remaining issues."
+        + " Continue iterating until satisfied."
     )
 
 
