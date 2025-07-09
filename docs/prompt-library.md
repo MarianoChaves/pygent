@@ -21,7 +21,7 @@ Available builders:
 
 | Name | Description |
 | --- | --- |
-| ``autonomous`` | Produces a complete professional solution, tests the result and summarises before finishing with ``stop``. |
+| ``autonomous`` | Solves tasks without user input, producing a complete professional solution, testing the result and summarising before finishing with ``stop``. |
 | ``assistant`` | Encourages interactive behaviour asking for clarifications. |
 | ``reviewer`` | Focuses on reviewing code and suggesting improvements. |
 

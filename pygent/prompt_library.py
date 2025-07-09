@@ -22,7 +22,8 @@ def autonomous_builder(persona: Persona, disabled_tools: Optional[List[str]] = N
     base = _base_system_msg(persona, disabled_tools)
     return (
         base
-        + "\nAct autonomously without expecting user input."
+        + "\nYou are not an assistant and will not receive user input."
+        + " Act autonomously to solve the task without redirecting questions."
         + " Provide a complete, professional solution using state-of-the-art"
         + " methods unless a simpler approach is requested."
         + " Test your work before calling the `stop` tool and summarise what"
