@@ -96,7 +96,9 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
 
     first_line = "First, present a concise plan (≤ 5 lines)"
     if has_ask:
-        first_line += " and end by asking the user permission to procceed."
+        first_line += (
+            " and end by asking the user permission to procceed, ideally as a short menu."
+        )
     else:
         first_line += "."
 
@@ -108,7 +110,9 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
 
     workflow_parts = [first_line, second_line]
     if has_ask:
-        workflow_parts.append("If you require additional input, use the `ask_user` tool.")
+        workflow_parts.append(
+            "If you require additional input, use the `ask_user` tool and provide options when possible."
+        )
     workflow_parts.append(
         "Before finalizing, verify and test that the request is fully satisfied. "
         "If not, keep iterating until no more improvements can be made."
