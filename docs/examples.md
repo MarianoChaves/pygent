@@ -12,6 +12,8 @@ This page collects small scripts demonstrating different aspects of Pygent. Each
 - [config_file_example.py](https://github.com/marianochaves/pygent/blob/main/examples/config_file_example.py) &ndash; loading a config file and delegating a testing agent.
 - [delegate_external_tool.py](https://github.com/marianochaves/pygent/blob/main/examples/delegate_external_tool.py) &ndash; new tool using an external model service inside a delegated task.
 - [crew_example.py](https://github.com/marianochaves/pygent/blob/main/examples/crew_example.py) &ndash; coordenando dois agentes em paralelo.
+- [prompt_library.py](https://github.com/marianochaves/pygent/blob/main/examples/prompt_library.py) &ndash; using the prebuilt system message builders.
+- [agent_presets.py](https://github.com/marianochaves/pygent/blob/main/examples/agent_presets.py) &ndash; launching an agent from a preset.
 
 See the [Custom Models](custom-models.md) page for a walkthrough of building your own models.
 
