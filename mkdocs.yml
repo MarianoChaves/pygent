@@ -9,6 +9,8 @@ nav:
   - Tools: tools.md
   - Custom Models: custom-models.md
   - Custom System Message: custom-system-message.md
+  - Prompt Library: prompt-library.md
+  - Agent Presets: agent-presets.md
   - Multi-Agent Collaboration: crew-style.md
   - Architecture: architecture.md
   - Examples: examples.md

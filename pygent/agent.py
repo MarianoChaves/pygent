@@ -400,14 +400,31 @@ def run_interactive(
     disabled_tools: Optional[List[str]] = None,
     confirm_bash: Optional[bool] = None,
     banned_commands: Optional[List[str]] = None,
+    preset: Optional[str] = None,
 ) -> None:  # pragma: no cover
-    """Start an interactive session in the terminal."""
+    """Start an interactive session in the terminal.
+
+    Parameters
+    ----------
+    preset:
+        Name of a preset from :data:`pygent.agent_presets.AGENT_PRESETS` to use
+        when creating the agent.
+    """
     ws = pathlib.Path.cwd() / workspace_name if workspace_name else None
-    agent = Agent(
-        runtime=Runtime(use_docker=use_docker, workspace=ws, banned_commands=banned_commands),
-        disabled_tools=disabled_tools or [],
-        confirm_bash=bool(confirm_bash) if confirm_bash is not None else _default_confirm_bash(),
-    )
+    if preset:
+        from .agent_presets import AGENT_PRESETS
+
+        agent = AGENT_PRESETS[preset].create_agent(
+            runtime=Runtime(use_docker=use_docker, workspace=ws, banned_commands=banned_commands),
+            disabled_tools=disabled_tools or [],
+            confirm_bash=bool(confirm_bash) if confirm_bash is not None else _default_confirm_bash(),
+        )
+    else:
+        agent = Agent(
+            runtime=Runtime(use_docker=use_docker, workspace=ws, banned_commands=banned_commands),
+            disabled_tools=disabled_tools or [],
+            confirm_bash=bool(confirm_bash) if confirm_bash is not None else _default_confirm_bash(),
+        )
     from .commands import COMMANDS
     mode = "Docker" if agent.runtime.use_docker else "local"
     console.print(

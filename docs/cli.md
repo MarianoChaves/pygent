@@ -12,6 +12,8 @@ To start an interactive session, simply run `pygent` in your terminal. You can u
 * `--load <dir>`: Loads a snapshot of a previously saved environment, including the workspace, history, and environment variables.
 * `--confirm-bash`: Prompts for confirmation before executing any command with the `bash` tool. The command is shown in the terminal before asking for permission.
 * `--ban-cmd <command>`: Disables the execution of a specific command.
+* `--preset <name>`: Starts the session using one of the built-in presets
+  (`autonomous`, `assistant`, or `reviewer`).
 
 ## Internal Commands
 

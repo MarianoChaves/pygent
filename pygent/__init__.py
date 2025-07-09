@@ -31,6 +31,8 @@ from .errors import PygentError, APIError  # noqa: E402,F401
 from .tools import register_tool, tool, clear_tools, reset_tools, remove_tool  # noqa: E402,F401
 from .task_manager import TaskManager  # noqa: E402,F401
 from .task_tools import register_task_tools  # noqa: E402,F401
+from .prompt_library import PROMPT_BUILDERS  # noqa: E402,F401
+from .agent_presets import AGENT_PRESETS, AgentPreset  # noqa: E402,F401
 
 __all__ = [
     "Agent",
@@ -50,4 +52,7 @@ __all__ = [
     "remove_tool",
     "TaskManager",
     "register_task_tools",
+    "PROMPT_BUILDERS",
+    "AGENT_PRESETS",
+    "AgentPreset",
 ]
