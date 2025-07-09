@@ -22,7 +22,9 @@ class AgentPreset:
     def create_agent(self, **kwargs) -> Agent:
         """Return an :class:`~pygent.agent.Agent` using this preset."""
 
-        set_system_message_builder(self.builder)
+        # Build the agent first with the default system message to avoid
+        # recursive calls when the custom builder relies on ``build_system_msg``.
+        set_system_message_builder(None)
         reset_tools()
         if self.include_task_tools:
             register_task_tools()
@@ -31,7 +33,12 @@ class AgentPreset:
             for name in list(TOOLS):
                 if name not in allowed:
                     remove_tool(name)
-        return Agent(**kwargs)
+        agent = Agent(**kwargs)
+        # Now enable the custom builder and refresh the system message so the
+        # first history entry reflects it.
+        set_system_message_builder(self.builder)
+        agent.refresh_system_message()
+        return agent
 
 
 AGENT_PRESETS: dict[str, AgentPreset] = {
