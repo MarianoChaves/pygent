@@ -21,7 +21,7 @@ Available builders:
 
 | Name | Description |
 | --- | --- |
-| ``autonomous`` | Runs without expecting user input and finishes by calling ``stop``. |
+| ``autonomous`` | Runs tests on its work and provides a short summary before finishing with ``stop``. |
 | ``assistant`` | Encourages interactive behaviour asking for clarifications. |
 | ``reviewer`` | Focuses on reviewing code and suggesting improvements. |
 

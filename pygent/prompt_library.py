@@ -20,7 +20,13 @@ def _base_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
 def autonomous_builder(persona: Persona, disabled_tools: Optional[List[str]] = None) -> str:
     """Prompt emphasising fully autonomous operation."""
     base = _base_system_msg(persona, disabled_tools)
-    return base + "\nAct autonomously without expecting user input. When the task is complete use the `stop` tool."
+    return (
+        base
+        + "\nAct autonomously without expecting user input."
+        + " Test your work before calling the `stop` tool and provide a"
+        + " short summary of what you accomplished and any remaining issues."
+        + " Offer an initial solution and continue iterating if needed."
+    )
 
 
 def assistant_builder(persona: Persona, disabled_tools: Optional[List[str]] = None) -> str:

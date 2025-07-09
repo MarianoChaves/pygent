@@ -17,7 +17,7 @@ The available presets and their behaviours are:
 
 | Name | Tools | Description |
 | --- | --- | --- |
-| ``autonomous`` | ``bash``, ``write_file``, ``stop`` | Runs without user interaction and finishes with ``stop``. |
+| ``autonomous`` | ``bash``, ``write_file``, ``stop`` | Tests its work autonomously and summarises the results before finishing with ``stop``. |
 | ``assistant`` | ``bash``, ``write_file``, ``ask_user`` | Interactive style that asks for clarifications and presents menu options when possible. |
 | ``reviewer`` | ``bash`` | Focuses on analysing code and suggesting improvements. |
 
