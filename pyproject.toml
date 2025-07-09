@@ -1,6 +1,6 @@
 [project]
 name = "pygent"
-version = "0.2.15"
+version = "0.2.16"
 description = "Pygent is a minimalist coding assistant that runs commands in a Docker container when available and falls back to local execution."
 readme = "README.md"
 authors = [ { name = "Mariano Chaves", email = "mchaves.software@gmail.com" } ]
