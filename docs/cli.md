@@ -9,6 +9,7 @@ To start an interactive session, simply run `pygent` in your terminal. You can u
 * `--docker`/`--no-docker`: Forces command execution inside a Docker container or locally.
 * `--config <path>`: Loads configuration from a specific TOML file.
 * `--workspace <name>`: Defines a working directory for the session.
+* `--cwd`: Uses the current directory as the workspace instead of a temporary folder.
 * `--load <dir>`: Loads a snapshot of a previously saved environment, including the workspace, history, and environment variables.
 * `--confirm-bash`: Prompts for confirmation before executing any command with the `bash` tool. The command is shown in the terminal before asking for permission.
 * `--ban-cmd <command>`: Disables the execution of a specific command.

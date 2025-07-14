@@ -79,6 +79,7 @@ can easily tell which agent is active.
 Pass `--confirm-bash` if you want to approve each bash command before it runs.
 Use `--ban-cmd CMD` to disallow specific commands entirely (repeat to ban multiple).
 Pass `--config path/to/pygent.toml` to load settings from a file.
+Use `--cwd` to run inside the current directory instead of a temporary workspace.
 
 Type messages normally; use `/exit` to end the session. Each command is executed
 in the container and the result shown in the terminal.

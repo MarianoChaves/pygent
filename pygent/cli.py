@@ -34,6 +34,11 @@ def main(
         "--workspace",
         help="name of workspace directory",
     ),
+    cwd: bool = typer.Option(
+        False,
+        "--cwd",
+        help="use the current directory as workspace",
+    ),
     pyconfig: Optional[str] = typer.Option(
         None,
         "--pyconfig",
@@ -85,6 +90,8 @@ def main(
         if "=" in item:
             key, val = item.split("=", 1)
             os.environ[key] = val
+    if cwd:
+        workspace = os.getcwd()
     if pyconfig:
         run_py_config(pyconfig)
     else:
