@@ -42,9 +42,12 @@ class Command:
 
 def cmd_cmd(agent: Agent, arg: str) -> None:
     """Run a raw shell command in the sandbox."""
-    output = agent.runtime.bash(arg)
     console = Console()
-    console.print(output)
+
+    def _stream(line: str) -> None:
+        console.print(line, end="")
+
+    agent.runtime.bash(arg, stream=_stream)
 
 
 def cmd_cp(agent: Agent, arg: str) -> None:

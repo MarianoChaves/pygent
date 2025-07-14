@@ -6,8 +6,10 @@ import shutil
 import subprocess
 import tempfile
 import uuid
+import threading
+import time
 from pathlib import Path
-from typing import Union, Optional
+from typing import Union, Optional, Callable
 
 try:  # Docker may not be available (e.g. Windows without Docker)
     import docker  # type: ignore
@@ -104,23 +106,48 @@ class Runtime:
         return self._use_docker
 
     # ---------------- public API ----------------
-    def bash(self, cmd: str, timeout: int = 600) -> str:
-        """Run a command in the container or locally and return the output.
+    def bash(
+        self,
+        cmd: str,
+        timeout: int = 600,
+        stream: Optional[Callable[[str], None]] = None,
+    ) -> str:
+        """Run ``cmd`` in the sandbox and return its captured output.
 
-        The executed command is always included in the returned string so the
-        caller can display what was run.
+        If ``stream`` is provided, lines are forwarded to it as they are
+        produced. The returned value still contains the full output prefixed
+        with ``$ cmd`` just like before.
         """
         tokens = cmd.split()
         if tokens:
             from pathlib import Path
 
             if Path(tokens[0]).name in self.banned_commands:
-                return f"$ {cmd}\n[error] command '{tokens[0]}' disabled"
+                return f"$ {cmd}\n[error] command '{Path(tokens[0]).name}' disabled"
             for t in tokens:
                 if Path(t).name in self.banned_apps:
                     return f"$ {cmd}\n[error] application '{Path(t).name}' disabled"
+
+        prefix = f"$ {cmd}\n"
+        output_parts = [prefix]
+        if stream:
+            stream(prefix)
+
         if self._use_docker and self.container is not None:
             try:
+                if stream is not None:
+                    res = self.container.exec_run(
+                        cmd,
+                        workdir="/workspace",
+                        stream=True,
+                        tty=False,
+                        stdin=False,
+                    )
+                    for chunk in res.output:
+                        text = chunk.decode()
+                        output_parts.append(text)
+                        stream(text)
+                    return "".join(output_parts)
                 res = self.container.exec_run(
                     cmd,
                     workdir="/workspace",
@@ -132,25 +159,66 @@ class Runtime:
                 stdout, stderr = (
                     res.output if isinstance(res.output, tuple) else (res.output, b"")
                 )
-                output = (stdout or b"").decode() + (stderr or b"").decode()
-                return f"$ {cmd}\n{output}"
+                text = (stdout or b"").decode() + (stderr or b"").decode()
+                output_parts.append(text)
+                return "".join(output_parts)
             except Exception as exc:
-                return f"$ {cmd}\n[error] {exc}"
+                err = f"[error] {exc}"
+                output_parts.append(err)
+                if stream:
+                    stream(err + "\n")
+                return "".join(output_parts)
+
         try:
-            proc = subprocess.run(
+            proc = subprocess.Popen(
                 cmd,
                 shell=True,
                 cwd=self.base_dir,
-                capture_output=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
                 text=True,
                 stdin=subprocess.DEVNULL,
-                timeout=timeout,
             )
-            return f"$ {cmd}\n{proc.stdout + proc.stderr}"
-        except subprocess.TimeoutExpired:
-            return f"$ {cmd}\n[timeout after {timeout}s]"
+
+            lines: list[str] = []
+
+            def _reader() -> None:
+                assert proc.stdout is not None
+                for line in proc.stdout:
+                    lines.append(line)
+                    if stream:
+                        stream(line)
+
+            t = threading.Thread(target=_reader)
+            t.start()
+            try:
+                proc.wait(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                t.join()
+                lines.append(f"[timeout after {timeout}s]\n")
+                if stream:
+                    stream(f"[timeout after {timeout}s]\n")
+                output_parts.extend(lines)
+                return "".join(output_parts)
+            except Exception as exc:
+                proc.kill()
+                t.join()
+                lines.append(f"[error] {exc}\n")
+                if stream:
+                    stream(f"[error] {exc}\n")
+                output_parts.extend(lines)
+                return "".join(output_parts)
+
+            t.join()
+            output_parts.extend(lines)
+            return "".join(output_parts)
         except Exception as exc:
-            return f"$ {cmd}\n[error] {exc}"
+            err = f"[error] {exc}"
+            output_parts.append(err)
+            if stream:
+                stream(err + "\n")
+            return "".join(output_parts)
 
     def write_file(self, path: Union[str, Path], content: str) -> str:
         p = self.base_dir / path
