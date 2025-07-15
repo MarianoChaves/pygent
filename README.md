@@ -56,6 +56,7 @@ Behaviour can be adjusted via environment variables (see `docs/configuration.md`
 * `PYGENT_IMAGE` &ndash; Docker image to create the container (default `python:3.12-slim`).
 * `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
 * `PYGENT_MAX_TASKS` &ndash; maximum number of concurrent delegated tasks (default `3`).
+* `PYGENT_MAX_HISTORY` &ndash; maximum number of messages kept in memory before old ones are discarded (default `50`).
 
 Settings can also be read from a `pygent.toml` file. See
 [examples/sample_config.toml](https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml)

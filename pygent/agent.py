@@ -34,6 +34,7 @@ except Exception:  # pragma: no cover - used in tests without questionary
 from .runtime import Runtime
 from . import tools, models, openai_compat
 from .models import Model, OpenAIModel
+from .errors import APIError
 from .persona import Persona
 
 # optional custom builder for the system message
@@ -178,6 +179,7 @@ class Agent:
     disabled_tools: List[str] = field(default_factory=list)
     log_file: Optional[pathlib.Path] = field(default_factory=_default_log_file)
     confirm_bash: bool = field(default_factory=_default_confirm_bash)
+    max_history: Optional[int] = field(default_factory=lambda: int(os.getenv("PYGENT_MAX_HISTORY", "50")) or None)
 
     def __post_init__(self) -> None:
         """Initialize defaults after dataclass construction."""
@@ -228,8 +230,17 @@ class Agent:
             with self.history_file.open("w", encoding="utf-8") as fh:
                 json.dump([self._message_dict(m) for m in self.history], fh)
 
+    def _trim_history(self, limit: Optional[int] = None) -> None:
+        """Remove older messages when history grows too much."""
+        limit = self.max_history if limit is None else limit
+        if limit is None:
+            return
+        while len(self.history) > limit and len(self.history) > 1:
+            self.history.pop(1)
+
     def append_history(self, msg: Any) -> None:
         self.history.append(msg)
+        self._trim_history()
         self._save_history()
         if self._log_fp:
             try:
@@ -261,9 +272,22 @@ class Agent:
             if s["function"]["name"] not in self.disabled_tools
         ]
         with status_cm:
-            assistant_raw = self.model.chat(
-                self.history, self.model_name, schemas
-            )
+            try:
+                assistant_raw = self.model.chat(
+                    self.history, self.model_name, schemas
+                )
+            except APIError as exc:
+                msg = str(exc).lower()
+                if "context" in msg and "length" in msg:
+                    limit = max(len(self.history) - 1, 1)
+                    self._trim_history(limit)
+                    if self.max_history is None or self.max_history > limit:
+                        self.max_history = limit
+                    assistant_raw = self.model.chat(
+                        self.history, self.model_name, schemas
+                    )
+                else:
+                    raise
         assistant_msg = openai_compat.parse_message(assistant_raw)
         self.append_history(assistant_msg)
 
