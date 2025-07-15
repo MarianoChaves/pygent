@@ -26,6 +26,7 @@ from .agent import (
     run_interactive,
     set_system_message_builder,
 )
+from .session import Session, CliSession
 from .models import Model, OpenAIModel, set_custom_model  # noqa: E402,F401
 from .errors import PygentError, APIError  # noqa: E402,F401
 from .tools import register_tool, tool, clear_tools, reset_tools, remove_tool  # noqa: E402,F401
@@ -43,6 +44,8 @@ __all__ = [
     "OpenAIModel",
     "set_custom_model",
     "set_system_message_builder",
+    "Session",
+    "CliSession",
     "PygentError",
     "APIError",
     "register_tool",
