@@ -12,7 +12,7 @@ Pygent comes with a set of essential tools ready to use:
     * **Parameters**: `path` (string), `content` (string).
 * **`stop`**: Stops the agent's autonomous execution loop. Useful for signaling the end of a task.
 * **`ask_user`**: Used to request a response or input from the user, continuing the conversation. When feasible, include an `options` list to present a short menu.
-* **`read_image`**: Returns a data URL for an image in the workspace, useful for vision models.
+* **`read_image`**: Returns a data URL for an image in the workspace, useful for vision models. The MIME type is detected from the file contents when the extension is unknown.
 
 ## Task Tools
 
