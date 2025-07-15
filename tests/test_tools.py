@@ -129,6 +129,14 @@ def test_read_image_data_url(tmp_path):
     assert result.startswith("data:image/png;base64,")
 
 
+def test_read_image_detects_mime_from_contents(tmp_path):
+    rt = Runtime(use_docker=False, workspace=tmp_path)
+    img = tmp_path / "img"
+    img.write_bytes(b"\x89PNG\r\n")
+    result = tools._read_image(rt, path="img")
+    assert result.startswith("data:image/png;base64,")
+
+
 def test_workflow_block_respects_ask_user():
     reset_tools()
     ag = Agent()
