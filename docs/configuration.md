@@ -12,6 +12,7 @@ exported in your shell or set via a `.env` file before running the CLI.
 | `PYGENT_USE_DOCKER` | Set to `0` to run commands locally. Otherwise the runtime will try to use Docker if available. | auto |
 | `PYGENT_MAX_TASKS` | Maximum number of delegated tasks that can run concurrently. | `3` |
 | `PYGENT_HISTORY_FILE` | Path to a JSON file where the conversation history is saved. | – |
+| `PYGENT_MAX_HISTORY` | Maximum number of messages kept in memory before older ones are trimmed. | `50` |
 | `PYGENT_WORKSPACE` | Directory used to persist the workspace between sessions. | – |
 | `PYGENT_SNAPSHOT` | Load environment and history from the given directory on startup. | – |
 | `PYGENT_STEP_TIMEOUT` | Default time limit in seconds for each step when running delegated tasks. | – |
