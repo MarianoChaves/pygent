@@ -33,6 +33,7 @@ except Exception:  # pragma: no cover - used in tests without questionary
 
 from .runtime import Runtime
 from . import tools, models, openai_compat
+from .session import CliSession
 from .models import Model, OpenAIModel
 from .persona import Persona
 
@@ -93,6 +94,7 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
     # 3) Workflow block
     has_ask = any(s["function"]["name"] == "ask_user" for s in schemas)
     has_stop = any(s["function"]["name"] == "stop" for s in schemas)
+    has_image = any(s["function"]["name"] == "read_image" for s in schemas)
 
     first_line = "First, present a concise plan (≤ 5 lines)"
     if has_ask:
@@ -121,6 +123,10 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
         workflow_parts.append("When the task is fully complete, use the `stop` tool.")
     workflow_block = " ".join(workflow_parts)
 
+    if has_image:
+        workflow_block += (
+            " If you need to read an image, use the `read_image` tool and provide a path."
+        )
     # 4) Optional bash note
     bash_note = (
         "You can execute shell commands in an isolated environment via the `bash` tool, "
@@ -429,69 +435,5 @@ def run_interactive(
             disabled_tools=disabled_tools or [],
             confirm_bash=bool(confirm_bash) if confirm_bash is not None else _default_confirm_bash(),
         )
-    from .commands import COMMANDS
-    mode = "Docker" if agent.runtime.use_docker else "local"
-    console.print(
-        f"[bold green]{agent.persona.name} ({mode})[/] started. (Type /exit to quit)"
-    )
-    console.print("Type /help for a list of available commands.")
-    try:
-        next_msg: Optional[str] = None
-        while True:
-            if next_msg is None:
-                user_msg = console.input("[bold steel_blue]>>> [/]")
-            else:
-                console.print(f"[bold steel_blue]>>> [/]{next_msg}", highlight=False)
-                user_msg = next_msg
-                next_msg = None
-            if agent._log_fp:
-                try:
-                    agent._log_fp.write(f"user> {user_msg}\n")
-                    agent._log_fp.flush()
-                except Exception:
-                    pass
-            if not user_msg.strip():
-                continue
-            parts = user_msg.split(maxsplit=1)
-            cmd = parts[0]
-            args = parts[1] if len(parts) == 2 else ""
-            if cmd in {"/exit", "quit", "q"}:
-                break
-            if cmd in COMMANDS:
-                result = COMMANDS[cmd](agent, args)
-                if isinstance(result, Agent):
-                    agent = result
-                continue
-            last = agent.run_until_stop(user_msg)
-            if last and last.tool_calls:
-                for call in last.tool_calls:
-                    if call.function.name == "ask_user":
-                        args = json.loads(call.function.arguments or "{}")
-                        options = args.get("options")
-                        if options:
-                            prompt = args.get("prompt", "Choose:")
-                            if questionary:
-                                next_msg = questionary.select(prompt, choices=options).ask()
-                            else:  # pragma: no cover - simple fallback for tests
-                                opts = "/".join(options)
-                                next_msg = input(f"{prompt} ({opts}): ")
-                        break
-    except Exception as exc:  # pragma: no cover - interactive only
-        from .commands import cmd_save
-        dest = pathlib.Path.cwd() / f"crash_{uuid.uuid4().hex[:8]}"
-        cmd_save(agent, str(dest))
-        console.print(
-            Panel(
-                f"An unexpected error occurred: [bold red]{exc}[/]\n"
-                f"Your workspace has been saved to [cyan]{dest}[/].\n"
-                f"You can restore it using: [bold yellow]pygent --load {dest}[/]",
-                title="[bold red]Critical Error[/]",
-                border_style="red",
-                box=box.DOUBLE if box else None,
-            )
-        )
-        # raise # Optionally re-raise the exception if needed for debugging or higher-level handling
-    finally:
-        console.print("[dim]Closing session...[/]")
-        agent.close()
-        agent.runtime.cleanup()
+    session = CliSession(agent)
+    session.run()

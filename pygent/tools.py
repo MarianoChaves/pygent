@@ -220,7 +220,7 @@ def _download_file(rt: Runtime, path: str, binary: bool = False) -> str:
 
 @tool(
     name="read_image",
-    description="Return a data URL for an image in the workspace.",
+    description="If you use this tool, you will read the image provided.",
     parameters={
         "type": "object",
         "properties": {

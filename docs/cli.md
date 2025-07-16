@@ -29,3 +29,7 @@ Within the interactive session, you can use the following commands that start wi
 * `/banned [list|add|remove <name>]`: Lists, adds, or removes commands from the list of banned commands in the `runtime`.
 * `/confirm-bash [on|off]`: Enables or disables confirmation before running `bash` commands during the session.
 * `/exit`: Ends the interactive session.
+
+## Custom Sessions
+
+The interactive loop is implemented by the `Session` class. The default `CliSession` uses `rich` and `questionary` to handle terminal input and output. Subclass `Session` to integrate Pygent into other environments such as GUIs or notebooks and call `run()` on your custom session.

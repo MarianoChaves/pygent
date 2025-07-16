@@ -13,6 +13,7 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Optional web interface via `pygent ui` (also available as `pygent-ui`).
 * Register your own tools and customise the system prompt.
 * Extend the CLI with custom commands.
+* Build custom interactive sessions by subclassing the `Session` API.
 * Execute a `config.py` script on startup for advanced configuration.
 * Set environment variables from the command line.
 * Each session begins with a short plan that you can approve before execution.
