@@ -1,6 +1,6 @@
 """Simple Gradio-based chat interface."""
 
-from .agent import Agent
+from .agent import Agent, _format_content
 from .runtime import Runtime
 from .tools import execute_tool, TOOL_SCHEMAS
 from . import openai_compat
@@ -25,7 +25,7 @@ def run_gui(use_docker: Optional[bool] = None) -> None:
         raw = agent.model.chat(agent.history, agent.model_name, TOOL_SCHEMAS)
         assistant_msg = openai_compat.parse_message(raw)
         agent.append_history(assistant_msg)
-        reply = assistant_msg.content or ""
+        reply = _format_content(assistant_msg.content)
         if assistant_msg.tool_calls:
             for call in assistant_msg.tool_calls:
                 output = execute_tool(call, agent.runtime)

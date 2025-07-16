@@ -23,6 +23,7 @@ from dataclasses import asdict
 from pygent import openai_compat
 from pygent.models import OpenAIModel
 import pygent.models
+from pygent.agent import Agent
 
 
 def test_parse_message_with_image_list():
@@ -60,3 +61,14 @@ def test_openai_model_serializes_image():
     sent = calls[0]['messages'][0]['content']
     assert isinstance(sent, list)
     assert sent[0]['image_url']['url'].startswith('data:image')
+
+
+def test_format_content_with_image():
+    ag = Agent()
+    items = [
+        {'type': 'text', 'text': 'see'},
+        {'type': 'image_url', 'image_url': {'url': 'data:image/png;base64,AAA='}},
+    ]
+    rendered = ag._format_content(items)
+    assert 'see' in rendered
+    assert 'data:image' in rendered

@@ -234,6 +234,29 @@ class Agent:
             with self.history_file.open("w", encoding="utf-8") as fh:
                 json.dump([self._message_dict(m) for m in self.history], fh)
 
+    def _format_content(self, content: Any) -> str:
+        """Return a Markdown-friendly string for ``content``."""
+        if content is None:
+            return ""
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            parts = []
+            for part in content:
+                if isinstance(part, dict):
+                    typ = part.get("type")
+                    if typ == "text":
+                        parts.append(part.get("text", ""))
+                    elif typ == "image_url":
+                        url = part.get("image_url", {}).get("url", "")
+                        parts.append(f"![image]({url})")
+                    else:
+                        parts.append(str(part))
+                else:
+                    parts.append(str(part))
+            return "\n\n".join(parts)
+        return str(content)
+
     def append_history(self, msg: Any) -> None:
         self.history.append(msg)
         self._save_history()
@@ -337,7 +360,7 @@ class Agent:
                         )
                     )
         else:
-            markdown_response = Markdown(assistant_msg.content or "") # Ensure content is not None
+            markdown_response = Markdown(self._format_content(assistant_msg.content))
             console.print(
                 Panel(
                     markdown_response,
