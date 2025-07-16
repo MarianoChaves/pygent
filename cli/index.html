@@ -349,6 +349,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#custom-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Sessions
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -621,6 +630,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#custom-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Sessions
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -668,6 +686,8 @@
 <li><code>/confirm-bash [on|off]</code>: Enables or disables confirmation before running <code>bash</code> commands during the session.</li>
 <li><code>/exit</code>: Ends the interactive session.</li>
 </ul>
+<h2 id="custom-sessions">Custom Sessions</h2>
+<p>The interactive loop is implemented by the <code>Session</code> class. The default <code>CliSession</code> uses <code>rich</code> and <code>questionary</code> to handle terminal input and output. Subclass <code>Session</code> to integrate Pygent into other environments such as GUIs or notebooks and call <code>run()</code> on your custom session.</p>
 
 
 
