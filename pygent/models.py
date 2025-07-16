@@ -27,10 +27,17 @@ class OpenAIModel:
 
     def chat(self, messages: List[Dict[str, Any]], model: str, tools: Any) -> Message:
         try:
-            serialized = [
-                asdict(m) if is_dataclass(m) else m
-                for m in messages
-            ]
+            serialized = []
+            for m in messages:
+                data = asdict(m) if is_dataclass(m) else m
+                if isinstance(data, dict):
+                    content = data.get("content")
+                    if isinstance(content, str) and content.startswith("data:image"):
+                        data = data.copy()
+                        data["content"] = [
+                            {"type": "image_url", "image_url": {"url": content}}
+                        ]
+                serialized.append(data)
             resp = openai.chat.completions.create(
                 model=model,
                 messages=serialized,
