@@ -66,6 +66,31 @@ def cmd_cp(agent: Agent, arg: str) -> None:
         console.print(f"Error: {e}", style="bold red")
 
 
+def cmd_img(agent: Agent, arg: str) -> None:
+    """Send an image to the assistant."""
+    console = Console()
+    path = arg.strip()
+    if not path:
+        console.print("Usage: /img PATH", style="bold red")
+        return
+    src = Path(path).expanduser()
+    if not src.exists():
+        console.print(f"file {path} not found", style="bold red")
+        return
+    import base64
+    import mimetypes
+    import imghdr
+
+    data = base64.b64encode(src.read_bytes()).decode()
+    mime, _ = mimetypes.guess_type(str(src))
+    if not mime:
+        guessed = imghdr.what(src)
+        mime = f"image/{guessed}" if guessed else "image/png"
+    content = f"data:{mime};base64,{data}"
+    console.print(f"Sent {src} to assistant", style="cyan")
+    agent.run_until_stop(content)
+
+
 def cmd_new(agent: Agent, arg: str) -> Agent:
     """Restart the conversation with a fresh history."""
     persistent = agent.runtime._persistent
@@ -216,6 +241,7 @@ def register_command(
 COMMANDS: Dict[str, Command] = {
     "/cmd": Command(cmd_cmd, description="Run a raw shell command in the sandbox.", usage="/cmd <command>"),
     "/cp": Command(cmd_cp, description="Copy a file into the workspace.", usage="/cp SRC [DEST]"),
+    "/img": Command(cmd_img, description="Send an image to the assistant.", usage="/img PATH"),
     "/new": Command(cmd_new, description="Restart the conversation with a fresh history.", usage="/new"),
     "/help": Command(cmd_help, description="Display available commands.", usage="/help [command]"),
     "/save": Command(cmd_save, description="Save workspace and environment to DIR for later use.", usage="/save DIR"),

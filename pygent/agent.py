@@ -239,6 +239,8 @@ class Agent:
         if content is None:
             return ""
         if isinstance(content, str):
+            if content.startswith("data:image"):
+                return f"![image]({content})"
             return content
         if isinstance(content, list):
             parts = []

@@ -24,6 +24,8 @@ from pygent import openai_compat
 from pygent.models import OpenAIModel
 import pygent.models
 from pygent.agent import Agent
+from pygent.runtime import Runtime
+from pygent.commands import cmd_img
 
 
 def test_parse_message_with_image_list():
@@ -72,3 +74,21 @@ def test_format_content_with_image():
     rendered = ag._format_content(items)
     assert 'see' in rendered
     assert 'data:image' in rendered
+
+
+def test_img_command_sends_data_url(tmp_path):
+    calls = []
+    ag = Agent(runtime=Runtime(use_docker=False, workspace=tmp_path/'ws'))
+
+    class DummyModel:
+        def chat(self, messages, model, tools):
+            calls.append(messages[-1]['content'])
+            return openai_compat.Message(role='assistant', content='ok')
+
+    ag.model = DummyModel()
+
+    img = tmp_path / 'pic.png'
+    img.write_bytes(b'\x89PNG\r\n')
+    cmd_img(ag, str(img))
+    assert calls
+    assert isinstance(calls[0], str) and calls[0].startswith('data:image')
