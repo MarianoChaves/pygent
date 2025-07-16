@@ -28,7 +28,7 @@ class ToolCall:
 @dataclass
 class Message:
     role: str
-    content: Optional[str] = None
+    content: Any = None
     tool_calls: Optional[List[ToolCall]] = None
 
 

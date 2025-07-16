@@ -83,7 +83,7 @@ class Session(ABC):
                     break
                 if cmd in COMMANDS:
                     result = COMMANDS[cmd](self.agent, args)
-                    if isinstance(result, Agent):
+                    if isinstance(result, type(self.agent)):
                         self.agent = result
                     continue
                 last = self.agent.run_until_stop(user_msg)
