@@ -94,6 +94,7 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
     # 3) Workflow block
     has_ask = any(s["function"]["name"] == "ask_user" for s in schemas)
     has_stop = any(s["function"]["name"] == "stop" for s in schemas)
+    has_image = any(s["function"]["name"] == "read_image" for s in schemas)
 
     first_line = "First, present a concise plan (≤ 5 lines)"
     if has_ask:
@@ -122,6 +123,10 @@ def build_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
         workflow_parts.append("When the task is fully complete, use the `stop` tool.")
     workflow_block = " ".join(workflow_parts)
 
+    if has_image:
+        workflow_block += (
+            " If you need to read an image, use the `read_image` tool and provide a path."
+        )
     # 4) Optional bash note
     bash_note = (
         "You can execute shell commands in an isolated environment via the `bash` tool, "
