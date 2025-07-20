@@ -2,8 +2,12 @@ import os
 import sys
 import types
 
-sys.modules.setdefault('openai', types.ModuleType('openai'))
-sys.modules.setdefault('docker', types.ModuleType('docker'))
+import pytest
+
+pytest.importorskip("fastapi")
+
+sys.modules.setdefault("openai", types.ModuleType("openai"))
+sys.modules.setdefault("docker", types.ModuleType("docker"))
 
 # mocks for rich
 rich_mod = types.ModuleType('rich')
