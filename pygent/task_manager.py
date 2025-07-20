@@ -127,7 +127,7 @@ class TaskManager:
         agent.runtime = Runtime(use_docker=parent_rt.use_docker, workspace=task_dir)
         setattr(agent, "persona", persona)
         if not getattr(agent, "system_msg", None):
-            from .agent import build_system_msg  # lazy import
+            from .system_message import build_system_msg  # lazy import
 
             agent.system_msg = build_system_msg(persona)
         setattr(agent.runtime, "task_depth", parent_depth + 1)

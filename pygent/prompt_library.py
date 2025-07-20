@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional, List, Callable
 
 from .persona import Persona
-from . import agent
+from . import system_message as agent
 
 
 def _base_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = None) -> str:

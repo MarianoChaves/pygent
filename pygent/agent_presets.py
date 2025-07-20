@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from typing import Callable, List, Optional
 
 from .persona import Persona
-from .agent import Agent, set_system_message_builder
+from .agent import Agent
+from .system_message import set_system_message_builder
 from .tools import reset_tools, remove_tool, TOOLS
 from .prompt_library import PROMPT_BUILDERS
 from .task_tools import register_task_tools
