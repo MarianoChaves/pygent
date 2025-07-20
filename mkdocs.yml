@@ -13,6 +13,7 @@ nav:
   - Agent Presets: agent-presets.md
   - Multi-Agent Collaboration: crew-style.md
   - Architecture: architecture.md
+  - FastAPI Server: fastapi-server.md
   - Examples: examples.md
   - API Reference: api-reference.md
 theme:

@@ -11,6 +11,7 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Persist the workspace across sessions by setting `PYGENT_WORKSPACE`.
 * Provides a small Python API for use in other projects.
 * Optional web interface via `pygent ui` (also available as `pygent-ui`).
+* Optional FastAPI server to manage tasks over HTTP.
 * Register your own tools and customise the system prompt.
 * Extend the CLI with custom commands.
 * Build custom interactive sessions by subclassing the `Session` API.
@@ -27,10 +28,10 @@ The recommended way to install Pygent is using pip:
 pip install pygent
 ```
 
-To include optional features like Docker support or the web UI, you can specify extras:
+To include optional features like Docker support, the web UI, or the FastAPI server, you can specify extras:
 
 ```bash
-pip install pygent[docker,ui]
+pip install pygent[docker,ui,server]
 ```
 
 Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
@@ -43,7 +44,7 @@ pip install -e .
 ```
 
 Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
-To run commands in Docker containers, Docker must be installed separately. If installing from source, you can include Docker support with `pip install -e .[docker]`.
+To run commands in Docker containers, Docker must be installed separately. If installing from source, you can include Docker support with `pip install -e .[docker,ui,server]`.
 
 ## Configuration
 
@@ -87,6 +88,7 @@ in the container and the result shown in the terminal.
 Interactive programs that expect input (e.g. running `python` without a script)
 are not supported and will exit immediately.
 For a minimal web interface run `pygent ui` instead (requires `pygent[ui]`).
+To expose the API over HTTP run `uvicorn pygent.fastapi_app:create_app` (requires `pygent[server]`).
 Use `/help` for a list of built-in commands or `/help <cmd>` for details.
 Use `/save DIR` to snapshot the current environment for later use.
 Use `/tools` to enable or disable tools during the session.
