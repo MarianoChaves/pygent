@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://pygent-ai.com/cli/">
+        <link rel="canonical" href="https://pygent-ai.com/fastapi-server/">
       
       
-        <link rel="prev" href="../getting-started/">
+        <link rel="prev" href="../architecture/">
       
       
-        <link rel="next" href="../configuration/">
+        <link rel="next" href="../examples/">
       
       
       <link rel="icon" href="../file_00000000b9e861f88eb06edc1f30e443.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Command Line Interface (CLI) - Pygent</title>
+        <title>FastAPI Server - Pygent</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#command-line-interface-cli" class="md-skip">
+        <a href="#fastapi-server" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Command Line Interface (CLI)
+              FastAPI Server
             
           </span>
         </div>
@@ -279,32 +279,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Command Line Interface (CLI)
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
         
   
   
@@ -315,53 +293,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interactive Session
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#internal-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Internal Commands
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#custom-sessions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Custom Sessions
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -546,10 +477,19 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../fastapi-server/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -560,6 +500,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -628,41 +569,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interactive Session
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#internal-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      Internal Commands
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#custom-sessions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Custom Sessions
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -680,36 +586,23 @@
   
 
 
-<h1 id="command-line-interface-cli">Command Line Interface (CLI)</h1>
-<p>The Pygent CLI offers an interactive way to engage with the assistant, allowing for command execution, file management, and real-time environment configuration.</p>
-<h2 id="interactive-session">Interactive Session</h2>
-<p>To start an interactive session, simply run <code>pygent</code> in your terminal. You can use various options to configure the session:</p>
+<h1 id="fastapi-server">FastAPI Server</h1>
+<p>Pygent can expose the <code>TaskManager</code> over HTTP using FastAPI. This optional server lets you create and monitor tasks remotely, mirroring the CLI workflow.</p>
+<p>Install the server dependencies with the <code>server</code> extra:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pygent<span class="o">[</span>server<span class="o">]</span>
+</code></pre></div>
+<p>Start the server with <code>uvicorn</code>:</p>
+<div class="highlight"><pre><span></span><code>uvicorn<span class="w"> </span>pygent.fastapi_app:create_app
+</code></pre></div>
+<p>The API provides the following endpoints:</p>
 <ul>
-<li><code>--docker</code>/<code>--no-docker</code>: Forces command execution inside a Docker container or locally.</li>
-<li><code>--config &lt;path&gt;</code>: Loads configuration from a specific TOML file.</li>
-<li><code>--workspace &lt;name&gt;</code>: Defines a working directory for the session.</li>
-<li><code>--cwd</code>: Uses the current directory as the workspace instead of a temporary folder.</li>
-<li><code>--load &lt;dir&gt;</code>: Loads a snapshot of a previously saved environment, including the workspace, history, and environment variables.</li>
-<li><code>--confirm-bash</code>: Prompts for confirmation before executing any command with the <code>bash</code> tool. The command is shown in the terminal before asking for permission.</li>
-<li><code>--ban-cmd &lt;command&gt;</code>: Disables the execution of a specific command.</li>
-<li><code>--preset &lt;name&gt;</code>: Starts the session using one of the built-in presets
-  (<code>autonomous</code>, <code>assistant</code>, or <code>reviewer</code>).</li>
+<li><code>POST /tasks</code> – start a new task. Payload fields match the arguments of <code>TaskManager.start_task</code>.</li>
+<li><code>GET /tasks</code> – list task IDs and their status.</li>
+<li><code>GET /tasks/{task_id}</code> – retrieve the status of a task.</li>
+<li><code>POST /tasks/{task_id}/message</code> – send a message to a finished task and get the reply.</li>
+<li><code>GET /tasks/{task_id}/history</code> – fetch the conversation history for a task.</li>
 </ul>
-<h2 id="internal-commands">Internal Commands</h2>
-<p>Within the interactive session, you can use the following commands that start with <code>/</code>:</p>
-<ul>
-<li><code>/help [command]</code>: Shows a detailed list of available commands, including their descriptions and usage patterns. If a specific command is provided (e.g., <code>/help /cp</code>), it displays detailed help for that command.</li>
-<li><code>/cmd &lt;command&gt;</code>: Executes a shell command directly in the <code>runtime</code> environment (local or Docker). Example: <code>/cmd ls -la</code></li>
-<li><code>/cp &lt;source&gt; [destination]</code>: Copies a file from your local system to the agent's workspace. Example: <code>/cp my_script.py agent_scripts/</code></li>
-<li><code>/new</code>: Restarts the conversation, clearing the history but keeping the current <code>runtime</code> (and workspace, if persistent).</li>
-<li><code>/save &lt;dir&gt;</code>: Saves the current state, including the workspace, conversation history, and environment variables, to a directory for later use.</li>
-<li><code>/tools [list|enable|disable &lt;name&gt;]</code>: Lists available tools or enables/disables a specific tool during the session.</li>
-<li><code>/banned [list|add|remove &lt;name&gt;]</code>: Lists, adds, or removes commands from the list of banned commands in the <code>runtime</code>.</li>
-<li><code>/confirm-bash [on|off]</code>: Enables or disables confirmation before running <code>bash</code> commands during the session.</li>
-<li><code>/exit</code>: Ends the interactive session.</li>
-</ul>
-<h2 id="custom-sessions">Custom Sessions</h2>
-<p>The interactive loop is implemented by the <code>Session</code> class. The default <code>CliSession</code> uses <code>rich</code> and <code>questionary</code> to handle terminal input and output. Subclass <code>Session</code> to integrate Pygent into other environments such as GUIs or notebooks and call <code>run()</code> on your custom session.</p>
+<p>Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a <code>TaskManager</code> instance in <code>app.state.manager</code> so you can access it from middleware or custom routes if needed.</p>
 
 
 
