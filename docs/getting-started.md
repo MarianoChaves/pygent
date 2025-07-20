@@ -13,10 +13,10 @@ The recommended way to install Pygent is using pip:
 pip install pygent
 ```
 
-To include optional features like Docker support or the web UI, you can specify extras:
+To include optional features like Docker support, the web UI, or the FastAPI server, you can specify extras:
 
 ```bash
-pip install pygent[docker,ui]
+pip install pygent[docker,ui,server]
 ```
 
 Python 3.9 or newer is required. If Docker is not installed on your system, you should omit the `[docker]` extra; commands that would use Docker will then run on the host system instead. Docker itself needs to be installed separately if you wish to use containerized execution.
@@ -26,7 +26,7 @@ For developers or those wanting the latest unreleased features, Pygent can also 
 ```bash
 pip install -e .
 ```
-You can include extras like `[docker,ui]` when installing from source as well (e.g., `pip install -e .[docker,ui]`).
+You can include extras like `[docker,ui,server]` when installing from source as well (e.g., `pip install -e .[docker,ui,server]`).
 
 ## Interactive session
 
