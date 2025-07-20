@@ -324,6 +324,19 @@ class Agent:
                         try:
                             args = json.loads(call.function.arguments or "{}")
                             path = args.get("path", "<unknown>")
+                            self.append_history(
+                                {
+                                    "role": "user",
+                                    "content": [
+                                        {
+                                            "type": "image_url",
+                                            "image_url": {
+                                                "url": output
+                                            }
+                                        }
+                                    ]
+                                }
+                            )
                         except Exception:
                             path = "<unknown>"
                         display_output = f"returned data URL for {path}"
