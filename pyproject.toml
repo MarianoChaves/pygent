@@ -30,7 +30,7 @@ pygent-ui = "pygent.ui:main"
 
 
 [tool.setuptools.package-data]
-"pygent" = ["py.typed"]
+"pygent" = ["py.typed", "static/*"]
 
 [build-system]
 requires = ["setuptools>=64", "wheel"]

@@ -23,3 +23,7 @@ The API provides the following endpoints:
 * `GET /tasks/{task_id}/history` – fetch the conversation history for a task.
 
 Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a `TaskManager` instance in `app.state.manager` so you can access it from middleware or custom routes if needed.
+
+## Web Interface
+
+When the server is started a simple HTML interface is served from the root URL. Open your browser at the server address to experiment with the API without writing any code.

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pygent API UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    textarea { width: 100%; height: 6em; }
+    input[type=text] { width: 100%; }
+    #history { white-space: pre-wrap; border: 1px solid #ccc; padding: 1em; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Pygent API Web UI</h1>
+  <section>
+    <h2>Start a new task</h2>
+    <textarea id="prompt" placeholder="Enter prompt..."></textarea><br>
+    <button onclick="startTask()">Start Task</button>
+    <p id="taskId"></p>
+  </section>
+
+  <section>
+    <h2>Interact with task</h2>
+    <input type="text" id="task" placeholder="Task ID"><br>
+    <button onclick="checkStatus()">Check Status</button>
+    <p id="status"></p>
+
+    <input type="text" id="message" placeholder="Message"><br>
+    <button onclick="sendMessage()">Send Message</button>
+
+    <button onclick="getHistory()">Get History</button>
+    <div id="history"></div>
+  </section>
+
+<script>
+async function startTask() {
+  const prompt = document.getElementById('prompt').value;
+  const res = await fetch('/tasks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  const data = await res.json();
+  document.getElementById('taskId').textContent = 'Task ID: ' + data.task_id;
+  document.getElementById('task').value = data.task_id;
+}
+
+async function checkStatus() {
+  const id = document.getElementById('task').value;
+  const res = await fetch(`/tasks/${id}`);
+  if (res.ok) {
+    const data = await res.json();
+    document.getElementById('status').textContent = 'Status: ' + data.status;
+  }
+}
+
+async function sendMessage() {
+  const id = document.getElementById('task').value;
+  const msg = document.getElementById('message').value;
+  const res = await fetch(`/tasks/${id}/message`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: msg })
+  });
+  if (res.ok) {
+    const data = await res.json();
+    getHistory();
+    alert('Response: ' + data.response);
+  }
+}
+
+async function getHistory() {
+  const id = document.getElementById('task').value;
+  const res = await fetch(`/tasks/${id}/history`);
+  if (res.ok) {
+    const data = await res.json();
+    document.getElementById('history').textContent = JSON.stringify(data, null, 2);
+  }
+}
+</script>
+</body>
+</html>

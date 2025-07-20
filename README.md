@@ -88,7 +88,7 @@ in the container and the result shown in the terminal.
 Interactive programs that expect input (e.g. running `python` without a script)
 are not supported and will exit immediately.
 For a minimal web interface run `pygent ui` instead (requires `pygent[ui]`).
-To expose the API over HTTP run `uvicorn pygent.fastapi_app:create_app` (requires `pygent[server]`).
+To expose the API over HTTP run `uvicorn pygent.fastapi_app:create_app` (requires `pygent[server]`). The server also hosts a basic HTML UI at the root URL for quick testing.
 Use `/help` for a list of built-in commands or `/help <cmd>` for details.
 Use `/save DIR` to snapshot the current environment for later use.
 Use `/tools` to enable or disable tools during the session.
