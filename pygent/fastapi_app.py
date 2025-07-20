@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import List, Optional
 
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from importlib import resources
 from pydantic import BaseModel
 
 from .task_manager import TaskManager
@@ -25,8 +27,14 @@ class _UserMessage(BaseModel):
     max_time: Optional[float] = None
 
 
-def create_app() -> FastAPI:
-    """Return a ``FastAPI`` application wrapping :class:`TaskManager`."""
+def create_app(include_ui: bool = False) -> FastAPI:
+    """Return a ``FastAPI`` application wrapping :class:`TaskManager`.
+
+    Parameters
+    ----------
+    include_ui:
+        If ``True``, mount a very small web interface under ``/ui``.
+    """
 
     manager = TaskManager()
     runtime = Runtime()
@@ -34,6 +42,10 @@ def create_app() -> FastAPI:
     app = FastAPI()
     app.state.manager = manager
     app.state.runtime = runtime
+
+    if include_ui:
+        static_dir = resources.files(__package__).joinpath('static')
+        app.mount('/ui', StaticFiles(directory=str(static_dir), html=True), name='ui')
 
     @app.post("/tasks")
     def start_task(req: _NewTask):

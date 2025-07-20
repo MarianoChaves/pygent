@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Pygent API Web UI</title>
+<style>
+body { font-family: sans-serif; margin: 2em; }
+textarea { width: 100%; }
+pre { background: #f5f5f5; padding: 1em; }
+</style>
+</head>
+<body>
+<h1>Pygent API Web UI</h1>
+<form id="task-form">
+<p><label>Prompt:<br><textarea id="prompt" rows="4"></textarea></label></p>
+<p><button type="submit">Start Task</button></p>
+</form>
+<div id="task" style="display:none;">
+<p>Task ID: <span id="task-id"></span></p>
+<p>Status: <span id="task-status"></span></p>
+<form id="message-form" style="margin-top:1em;">
+<label>Message: <input id="message" type="text" /></label>
+<button type="submit">Send</button>
+</form>
+<h2>History</h2>
+<pre id="history"></pre>
+</div>
+<script>
+let tid = null;
+const taskForm = document.getElementById('task-form');
+const messageForm = document.getElementById('message-form');
+const statusEl = document.getElementById('task-status');
+const historyEl = document.getElementById('history');
+
+taskForm.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const prompt = document.getElementById('prompt').value;
+  const resp = await fetch('/tasks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({prompt})
+  });
+  const data = await resp.json();
+  tid = data.task_id;
+  document.getElementById('task-id').textContent = tid;
+  document.getElementById('task').style.display = 'block';
+  pollStatus();
+});
+
+messageForm.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const msg = document.getElementById('message').value;
+  const resp = await fetch(`/tasks/${tid}/message`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({message: msg})
+  });
+  const data = await resp.json();
+  historyEl.textContent += `\nUSER: ${msg}\nASSISTANT: ${data.response}\n`;
+});
+
+async function pollStatus() {
+  if (!tid) return;
+  const resp = await fetch(`/tasks/${tid}`);
+  const data = await resp.json();
+  statusEl.textContent = data.status;
+  if (data.status === 'finished') {
+    const hresp = await fetch(`/tasks/${tid}/history`);
+    const hist = await hresp.json();
+    historyEl.textContent = JSON.stringify(hist, null, 2);
+  } else {
+    setTimeout(pollStatus, 1000);
+  }
+}
+</script>
+</body>
+</html>

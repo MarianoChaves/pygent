@@ -14,6 +14,13 @@ Start the server with `uvicorn`:
 uvicorn pygent.fastapi_app:create_app
 ```
 
+Alternatively run the `pygent-web` script to include a small web interface under
+`/ui`:
+
+```bash
+pygent-web
+```
+
 The API provides the following endpoints:
 
 * `POST /tasks` – start a new task. Payload fields match the arguments of `TaskManager.start_task`.
@@ -23,3 +30,6 @@ The API provides the following endpoints:
 * `GET /tasks/{task_id}/history` – fetch the conversation history for a task.
 
 Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a `TaskManager` instance in `app.state.manager` so you can access it from middleware or custom routes if needed.
+
+When started with `pygent-web`, open `http://localhost:8000/ui` in your browser
+to interact with the API without writing any code.
