@@ -24,8 +24,8 @@ except _metadata.PackageNotFoundError:  # pragma: no cover - fallback for tests
 from .agent import (
     Agent,
     run_interactive,
-    set_system_message_builder,
 )
+from .system_message import set_system_message_builder
 from .session import Session, CliSession
 from .models import Model, OpenAIModel, set_custom_model  # noqa: E402,F401
 from .errors import PygentError, APIError  # noqa: E402,F401
