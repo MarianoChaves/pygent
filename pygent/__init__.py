@@ -34,6 +34,10 @@ from .task_manager import TaskManager  # noqa: E402,F401
 from .task_tools import register_task_tools  # noqa: E402,F401
 from .prompt_library import PROMPT_BUILDERS  # noqa: E402,F401
 from .agent_presets import AGENT_PRESETS, AgentPreset  # noqa: E402,F401
+try:  # optional dependency
+    from .fastapi_app import create_app  # noqa: E402,F401
+except Exception:  # pragma: no cover - optional
+    create_app = None  # type: ignore
 
 __all__ = [
     "Agent",
@@ -58,4 +62,5 @@ __all__ = [
     "PROMPT_BUILDERS",
     "AGENT_PRESETS",
     "AgentPreset",
+    "create_app",
 ]
