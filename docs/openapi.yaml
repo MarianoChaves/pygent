@@ -1,0 +1,193 @@
+openapi: 3.1.0
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /tasks:
+    get:
+      summary: List Tasks
+      operationId: list_tasks_tasks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      summary: Start Task
+      operationId: start_task_tasks_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_NewTask'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /tasks/{task_id}:
+    get:
+      summary: Task Status
+      operationId: task_status_tasks__task_id__get
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /tasks/{task_id}/message:
+    post:
+      summary: Message Task
+      operationId: message_task_tasks__task_id__message_post
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_UserMessage'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /tasks/{task_id}/history:
+    get:
+      summary: Task History
+      operationId: task_history_tasks__task_id__history_get
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    _NewTask:
+      properties:
+        prompt:
+          type: string
+          title: Prompt
+        files:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Files
+        persona:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Persona
+        step_timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Step Timeout
+        task_timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Task Timeout
+      type: object
+      required:
+      - prompt
+      title: _NewTask
+    _UserMessage:
+      properties:
+        message:
+          type: string
+          title: Message
+        step_timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Step Timeout
+        max_time:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Time
+      type: object
+      required:
+      - message
+      title: _UserMessage
