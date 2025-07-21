@@ -599,7 +599,7 @@
 <li><code>POST /tasks</code> – start a new task. Payload fields match the arguments of <code>TaskManager.start_task</code>.</li>
 <li><code>GET /tasks</code> – list task IDs and their status.</li>
 <li><code>GET /tasks/{task_id}</code> – retrieve the status of a task.</li>
-<li><code>POST /tasks/{task_id}/message</code> – send a message to a finished task and get the reply.</li>
+<li><code>POST /tasks/{task_id}/message</code> – send a message to a finished task and get the reply. The response includes an optional <code>ask_user</code> field when the agent requires user input.</li>
 <li><code>GET /tasks/{task_id}/history</code> – fetch the conversation history for a task.</li>
 </ul>
 <p>Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a <code>TaskManager</code> instance in <code>app.state.manager</code> so you can access it from middleware or custom routes if needed.</p>
