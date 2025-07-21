@@ -27,6 +27,7 @@ Repository = "https://github.com/marianochaves/pygent"
 [project.scripts]
 pygent = "pygent.cli:main"
 pygent-ui = "pygent.ui:main"
+pygent-api-ui = "pygent.api_ui:main"
 
 
 [tool.setuptools.package-data]

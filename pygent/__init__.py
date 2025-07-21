@@ -38,6 +38,10 @@ try:  # optional dependency
     from .fastapi_app import create_app  # noqa: E402,F401
 except Exception:  # pragma: no cover - optional
     create_app = None  # type: ignore
+try:
+    from .api_ui import run_api_gui  # noqa: E402,F401
+except Exception:  # pragma: no cover - optional
+    run_api_gui = None  # type: ignore
 
 __all__ = [
     "Agent",
@@ -63,4 +67,5 @@ __all__ = [
     "AGENT_PRESETS",
     "AgentPreset",
     "create_app",
+    "run_api_gui",
 ]
