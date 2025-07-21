@@ -38,6 +38,24 @@ class DummyModel:
         return openai_compat.Message(role='assistant', content='ok')
 
 
+class AskModel:
+    def chat(self, messages, model, tools):
+        return openai_compat.Message(
+            role='assistant',
+            content=None,
+            tool_calls=[
+                openai_compat.ToolCall(
+                    id='1',
+                    type='function',
+                    function=openai_compat.ToolCallFunction(
+                        name='ask_user',
+                        arguments='{"prompt": "Pick", "options": ["a", "b"]}',
+                    ),
+                )
+            ],
+        )
+
+
 def test_api_lifecycle():
     set_custom_model(DummyModel())
     app = create_app()
@@ -56,7 +74,25 @@ def test_api_lifecycle():
     assert any(t['id'] == tid for t in lst)
 
     resp = client.post(f'/tasks/{tid}/message', json={'message': 'hello'})
-    assert resp.json()['response'] == 'ok'
+    data = resp.json()
+    assert data['response'] == 'ok'
+    assert data['ask_user'] is None
+
+    set_custom_model(None)
+
+
+def test_message_returns_ask_user():
+    set_custom_model(AskModel())
+    app = create_app()
+    client = TestClient(app)
+
+    resp = client.post('/tasks', json={'prompt': 'run'})
+    tid = resp.json()['task_id']
+    app.state.manager.tasks[tid].thread.join()
+
+    resp = client.post(f'/tasks/{tid}/message', json={'message': 'hello'})
+    data = resp.json()
+    assert data['ask_user']['options'] == ['a', 'b']
 
     set_custom_model(None)
 
