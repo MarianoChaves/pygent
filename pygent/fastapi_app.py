@@ -72,8 +72,25 @@ def create_app() -> FastAPI:
             step_timeout=req.step_timeout,
             max_time=req.max_time,
         )
+
         content = reply.content if reply else ""
-        return {"response": content}
+        ask_user = None
+        if reply and reply.tool_calls:
+            import json
+
+            for call in reply.tool_calls:
+                if call.function.name == "ask_user":
+                    try:
+                        args = json.loads(call.function.arguments or "{}")
+                    except Exception:
+                        args = {}
+                    ask_user = {
+                        "prompt": args.get("prompt"),
+                        "options": args.get("options"),
+                    }
+                    break
+
+        return {"response": content, "ask_user": ask_user}
 
     @app.get("/tasks/{task_id}/history")
     def task_history(task_id: str):
