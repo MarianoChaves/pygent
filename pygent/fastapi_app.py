@@ -5,7 +5,57 @@ from __future__ import annotations
 from typing import List, Optional
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
+
+UI_HTML = """<!doctype html>
+<html>
+<head>
+  <title>Pygent API</title>
+  <style>
+    body { font-family: sans-serif; max-width: 720px; margin: 2em auto; }
+    #chat div { margin: .5em 0; }
+  </style>
+</head>
+<body>
+  <h1>Pygent API UI</h1>
+  <div id="chat"></div>
+  <form id="form">
+    <input id="msg" autocomplete="off" style="width: 80%" />
+    <button>Send</button>
+  </form>
+<script>
+let taskId = null;
+const chat = document.getElementById('chat');
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const inp = document.getElementById('msg');
+  const text = inp.value;
+  inp.value = '';
+  chat.innerHTML += `<div><b>You:</b> ${text}</div>`;
+  if (!taskId) {
+    const r = await fetch('/tasks', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({prompt:text})});
+    const j = await r.json();
+    taskId = j.task_id;
+    let status;
+    do {
+      const s = await fetch('/tasks/' + taskId);
+      status = (await s.json()).status;
+      if (status === 'running') await new Promise(r => setTimeout(r, 1000));
+    } while (status === 'running');
+    const h = await fetch(`/tasks/${taskId}/history`);
+    const hist = await h.json();
+    const last = hist[hist.length - 1];
+    chat.innerHTML += `<div><b>Assistant:</b> ${last.content || ''}</div>`;
+  } else {
+    const r = await fetch(`/tasks/${taskId}/message`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message:text})});
+    const j = await r.json();
+    chat.innerHTML += `<div><b>Assistant:</b> ${j.response}</div>`;
+  }
+});
+</script>
+</body>
+</html>"""
 
 from .task_manager import TaskManager
 from .runtime import Runtime
@@ -25,8 +75,11 @@ class _UserMessage(BaseModel):
     max_time: Optional[float] = None
 
 
-def create_app() -> FastAPI:
-    """Return a ``FastAPI`` application wrapping :class:`TaskManager`."""
+def create_app(with_ui: bool = False) -> FastAPI:
+    """Return a ``FastAPI`` application wrapping :class:`TaskManager`.
+
+    Pass ``with_ui=True`` to include a minimal browser UI at the root path.
+    """
 
     manager = TaskManager()
     runtime = Runtime()
@@ -34,6 +87,11 @@ def create_app() -> FastAPI:
     app = FastAPI()
     app.state.manager = manager
     app.state.runtime = runtime
+
+    if with_ui:
+        @app.get("/", response_class=HTMLResponse)
+        def _ui_root() -> str:
+            return UI_HTML
 
     @app.post("/tasks")
     def start_task(req: _NewTask):
@@ -83,6 +141,12 @@ def create_app() -> FastAPI:
         return task.agent.history
 
     return app
+
+
+def create_app_with_ui() -> FastAPI:
+    """Convenience wrapper for ``create_app(with_ui=True)``."""
+
+    return create_app(with_ui=True)
 
 
 def main() -> None:  # pragma: no cover - optional CLI

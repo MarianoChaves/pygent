@@ -23,3 +23,13 @@ The API provides the following endpoints:
 * `GET /tasks/{task_id}/history` – fetch the conversation history for a task.
 
 Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a `TaskManager` instance in `app.state.manager` so you can access it from middleware or custom routes if needed.
+
+For quick testing you can expose a minimal web UI by using the helper function
+`create_app_with_ui`:
+
+```bash
+uvicorn pygent.fastapi_app:create_app_with_ui
+```
+
+Opening `http://127.0.0.1:8000/` then shows a basic chat page that talks to the
+API.
