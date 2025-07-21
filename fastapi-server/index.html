@@ -602,6 +602,7 @@
 <li><code>POST /tasks/{task_id}/message</code> – send a message to a finished task and get the reply. The response includes an optional <code>ask_user</code> field when the agent requires user input.</li>
 <li><code>GET /tasks/{task_id}/history</code> – fetch the conversation history for a task.</li>
 </ul>
+<p>You can view the full OpenAPI specification in your browser when the server is running at <code>/docs</code> or <code>/openapi.json</code>. The generated spec is also included in this repository as <a href="../openapi.yaml"><code>openapi.yaml</code></a> for reference.</p>
 <p>Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a <code>TaskManager</code> instance in <code>app.state.manager</code> so you can access it from middleware or custom routes if needed.</p>
 
 
