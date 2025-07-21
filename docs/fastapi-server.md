@@ -22,4 +22,6 @@ The API provides the following endpoints:
 * `POST /tasks/{task_id}/message` – send a message to a finished task and get the reply. The response includes an optional `ask_user` field when the agent requires user input.
 * `GET /tasks/{task_id}/history` – fetch the conversation history for a task.
 
+You can view the full OpenAPI specification in your browser when the server is running at `/docs` or `/openapi.json`. The generated spec is also included in this repository as [`openapi.yaml`](openapi.yaml) for reference.
+
 Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a `TaskManager` instance in `app.state.manager` so you can access it from middleware or custom routes if needed.
