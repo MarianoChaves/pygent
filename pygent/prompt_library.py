@@ -20,15 +20,23 @@ def _base_system_msg(persona: Persona, disabled_tools: Optional[List[str]] = Non
 def autonomous_builder(persona: Persona, disabled_tools: Optional[List[str]] = None) -> str:
     """Prompt emphasising fully autonomous operation."""
     base = _base_system_msg(persona, disabled_tools)
+    lines = []
+    for line in base.splitlines():
+        if line.startswith("User:"):
+            continue
+        lines.append(line.replace("the user's request", "the given task"))
+    base = "\n".join(lines)
     return (
         base
-        + "\nYou are not an assistant and will not receive user input."
-        + " Act autonomously to solve the task without redirecting questions."
-        + " Provide a complete, professional solution using state-of-the-art"
-        + " methods unless a simpler approach is requested."
-        + " Test your work before calling the `stop` tool and summarise what"
-        + " you accomplished along with any remaining issues."
-        + " Continue iterating until satisfied."
+        + "\nOperate autonomously. Your next exchange will be with yourself, "
+        + "no further user messages will arrive."
+        + " You have a computing environment at your disposal; begin by "
+        + "inspecting it and the available tools."
+        + " Execute the initial task step by step using professional,"
+        + " state-of-the-art methods unless simplicity is preferable."
+        + " Test your work and produce a final artefact or concise summary "
+        + "before invoking the `stop` tool, describing the outcome and any "
+        + "remaining issues. Continue iterating until satisfied."
     )
 
 
