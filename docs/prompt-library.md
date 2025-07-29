@@ -21,7 +21,7 @@ Available builders:
 
 | Name | Description |
 | --- | --- |
-| ``autonomous`` | Solves tasks without user input, producing a complete professional solution, testing the result and summarising before finishing with ``stop``. |
+| ``autonomous`` | Operates autonomously in a computing environment without further user interaction. It inspects the environment first, performs the task step by step, tests the outcome and finishes with a final artefact or summary via ``stop``. |
 | ``assistant`` | Encourages interactive behaviour asking for clarifications. |
 | ``reviewer`` | Focuses on reviewing code and suggesting improvements. |
 
