@@ -57,6 +57,8 @@ class Session(ABC):
     def run(self) -> None:
         """Run the interactive loop."""
         from .commands import COMMANDS
+        # Import Agent lazily to avoid circular import issues
+        from .agent import Agent
 
         self.start_message()
         next_msg: Optional[str] = None
