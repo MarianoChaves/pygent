@@ -72,6 +72,7 @@ class Agent:
     disabled_tools: List[str] = field(default_factory=list)
     log_file: Optional[pathlib.Path] = field(default_factory=_default_log_file)
     confirm_bash: bool = field(default_factory=_default_confirm_bash)
+    max_non_tool_replies: Optional[int] = None
 
     def __post_init__(self) -> None:
         """Initialize defaults after dataclass construction."""
@@ -257,7 +258,11 @@ class Agent:
         step_timeout: Optional[float] = None,
         max_time: Optional[float] = None,
     ) -> Optional[openai_compat.Message]:
-        """Run steps until ``stop`` is called or limits are reached."""
+        """Run steps until ``stop`` is called or limits are reached.
+
+        The agent also stops if it replies without using a tool more than
+        ``max_non_tool_replies`` times consecutively.
+        """
 
         if step_timeout is None:
             env = os.getenv("PYGENT_STEP_TIMEOUT")
@@ -270,6 +275,7 @@ class Agent:
         start = time.monotonic()
         self._timed_out = False
         last_msg = None
+        non_tool_replies = 0
         for _ in range(max_steps):
             if max_time is not None and time.monotonic() - start > max_time:
                 self.append_history(
@@ -292,6 +298,21 @@ class Agent:
             calls = assistant_msg.tool_calls or []
             if any(c.function.name in ("stop", "ask_user") for c in calls):
                 break
+            if calls:
+                non_tool_replies = 0
+            else:
+                non_tool_replies += 1
+                if (
+                    self.max_non_tool_replies is not None
+                    and non_tool_replies >= self.max_non_tool_replies
+                ):
+                    self.append_history(
+                        {
+                            "role": "system",
+                            "content": "[stopped after too many non-tool replies]",
+                        }
+                    )
+                    break
             msg = "ask_user"
 
         return last_msg
