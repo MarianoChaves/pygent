@@ -139,11 +139,12 @@ class Agent:
         if self.history and self.history[0].get("role") == "system":
             self.history[0]["content"] = self.system_msg
 
-    def step(self, user_msg: str):
+    def step(self, user_msg: str = None, role: str = "user") -> openai_compat.Message:
         """Execute one round of interaction with the model."""
 
         self.refresh_system_message()
-        self.append_history({"role": "user", "content": user_msg})
+        if user_msg:
+            self.append_history({"role": role, "content": user_msg})
 
         status_cm = (
             console.status("[bold cyan]Thinking...", spinner="dots")
@@ -284,7 +285,11 @@ class Agent:
                 self._timed_out = True
                 break
             step_start = time.monotonic()
-            assistant_msg = self.step(msg)
+            if msg==user_msg:
+              role = 'user'
+            else:
+              role = 'system'
+            assistant_msg = self.step(msg, role=role)
             last_msg = assistant_msg
             if (
                 step_timeout is not None
@@ -313,8 +318,7 @@ class Agent:
                         }
                     )
                     break
-            msg = "ask_user"
-
+            msg = None
         return last_msg
 
     def close(self) -> None:
