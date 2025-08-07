@@ -34,13 +34,13 @@ def test_run_py_config_sets_env(tmp_path, monkeypatch):
 def test_run_py_config_sets_system_builder(tmp_path):
     cfg = tmp_path / 'config.py'
     cfg.write_text(
-        'from pygent.agent import set_system_message_builder\n'
+        'from pygent import set_system_message_builder\n'
         'def b(p, disabled_tools=None):\n'
         '    return "CUSTOM"\n'
         'set_system_message_builder(b)\n'
     )
     run_py_config(cfg)
-    from pygent.agent import Agent, set_system_message_builder
+    from pygent import Agent, set_system_message_builder
 
     ag = Agent()
     assert ag.system_msg == "CUSTOM"

@@ -133,12 +133,16 @@ All new agents and delegated tasks will use this model unless another one is pas
 You can also override how the assistant builds the system prompt:
 
 ```python
-from pygent.agent import set_system_message_builder
+from pygent import Agent, set_system_message_builder
 
 def my_builder(persona, disabled_tools=None):
     return f"{persona.name}: ready to work"
 
+# Global override
 set_system_message_builder(my_builder)
+
+# Or per-agent
+ag = Agent(system_message_builder=my_builder)
 ```
 
 Passing `None` restores the default prompt generation.

@@ -10,13 +10,24 @@ loaded on start-up.
 
 ```python
 # config.py
-from pygent.agent import set_system_message_builder
+from pygent import set_system_message_builder
 
 
 def my_system_builder(persona, disabled_tools=None):
     return f"{persona.name}: ready to work"
 
 set_system_message_builder(my_system_builder)
+```
+
+You can also supply a builder for individual agents:
+
+```python
+from pygent import Agent
+
+def my_system_builder(persona, disabled_tools=None):
+    return f"{persona.name}: ready to work"
+
+ag = Agent(system_message_builder=my_system_builder)
 ```
 
 Pass `None` to `set_system_message_builder` to restore the default

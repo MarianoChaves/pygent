@@ -3,7 +3,7 @@
 This page collects a few ready-made system message builders that you can use
 to quickly customise the agent's behaviour. They live in the
 :mod:`pygent.prompt_library` module and work with
-:func:`~pygent.agent.set_system_message_builder`. The
+:func:`~pygent.set_system_message_builder`. The
 :mod:`pygent.agent_presets` module builds on top of these to offer ready-made
 agents with preset tool sets.
 

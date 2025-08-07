@@ -6,7 +6,7 @@ import pathlib
 import uuid
 import time
 from dataclasses import dataclass, field, asdict
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Callable
 
 from rich.console import Console
 from rich.panel import Panel
@@ -34,7 +34,7 @@ from . import tools, models, openai_compat
 from .session import CliSession
 from .models import Model, OpenAIModel
 from .persona import Persona
-from .system_message import DEFAULT_PERSONA, build_system_msg, set_system_message_builder
+from .system_message import DEFAULT_PERSONA, build_system_msg
 
 DEFAULT_MODEL = os.getenv("PYGENT_MODEL", "gpt-4.1-mini")
 console = Console()
@@ -66,7 +66,8 @@ class Agent:
     model: Model = field(default_factory=_default_model)
     model_name: str = DEFAULT_MODEL
     persona: Persona = field(default_factory=lambda: DEFAULT_PERSONA)
-    system_msg: str = field(default_factory=lambda: build_system_msg(DEFAULT_PERSONA))
+    system_message_builder: Optional[Callable[[Persona, Optional[List[str]]], str]] = None
+    system_msg: str = ""
     history: List[Dict[str, Any]] = field(default_factory=list)
     history_file: Optional[pathlib.Path] = field(default_factory=_default_history_file)
     disabled_tools: List[str] = field(default_factory=list)
@@ -78,7 +79,7 @@ class Agent:
         """Initialize defaults after dataclass construction."""
         self._log_fp = None
         if not self.system_msg:
-            self.system_msg = build_system_msg(self.persona, self.disabled_tools)
+            self.refresh_system_message()
         if self.history_file and isinstance(self.history_file, (str, pathlib.Path)):
             self.history_file = pathlib.Path(self.history_file)
             if self.history_file.is_file():
@@ -135,7 +136,12 @@ class Agent:
 
     def refresh_system_message(self) -> None:
         """Update the system prompt based on the current tool registry."""
-        self.system_msg = build_system_msg(self.persona, self.disabled_tools)
+        if self.system_message_builder:
+            self.system_msg = self.system_message_builder(
+                self.persona, self.disabled_tools
+            )
+        else:
+            self.system_msg = build_system_msg(self.persona, self.disabled_tools)
         if self.history and self.history[0].get("role") == "system":
             self.history[0]["content"] = self.system_msg
 
