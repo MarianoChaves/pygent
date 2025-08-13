@@ -98,26 +98,34 @@ class Session(ABC):
                                 prompt = args.get("prompt", "Choose:")
                                 next_msg = self.ask(prompt, options)
                             break
+        
         except Exception as exc:  # pragma: no cover - interactive only
             from .commands import cmd_save
-            dest = pathlib.Path.cwd() / f"crash_{uuid.uuid4().hex[:8]}"
-            cmd_save(self.agent, str(dest))
+            if self.agent.runtime._persistent:
+                dest = self.agent.runtime.base_dir.resolve()
+                saved_msg = f"Your workspace is located at [cyan]{dest}[/]."
+                restore_msg = ""
+            else:
+                dest = pathlib.Path.cwd() / f"crash_{uuid.uuid4().hex[:8]}"
+                cmd_save(self.agent, str(dest))
+                saved_msg = f"Your workspace has been saved to [cyan]{dest}[/]."
+                restore_msg = f"You can restore it using: [bold yellow]pygent --load {dest}[/]"
             if Panel:
+                body = f"An unexpected error occurred: [bold red]{exc}[/]\n{saved_msg}"
+                if restore_msg:
+                    body += f"\n{restore_msg}"
                 self.console.print(
                     Panel(
-                        f"An unexpected error occurred: [bold red]{exc}[/]\n"
-                        f"Your workspace has been saved to [cyan]{dest}[/].\n"
-                        f"You can restore it using: [bold yellow]pygent --load {dest}[/]",
+                        body,
                         title="[bold red]Critical Error[/]",
                         border_style="red",
                         box=box.DOUBLE if box else None,
                     )
                 )
             else:  # pragma: no cover - fallback without rich
-                print(
-                    f"An unexpected error occurred: {exc}\nWorkspace saved to {dest}\n"
-                    f"Restore with: pygent --load {dest}"
-                )
+                print(f"An unexpected error occurred: {exc}\n{saved_msg}")
+                if restore_msg:
+                    print(restore_msg)
         finally:
             self.end_session()
 
