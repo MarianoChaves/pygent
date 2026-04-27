@@ -1,20 +1,27 @@
 # Welcome to Pygent
 
-**Pygent** is a minimalist and powerful coding assistant designed to execute tasks in a secure and isolated environment. By default, it uses Docker containers to ensure commands are run safely, but it can also operate locally if Docker is unavailable.
+**Pygent** is a minimalist coding assistant focused on one core workflow:
+**an agentic CLI that can safely execute commands in an isolated workspace**.
 
-Whether you're looking to automate development tasks, generate code, or simply experiment with a secure AI assistant, Pygent offers the tools and flexibility you need.
+By default, Pygent tries to run commands in Docker. If Docker is unavailable,
+it falls back to local execution.
 
 ## Highlights
 
-* **Secure Execution**: Commands run in ephemeral Docker containers by default.
-* **Flexibility**: Integrates with language models compatible with the OpenAI API.
-* **Extensibility**: Create your own tools, customize system prompts, and extend the CLI with custom commands.
-* **Persistence**: Save and recover your workspace state between sessions.
-* **Dual Interface**: Use Pygent via an interactive CLI or a simple web interface.
+* **Simple default flow**: single-agent interactive CLI.
+* **Safe execution model**: isolated workspace and optional Docker runtime.
+* **OpenAI-compatible**: works with OpenAI and compatible providers.
+* **Extensible**: register custom tools and plug custom models.
+* **Stateful sessions**: history, snapshots, and reusable workspaces.
 
-## Where to start?
+## Start here
 
-* **New to Pygent?** Check out our **[Getting Started Guide](getting-started.md)** to install and run your first agent.
-* **Want to use the CLI?** The **[Command Line Interface (CLI)](cli.md)** page has all the details.
-* **Ready to customize?** Learn how to create **[Tools](tools.md)** and **[Custom Models](custom-models.md)**.
-* **Want to understand how it works?** The **[Architecture](architecture.md)** section provides an overview of the internal components.
+* New user? Read **[Getting Started](getting-started.md)**.
+* CLI details? Go to **[CLI](cli.md)**.
+* Want customization? See **[Tools](tools.md)** and **[Custom Models](custom-models.md)**.
+* Want internals? Read **[Architecture](architecture.md)**.
+
+## About legacy advanced features
+
+Older multi-agent/preset/server flows are still documented in **Optional Legacy Features**.
+They are no longer the default product direction.

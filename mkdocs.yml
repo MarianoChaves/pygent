@@ -10,12 +10,13 @@ nav:
   - Custom Models: custom-models.md
   - Custom System Message: custom-system-message.md
   - Prompt Library: prompt-library.md
-  - Agent Presets: agent-presets.md
-  - Multi-Agent Collaboration: crew-style.md
   - Architecture: architecture.md
-  - FastAPI Server: fastapi-server.md
   - Examples: examples.md
   - API Reference: api-reference.md
+  - Optional Legacy Features:
+    - Agent Presets (Legacy): agent-presets.md
+    - Multi-Agent Collaboration (Legacy): crew-style.md
+    - FastAPI Server (Legacy): fastapi-server.md
 theme:
   name: material
   language: en
@@ -45,18 +46,15 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [.]  # Look for modules in the current directory
+          paths: [.]
           options:
             show_root_heading: True
-            # show_source: True  # Disabled for now to address long lines
             members_order: source
             show_bases: True
             show_signature_annotations: True
-            # separate_signature: True # Disabled for now, might contribute to line length issues
             docstring_section_style: spacy
             merge_init_into_class: True
             show_if_no_docstring: True
-            # Options to potentially help with long lines and improve readability
-            line_length: 80 # Attempt to wrap lines
-            show_symbol_type_toc: True # Add symbol types to ToC for better navigation
-            annotations_path: brief # Use brief paths for annotations
+            line_length: 80
+            show_symbol_type_toc: True
+            annotations_path: brief
