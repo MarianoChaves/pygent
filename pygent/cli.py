@@ -8,7 +8,6 @@ import os
 import typer
 
 from .config import load_config, run_py_config, load_snapshot
-from .agent_presets import AGENT_PRESETS
 
 
 app = typer.Typer(invoke_without_command=True, help="Pygent command line interface")
@@ -73,12 +72,6 @@ def main(
         help="command to ban (repeatable)",
         show_default=False,
     ),
-    preset: Optional[str] = typer.Option(
-        None,
-        "--preset",
-        help="start session using a predefined agent preset (autonomous, assistant, reviewer)",
-        show_default=False,
-    ),
 ) -> None:  # pragma: no cover - CLI wrapper
     """Start an interactive session when no subcommand is given."""
     load_config(config)
@@ -102,7 +95,6 @@ def main(
         "omit_tool": omit_tool or [],
         "confirm_bash": confirm_bash,
         "ban_cmd": ban_cmd or [],
-        "preset": preset,
     }
     if ctx.invoked_subcommand is None:
         from .agent import run_interactive
@@ -113,7 +105,6 @@ def main(
             disabled_tools=omit_tool or [],
             confirm_bash=confirm_bash,
             banned_commands=ban_cmd or [],
-            preset=preset,
         )
         raise typer.Exit()
 
@@ -143,4 +134,3 @@ def run() -> None:  # pragma: no cover
 
 
 main = run  # Backwards compatibility
-
