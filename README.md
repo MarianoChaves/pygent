@@ -10,14 +10,10 @@ Pygent is a coding assistant that executes each request inside an isolated Docke
 * Optionally save the history to a JSON file for later recovery.
 * Persist the workspace across sessions by setting `PYGENT_WORKSPACE`.
 * Provides a small Python API for use in other projects.
-* Optional web interface via `pygent ui` (also available as `pygent-ui`).
-* Optional FastAPI server to manage tasks over HTTP.
 * Register your own tools and customise the system prompt.
 * Extend the CLI with custom commands.
-* Build custom interactive sessions by subclassing the `Session` API.
 * Execute a `config.py` script on startup for advanced configuration.
 * Set environment variables from the command line.
-* Each session begins with a short plan that you can approve before execution.
 * The assistant can leverage the `bash` tool to run shell commands in a sandboxed environment.
 
 ## Installation
@@ -28,10 +24,10 @@ The recommended way to install Pygent is using pip:
 pip install pygent
 ```
 
-To include optional features like Docker support, the web UI, or the FastAPI server, you can specify extras:
+To include optional Docker support, you can specify extras:
 
 ```bash
-pip install pygent[docker,ui,server]
+pip install pygent[docker]
 ```
 
 Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
@@ -44,7 +40,7 @@ pip install -e .
 ```
 
 Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
-To run commands in Docker containers, Docker must be installed separately. If installing from source, you can include Docker support with `pip install -e .[docker,ui,server]`.
+To run commands in Docker containers, Docker must be installed separately. If installing from source, you can include Docker support with `pip install -e .[docker]`.
 
 ## Configuration
 
@@ -57,13 +53,12 @@ Behaviour can be adjusted via environment variables (see `docs/configuration.md`
 * `PYGENT_MODEL` &ndash; model name used for requests (default `gpt-4.1-mini`).
 * `PYGENT_IMAGE` &ndash; Docker image to create the container (default `python:3.12-slim`).
 * `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
-* `PYGENT_MAX_TASKS` &ndash; maximum number of concurrent delegated tasks (default `3`).
 
 Settings can also be read from a `pygent.toml` file. See
 [examples/sample_config.toml](https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml)
 and the accompanying
 [config_file_example.py](https://github.com/marianochaves/pygent/blob/main/examples/config_file_example.py)
-script for a working demonstration that generates tests using a delegated agent.
+script for a working demonstration of startup configuration.
 
 ## CLI usage
 
@@ -87,8 +82,6 @@ Type messages normally; use `/exit` to end the session. Each command is executed
 in the container and the result shown in the terminal.
 Interactive programs that expect input (e.g. running `python` without a script)
 are not supported and will exit immediately.
-For a minimal web interface run `pygent ui` instead (requires `pygent[ui]`).
-To expose the API over HTTP run `uvicorn pygent.fastapi_app:create_app` (requires `pygent[server]`).
 Use `/help` for a list of built-in commands or `/help <cmd>` for details.
 Use `/save DIR` to snapshot the current environment for later use.
 Use `/tools` to enable or disable tools during the session.
@@ -128,7 +121,7 @@ from pygent.models import set_custom_model
 set_custom_model(MyModel())
 ```
 
-All new agents and delegated tasks will use this model unless another one is passed explicitly.
+All new agents will use this model unless another one is passed explicitly.
 
 You can also override how the assistant builds the system prompt:
 
@@ -182,4 +175,3 @@ Use `mkdocs serve` to build the documentation locally and serve it on a local we
 ## License
 
 This project is released under the MIT license. See the `LICENSE` file for details.
-

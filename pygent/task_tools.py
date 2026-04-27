@@ -3,7 +3,7 @@ from __future__ import annotations
 """Optional tools for background tasks and personas."""
 
 import json
-from typing import Optional, List
+from typing import Optional
 
 from .runtime import Runtime
 from .task_manager import TaskManager
@@ -19,15 +19,78 @@ def _get_manager() -> TaskManager:
     return _task_manager
 
 
+def get_task_manager() -> TaskManager:
+    """Return the lazily-created manager used by task tools."""
+    return _get_manager()
+
+
+def set_task_manager(manager: TaskManager) -> None:
+    """Override the manager instance (used by tests and integration layers)."""
+    global _task_manager
+    _task_manager = manager
+
+
 # ---- tool implementations ----
-from .tools import (
-    _delegate_task,
-    _delegate_persona_task,
-    _list_personas,
-    _task_status,
-    _collect_file,
-    _download_file,
-)
+from .tools import _download_file
+
+
+def _delegate_task(
+    rt: Runtime,
+    prompt: str,
+    files: Optional[list[str]] = None,
+    timeout: Optional[float] = None,
+    step_timeout: Optional[float] = None,
+    persona: Optional[str] = None,
+) -> str:
+    if getattr(rt, "task_depth", 0) >= 1:
+        return "error: delegation not allowed in sub-tasks"
+    try:
+        tid = _get_manager().start_task(
+            prompt,
+            parent_rt=rt,
+            files=files,
+            parent_depth=getattr(rt, "task_depth", 0),
+            step_timeout=step_timeout,
+            task_timeout=timeout,
+            persona=persona,
+        )
+    except RuntimeError as exc:
+        return str(exc)
+    return f"started {tid}"
+
+
+def _delegate_persona_task(
+    rt: Runtime,
+    prompt: str,
+    persona: str,
+    files: Optional[list[str]] = None,
+    timeout: Optional[float] = None,
+    step_timeout: Optional[float] = None,
+) -> str:
+    return _delegate_task(
+        rt,
+        prompt=prompt,
+        files=files,
+        timeout=timeout,
+        step_timeout=step_timeout,
+        persona=persona,
+    )
+
+
+def _list_personas(rt: Runtime) -> str:
+    personas = [
+        {"name": p.name, "description": p.description}
+        for p in _get_manager().personas
+    ]
+    return json.dumps(personas)
+
+
+def _task_status(rt: Runtime, task_id: str) -> str:
+    return _get_manager().status(task_id)
+
+
+def _collect_file(rt: Runtime, task_id: str, path: str, dest: Optional[str] = None) -> str:
+    return _get_manager().collect_file(rt, task_id, path, dest)
 
 
 def register_task_tools() -> None:
