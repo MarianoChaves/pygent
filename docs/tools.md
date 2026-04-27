@@ -1,65 +1,62 @@
 # Tools
 
-Tools are at the heart of Pygent's functionality, allowing the agent to interact with the file system, execute commands, and perform other actions.
+Tools are how the model performs actions in the workspace.
 
-## Native Tools
+## Built-in core tools
 
-Pygent comes with a set of essential tools ready to use:
+These are enabled by default:
 
-* **`bash`**: Executes a shell command in the execution environment (local or Docker).
-    * **Parameters**: `cmd` (string) - The command to be executed.
-* **`write_file`**: Creates or overwrites a file in the agent's workspace.
-    * **Parameters**: `path` (string), `content` (string).
-* **`stop`**: Stops the agent's autonomous execution loop. Useful for signaling the end of a task.
-* **`ask_user`**: Used to request a response or input from the user, continuing the conversation. When feasible, include an `options` list to present a short menu.
-* **`read_image`**: Returns a data URL for an image in the workspace, useful for vision models. The MIME type is detected from the file contents when the extension is unknown.
+* **`bash`**: run a shell command.
+  * params: `cmd: string`
+* **`write_file`**: create/overwrite files in workspace.
+  * params: `path: string`, `content: string`
+* **`read_image`**: read an image file and return a data URL.
+  * params: `path: string`
+* **`ask_user`**: request additional user input.
+* **`stop`**: signal the autonomous loop to stop.
 
-## Task Tools
+## Optional legacy task tools
 
-To manage subtasks and background agents, Pygent offers specific tools that are activated by registering with `register_task_tools()`:
+If you want delegated multi-agent flows, register them explicitly:
 
-* **`delegate_task`**: Creates a new background task with a new agent.
-    * **Parameters**: `prompt` (string), `files` (list of strings, optional), `persona` (string, optional), `timeout` (float, optional).
-* **`task_status`**: Checks the status of a delegated task.
-    * **Parameters**: `task_id` (string).
-* **`collect_file`**: Retrieves a file or directory from a delegated task to the main agent's workspace.
-    * **Parameters**: `task_id` (string), `path` (string), `dest` (string, optional).
-* **`list_personas`**: Returns the available personas for delegated tasks.
+```python
+from pygent.task_tools import register_task_tools
 
-## Creating Custom Tools
+register_task_tools()
+```
 
-You can easily extend Pygent with your own tools.
+Additional tools then become available:
 
-### Using `register_tool`
+* `delegate_task`
+* `delegate_persona_task`
+* `task_status`
+* `collect_file`
+* `list_personas`
+* `download_file`
 
-The most direct way to register a new tool is using the `register_tool` function.
+## Registering custom tools
 
 ```python
 from pygent import Agent, register_tool
 
-# The tool function always receives the runtime as the first argument
 def hello(rt, name: str) -> str:
     return f"Hello {name}!"
 
-# Register the tool
 register_tool(
-    "hello", # Tool name
-    "Greet by name", # Description
-    {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]}, # Parameter schema
-    hello # The function to be called
+    "hello",
+    "Greet by name",
+    {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]},
+    hello,
 )
 
 ag = Agent()
-# Now the agent can use the 'hello' tool
 ag.step("hello name='world'")
-ag.runtime.cleanup()
 ```
 
-### Using the `@tool` decorator
-Alternatively, you can use the `@tool` decorator for a more concise registration:
+Decorator version:
 
 ```python
-from pygent import tool, Agent
+from pygent import Agent, tool
 
 @tool(
     name="goodbye",
@@ -68,8 +65,4 @@ from pygent import tool, Agent
 )
 def goodbye(rt, name: str) -> str:
     return f"Goodbye {name}!"
-
-ag = Agent()
-ag.step("goodbye name='world'")
-ag.runtime.cleanup()
 ```

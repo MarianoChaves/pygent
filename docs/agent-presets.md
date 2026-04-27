@@ -1,31 +1,23 @@
-# Agent Presets
+# Agent Presets (Legacy)
 
-The :mod:`pygent.agent_presets` module bundles ready-made configurations for common
-workflows. Each preset combines a system message builder from the
-:mod:`pygent.prompt_library` with a default set of tools.
+> Legacy note: presets are no longer part of the default CLI architecture.
 
-Use :data:`~pygent.agent_presets.AGENT_PRESETS` to select one:
+The old `pygent.agent_presets` module still exists for compatibility in some setups,
+but the recommended approach is now to configure behavior directly with:
+
+* `set_system_message_builder(...)`
+* tool enable/disable controls
+
+## Migration path
+
+Instead of presets:
 
 ```python
-from pygent import AGENT_PRESETS
+from pygent import Agent, set_system_message_builder
+from pygent.prompt_library import PROMPT_BUILDERS
 
-ag = AGENT_PRESETS["autonomous"].create_agent()
-ag.run_until_stop("echo hello")
+set_system_message_builder(PROMPT_BUILDERS["autonomous"])
+ag = Agent()
 ```
 
-The available presets and their behaviours are:
-
-| Name | Tools | Description |
-| --- | --- | --- |
-| ``autonomous`` | ``bash``, ``write_file``, ``stop`` | Operates autonomously in a computing environment with no further user messages. It inspects the environment first, executes the task in steps, tests the result and ends with a final artefact or summary using ``stop``. |
-| ``assistant`` | ``bash``, ``write_file``, ``ask_user`` | Interactive style that asks for clarifications and presents menu options when possible. |
-| ``reviewer`` | ``bash`` | Focuses on analysing code and suggesting improvements. |
-
-You can create your own preset by instantiating
-:class:`~pygent.agent_presets.AgentPreset` with a custom builder and tool list.
-
-To start an interactive session using a preset from the command line:
-
-```bash
-pygent --preset autonomous
-```
+For CLI sessions, start plain `pygent` and adjust tools interactively (`/tools`).

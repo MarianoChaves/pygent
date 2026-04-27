@@ -1,39 +1,47 @@
 # API Reference
 
-This section documents the main classes and helpers exposed by **Pygent**. The content is generated from the package docstrings.
+This section documents the main classes and helpers exposed by **Pygent**.
 
-## Agent
+## Core API
+
+### Agent
 
 ::: pygent.agent.Agent
 
-## Runtime
+### Runtime
 
 ::: pygent.runtime.Runtime
 
-## TaskManager
-
-::: pygent.task_manager.TaskManager
-
-## Tools
+### Tools
 
 ::: pygent.tools
 
-## Models
+### Models
 
 ::: pygent.models
 
-## Config
+### Config
 
 ::: pygent.config
 
-## Errors
+### Errors
 
 ::: pygent.errors
 
-## OpenAI Compatibility (`openai_compat`)
+### OpenAI Compatibility (`openai_compat`)
 
 ::: pygent.openai_compat
 
-## Commands
+### Commands
 
 ::: pygent.commands
+
+## Optional legacy API
+
+### TaskManager
+
+::: pygent.task_manager.TaskManager
+
+### Task tools module
+
+::: pygent.task_tools
