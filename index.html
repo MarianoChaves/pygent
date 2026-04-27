@@ -309,10 +309,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#where-to-start" class="md-nav__link">
+  <a href="#start-here" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Where to start?
+        Start here
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about-legacy-advanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        About legacy advanced features
       
     </span>
   </a>
@@ -523,60 +534,6 @@
   
   
     <li class="md-nav__item">
-      <a href="agent-presets/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Agent Presets
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="crew-style/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Multi-Agent Collaboration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="architecture/" class="md-nav__link">
         
   
@@ -585,33 +542,6 @@
     
   
     Architecture
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="fastapi-server/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FastAPI Server
   
 
     
@@ -678,6 +608,144 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optional Legacy Features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Optional Legacy Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="agent-presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Presets (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="crew-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Collaboration (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="fastapi-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FastAPI Server (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -716,10 +784,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#where-to-start" class="md-nav__link">
+  <a href="#start-here" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Where to start?
+        Start here
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about-legacy-advanced-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        About legacy advanced features
       
     </span>
   </a>
@@ -747,23 +826,28 @@
 
 
 <h1 id="welcome-to-pygent">Welcome to Pygent</h1>
-<p><strong>Pygent</strong> is a minimalist and powerful coding assistant designed to execute tasks in a secure and isolated environment. By default, it uses Docker containers to ensure commands are run safely, but it can also operate locally if Docker is unavailable.</p>
-<p>Whether you're looking to automate development tasks, generate code, or simply experiment with a secure AI assistant, Pygent offers the tools and flexibility you need.</p>
+<p><strong>Pygent</strong> is a minimalist coding assistant focused on one core workflow:
+<strong>an agentic CLI that can safely execute commands in an isolated workspace</strong>.</p>
+<p>By default, Pygent tries to run commands in Docker. If Docker is unavailable,
+it falls back to local execution.</p>
 <h2 id="highlights">Highlights</h2>
 <ul>
-<li><strong>Secure Execution</strong>: Commands run in ephemeral Docker containers by default.</li>
-<li><strong>Flexibility</strong>: Integrates with language models compatible with the OpenAI API.</li>
-<li><strong>Extensibility</strong>: Create your own tools, customize system prompts, and extend the CLI with custom commands.</li>
-<li><strong>Persistence</strong>: Save and recover your workspace state between sessions.</li>
-<li><strong>Dual Interface</strong>: Use Pygent via an interactive CLI or a simple web interface.</li>
+<li><strong>Simple default flow</strong>: single-agent interactive CLI.</li>
+<li><strong>Safe execution model</strong>: isolated workspace and optional Docker runtime.</li>
+<li><strong>OpenAI-compatible</strong>: works with OpenAI and compatible providers.</li>
+<li><strong>Extensible</strong>: register custom tools and plug custom models.</li>
+<li><strong>Stateful sessions</strong>: history, snapshots, and reusable workspaces.</li>
 </ul>
-<h2 id="where-to-start">Where to start?</h2>
+<h2 id="start-here">Start here</h2>
 <ul>
-<li><strong>New to Pygent?</strong> Check out our <strong><a href="getting-started/">Getting Started Guide</a></strong> to install and run your first agent.</li>
-<li><strong>Want to use the CLI?</strong> The <strong><a href="cli/">Command Line Interface (CLI)</a></strong> page has all the details.</li>
-<li><strong>Ready to customize?</strong> Learn how to create <strong><a href="tools/">Tools</a></strong> and <strong><a href="custom-models/">Custom Models</a></strong>.</li>
-<li><strong>Want to understand how it works?</strong> The <strong><a href="architecture/">Architecture</a></strong> section provides an overview of the internal components.</li>
+<li>New user? Read <strong><a href="getting-started/">Getting Started</a></strong>.</li>
+<li>CLI details? Go to <strong><a href="cli/">CLI</a></strong>.</li>
+<li>Want customization? See <strong><a href="tools/">Tools</a></strong> and <strong><a href="custom-models/">Custom Models</a></strong>.</li>
+<li>Want internals? Read <strong><a href="architecture/">Architecture</a></strong>.</li>
 </ul>
+<h2 id="about-legacy-advanced-features">About legacy advanced features</h2>
+<p>Older multi-agent/preset/server flows are still documented in <strong>Optional Legacy Features</strong>.
+They are no longer the default product direction.</p>
 
 
 

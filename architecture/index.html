@@ -11,10 +11,10 @@
         <link rel="canonical" href="https://pygent-ai.com/architecture/">
       
       
-        <link rel="prev" href="../crew-style/">
+        <link rel="prev" href="../prompt-library/">
       
       
-        <link rel="next" href="../fastapi-server/">
+        <link rel="next" href="../examples/">
       
       
         
@@ -453,60 +453,6 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../agent-presets/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Agent Presets
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../crew-style/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Multi-Agent Collaboration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -573,7 +519,7 @@
   <a href="#core-components" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core Components
+        Core components
       
     </span>
   </a>
@@ -581,10 +527,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-flow" class="md-nav__link">
+  <a href="#default-request-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request Flow
+        Default request flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-legacy-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional legacy layer
       
     </span>
   </a>
@@ -595,33 +552,6 @@
   
 </nav>
       
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../fastapi-server/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FastAPI Server
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -680,6 +610,144 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optional Legacy Features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Optional Legacy Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Presets (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crew-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Collaboration (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fastapi-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FastAPI Server (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -710,7 +778,7 @@
   <a href="#core-components" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core Components
+        Core components
       
     </span>
   </a>
@@ -718,10 +786,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-flow" class="md-nav__link">
+  <a href="#default-request-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request Flow
+        Default request flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-legacy-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional legacy layer
       
     </span>
   </a>
@@ -749,34 +828,29 @@
 
 
 <h1 id="architecture">Architecture</h1>
-<p>Understanding Pygent's architecture helps in effectively customizing and extending the project. The system is composed of a few main components that work together.</p>
-<h2 id="core-components">Core Components</h2>
+<p>Pygent now prioritizes a <strong>simple single-agent architecture</strong>.</p>
+<h2 id="core-components">Core components</h2>
 <ul>
-<li>
-<p><strong><code>Agent</code></strong>: The <code>Agent</code> is the central orchestrator. It maintains the conversation history, interacts with the language model to decide the next step, and dispatches calls to tools. Each agent has its own state, including its persona and enabled tools.</p>
-</li>
-<li>
-<p><strong><code>Runtime</code></strong>: The <code>Runtime</code> represents the isolated execution environment. It is responsible for executing commands (<code>bash</code>), interacting with the file system (<code>write_file</code>, <code>read_file</code>), and managing the environment's lifecycle (e.g., a Docker container). If Docker is unavailable, the <code>runtime</code> executes commands locally. Each agent has its own <code>runtime</code> instance, ensuring isolation between tasks.</p>
-</li>
-<li>
-<p><strong><code>Model</code></strong>: The <code>Model</code> is an interface (protocol) that abstracts communication with a language model (LLM). The default implementation, <code>OpenAIModel</code>, interacts with OpenAI-compatible APIs. You can provide your own implementation to connect to different model backends.</p>
-</li>
-<li>
-<p><strong><code>TaskManager</code></strong>: The <code>TaskManager</code> manages the execution of background tasks. When you use the <code>delegate_task</code> tool, the <code>TaskManager</code> creates a new <code>Agent</code> with its own <code>Runtime</code> to execute the task asynchronously. This allows the main agent to continue its work or monitor the subtask's progress.</p>
-</li>
+<li><strong><code>Agent</code></strong>: orchestrates messages, model calls, and tool execution.</li>
+<li><strong><code>Runtime</code></strong>: executes commands and file operations in local or Docker workspace.</li>
+<li><strong><code>Model</code></strong> (<code>OpenAIModel</code> by default): abstraction for OpenAI-compatible chat backends.</li>
+<li><strong><code>tools</code> registry</strong>: global registry used to expose callable actions to the model.</li>
 </ul>
-<h2 id="request-flow">Request Flow</h2>
+<h2 id="default-request-flow">Default request flow</h2>
 <ol>
-<li>The user sends a message to the <code>Agent</code> via the CLI or API.</li>
-<li>The <code>Agent</code> adds the user's message to the conversation history.</li>
-<li>The <code>Agent</code> sends the complete history to the <code>Model</code>.</li>
-<li>The <code>Model</code> returns a response, which can be a text message or a request to call one or more tools (<code>tool_calls</code>).</li>
-<li>If it's a text message, the <code>Agent</code> displays it to the user.</li>
-<li>If it's a tool call, the <code>Agent</code> invokes the corresponding function (e.g., <code>tools._bash</code>), passing the necessary arguments to the <code>Runtime</code>.</li>
-<li>The <code>Runtime</code> executes the action (e.g., an <code>ls</code> command in the Docker container).</li>
-<li>The result of the execution is returned to the <code>Agent</code>.</li>
-<li>The <code>Agent</code> adds the tool's result to the history and typically calls the <code>Model</code> again so it can process the result and decide the next step, continuing the cycle until the task is completed (signaled by the <code>stop</code> tool).</li>
+<li>User message enters <code>Agent</code>.</li>
+<li>Agent updates history and sends context + tool schemas to model.</li>
+<li>Model returns text and/or tool calls.</li>
+<li>Agent executes tool calls through <code>Runtime</code>.</li>
+<li>Results are appended to history and displayed.</li>
 </ol>
+<h2 id="optional-legacy-layer">Optional legacy layer</h2>
+<p>A separate legacy layer still exists for delegated background tasks:</p>
+<ul>
+<li><code>pygent.task_manager.TaskManager</code></li>
+<li><code>pygent.task_tools.register_task_tools()</code></li>
+</ul>
+<p>This layer is opt-in and not part of the default CLI flow.</p>
 
 
 

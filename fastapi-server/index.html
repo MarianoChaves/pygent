@@ -11,10 +11,8 @@
         <link rel="canonical" href="https://pygent-ai.com/fastapi-server/">
       
       
-        <link rel="prev" href="../architecture/">
+        <link rel="prev" href="../crew-style/">
       
-      
-        <link rel="next" href="../examples/">
       
       
         
@@ -25,7 +23,7 @@
     
     
       
-        <title>FastAPI Server - Pygent</title>
+        <title>FastAPI Server (Legacy) - Pygent</title>
       
     
     
@@ -74,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fastapi-server" class="md-skip">
+        <a href="#fastapi-server-legacy" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              FastAPI Server
+              FastAPI Server (Legacy)
             
           </span>
         </div>
@@ -456,60 +454,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../agent-presets/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Agent Presets
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../crew-style/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Multi-Agent Collaboration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../architecture/" class="md-nav__link">
         
   
@@ -526,43 +470,6 @@
   
 
       </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FastAPI Server
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
     </li>
   
 
@@ -621,6 +528,156 @@
   
 
     
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Optional Legacy Features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Optional Legacy Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-presets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Presets (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crew-style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-Agent Collaboration (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FastAPI Server (Legacy)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -659,24 +716,16 @@
   
 
 
-<h1 id="fastapi-server">FastAPI Server</h1>
-<p>Pygent can expose the <code>TaskManager</code> over HTTP using FastAPI. This optional server lets you create and monitor tasks remotely, mirroring the CLI workflow.</p>
-<p>Install the server dependencies with the <code>server</code> extra:</p>
+<h1 id="fastapi-server-legacy">FastAPI Server (Legacy)</h1>
+<blockquote>
+<p>Legacy note: HTTP task orchestration is optional and outside the default CLI-first flow.</p>
+</blockquote>
+<p>If you still need server mode:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pygent<span class="o">[</span>server<span class="o">]</span>
+uvicorn<span class="w"> </span>pygent.fastapi_app:create_app
 </code></pre></div>
-<p>Start the server with <code>uvicorn</code>:</p>
-<div class="highlight"><pre><span></span><code>uvicorn<span class="w"> </span>pygent.fastapi_app:create_app
-</code></pre></div>
-<p>The API provides the following endpoints:</p>
-<ul>
-<li><code>POST /tasks</code> – start a new task. Payload fields match the arguments of <code>TaskManager.start_task</code>.</li>
-<li><code>GET /tasks</code> – list task IDs and their status.</li>
-<li><code>GET /tasks/{task_id}</code> – retrieve the status of a task.</li>
-<li><code>POST /tasks/{task_id}/message</code> – send a message to a finished task and get the reply. The response includes an optional <code>ask_user</code> field when the agent requires user input.</li>
-<li><code>GET /tasks/{task_id}/history</code> – fetch the conversation history for a task.</li>
-</ul>
-<p>You can view the full OpenAPI specification in your browser when the server is running at <code>/docs</code> or <code>/openapi.json</code>. The generated spec is also included in this repository as <a href="../openapi.yaml"><code>openapi.yaml</code></a> for reference.</p>
-<p>Each task runs in the background just like tasks started with the CLI or the Python API. The server stores a <code>TaskManager</code> instance in <code>app.state.manager</code> so you can access it from middleware or custom routes if needed.</p>
+<p>The server exposes task endpoints backed by <code>TaskManager</code>.
+See <code>docs/openapi.yaml</code> for a reference schema.</p>
 
 
 
