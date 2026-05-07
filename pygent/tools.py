@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from typing import Any, Callable, Dict, List, Optional
 import mimetypes
-import imghdr
+import filetype
 from pathlib import Path
 from copy import deepcopy
 
@@ -209,9 +209,9 @@ def _read_image(rt: Runtime, path: str) -> str:
         return data
     mime, _ = mimetypes.guess_type(path)
     if not mime or not mime.startswith("image/"):
-        guessed = imghdr.what(rt.base_dir / path)
-        if guessed:
-            mime = f"image/{guessed}"
+        kind = filetype.guess(rt.base_dir / path)
+        if kind and kind.mime.startswith("image/"):
+            mime = kind.mime
         else:
             ext = Path(path).suffix.lstrip(".") or "png"
             mime = f"image/{ext}"
