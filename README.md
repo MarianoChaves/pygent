@@ -1,177 +1,146 @@
 # Pygent
 
-Pygent is a coding assistant that executes each request inside an isolated Docker container (meaning the container is discarded after use) whenever possible. If Docker is unavailable (for instance on some Windows setups) the commands are executed locally instead. Full documentation is available in the `docs/` directory and at [pygent-ai.com](https://pygent-ai.com/).
+**A small Python harness for tool-using AI agents.** Bring a chat model and ordinary
+Python functions; Pygent runs the loop with explicit tools, validation, approvals,
+execution budgets and a serializable result.
 
-## Features
+Pygent is useful when you already have application logic and need a bounded agent
+loop around it: repository maintenance, internal developer tools, or an agent step
+inside a larger workflow. No graph DSL, database or automatic shell access is
+required. The existing coding CLI remains available.
 
-* Runs commands in ephemeral containers (default image `python:3.12-slim`).
-* Integrates with OpenAI-compatible models (models adhering to the OpenAI API specification) to orchestrate each step.
-* Persists the conversation history during the session.
-* Optionally save the history to a JSON file for later recovery.
-* Persist the workspace across sessions by setting `PYGENT_WORKSPACE`.
-* Provides a small Python API for use in other projects.
-* Register your own tools and customise the system prompt.
-* Extend the CLI with custom commands.
-* Execute a `config.py` script on startup for advanced configuration.
-* Set environment variables from the command line.
-* The assistant can leverage the `bash` tool to run shell commands in a sandboxed environment.
+**2.0.0rc1 is a release candidate.** Python 3.10+; MIT licensed.
+Read the [migration guide](docs/migration-v2.md) before upgrading from 1.x.
 
-## Installation
+## Try it without an API key
 
-The recommended way to install Pygent is using pip:
+Install this candidate from its source checkout:
 
 ```bash
-pip install pygent
+python -m pip install -e .
+python examples/offline_harness.py
 ```
-
-To include optional Docker support, you can specify extras:
-
-```bash
-pip install pygent[docker]
-```
-
-Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
-To run commands in Docker containers, Docker must be installed separately.
-
-If you are a developer or want the latest unreleased changes, you can install from source:
-
-```bash
-pip install -e .
-```
-
-Python ≥ 3.9 is required. The package now bundles the `openai` client for model access.
-To run commands in Docker containers, Docker must be installed separately. If installing from source, you can include Docker support with `pip install -e .[docker]`.
-
-## Configuration
-
-Behaviour can be adjusted via environment variables (see `docs/configuration.md` for a complete list):
-
-* `OPENAI_API_KEY` &ndash; key used to access the OpenAI API.
-  Set this to your API key or a key from any compatible provider.
-* `OPENAI_BASE_URL` &ndash; base URL for OpenAI-compatible APIs
-  (defaults to ``https://api.openai.com/v1``).
-* `PYGENT_MODEL` &ndash; model name used for requests (default `gpt-4.1-mini`).
-* `PYGENT_IMAGE` &ndash; Docker image to create the container (default `python:3.12-slim`).
-* `PYGENT_USE_DOCKER` &ndash; set to `0` to disable Docker and run locally.
-
-Settings can also be read from a `pygent.toml` file. See
-[examples/sample_config.toml](https://github.com/marianochaves/pygent/blob/main/examples/sample_config.toml)
-and the accompanying
-[config_file_example.py](https://github.com/marianochaves/pygent/blob/main/examples/config_file_example.py)
-script for a working demonstration of startup configuration.
-
-## CLI usage
-
-After installing run:
-
-```bash
-pygent
-```
-
-Use `--docker` to run commands inside a container (requires
-`pygent[docker]`). Use `--no-docker` or set `PYGENT_USE_DOCKER=0`
-to force local execution. When the session starts the CLI shows the
-persona name and whether it is running locally or in Docker so you
-can easily tell which agent is active.
-Pass `--confirm-bash` if you want to approve each bash command before it runs.
-Use `--ban-cmd CMD` to disallow specific commands entirely (repeat to ban multiple).
-Pass `--config path/to/pygent.toml` to load settings from a file.
-Use `--cwd` to run inside the current directory instead of a temporary workspace.
-
-Type messages normally; use `/exit` to end the session. Each command is executed
-in the container and the result shown in the terminal.
-Interactive programs that expect input (e.g. running `python` without a script)
-are not supported and will exit immediately.
-Use `/help` for a list of built-in commands or `/help <cmd>` for details.
-Use `/save DIR` to snapshot the current environment for later use.
-Use `/tools` to enable or disable tools during the session.
-Use `/banned` to list or update banned commands.
-Use `/confirm-bash on|off` to toggle confirmation before running bash commands.
-Resume from a snapshot with `pygent --load DIR` or by setting
-`PYGENT_SNAPSHOT=DIR`.
-Additional commands can be registered programmatically with
-`pygent.commands.register_command()`.
-The CLI loads a `config.py` script if present (or passed with `--pyconfig`)
-and environment variables may be set directly with `-e NAME=value`.
-
-
-## API usage
-
-You can also interact directly with the Python code:
 
 ```python
-from pygent import Agent
+from pygent import Harness, RunLimits, Tool
+from pygent.testing import ScriptedModel
 
-ag = Agent()
-ag.step("echo 'Hello World'")
-# ... more steps
-ag.runtime.cleanup()
+model = ScriptedModel([
+    {"role": "assistant", "tool_calls": [{
+        "id": "check-1", "type": "function",
+        "function": {"name": "add", "arguments": '{"a": 2, "b": 3}'},
+    }]},
+    {"role": "assistant", "content": "The result is 5."},
+])
+
+add = Tool(
+    name="add",
+    description="Add two integers.",
+    parameters={
+        "type": "object",
+        "properties": {"a": {"type": "integer"}, "b": {"type": "integer"}},
+        "required": ["a", "b"],
+        "additionalProperties": False,
+    },
+    function=lambda a, b: a + b,
+)
+
+harness = Harness(model, model_name="offline", tools=[add])
+result = harness.run("What is 2 + 3?", limits=RunLimits(max_steps=3))
+assert result.status == "completed"
+print(result.output)  # The result is 5.
 ```
 
-See the [examples](https://github.com/marianochaves/pygent/tree/main/examples) folder for more complete scripts. Models can be swapped by
-passing an object implementing the ``Model`` interface when creating the
-``Agent``. The default uses an OpenAI-compatible API, but custom models are
-easy to plug in. They can also trigger tools by returning a message with
-``tool_calls`` as demonstrated in ``examples/custom_model_with_tool.py``.
+`ScriptedModel` is a deterministic test double, not a simulated quality benchmark.
+It records requests so you can assert tool arguments and conversation protocol.
 
-Custom models can also be configured globally:
+## Connect your model
+
+The `Model` protocol consists of one method: `chat(messages, model, tools)`.
+Return an assistant message containing text or function tool calls.
+For an OpenAI-compatible Chat Completions endpoint:
 
 ```python
-from pygent.models import set_custom_model
-set_custom_model(MyModel())
+import os
+from openai import OpenAI
+from pygent import Harness, OpenAIModel
+
+client = OpenAI(timeout=30.0, max_retries=0)  # OPENAI_API_KEY; optional OPENAI_BASE_URL
+harness = Harness(OpenAIModel(client=client), model_name=os.environ["PYGENT_MODEL"])
+result = harness.run("Explain this test failure: ...")
+print(result.status, result.output)
 ```
 
-All new agents will use this model unless another one is passed explicitly.
+Provider retries are configured on the client. Pygent never automatically retries
+a tool with side effects. This adapter targets Chat Completions, not every vendor's
+native API. See [custom models](docs/custom-models.md).
 
-You can also override how the assistant builds the system prompt:
+## Explicit control, inspectable results
 
-```python
-from pygent import Agent, set_system_message_builder
+| Need | API / behavior |
+| --- | --- |
+| Limit model turns and tool attempts | `RunLimits(max_steps=20, max_tool_calls=100)` |
+| Bound each tool response in context | `RunLimits(max_output_chars=16_000)` |
+| Cooperative deadline or cancellation | `max_time` and `run(cancel=threading.Event())` |
+| Require application approval | `Tool(..., requires_approval=True)` and `run(approve=...)` |
+| Validate inputs before side effects | JSON Schema per tool, including nested types |
+| Validate a JSON final answer | `run(output_schema=...)`; inspect `result.data` |
+| Integrate tracing | `run(on_event=...)`; events exclude prompt/argument/output content |
+| Continue a completed turn | `run(..., history=result.messages)` |
+| Evaluate without network | `ScriptedModel` and ordinary `pytest` assertions |
 
-def my_builder(persona, disabled_tools=None):
-    return f"{persona.name}: ready to work"
+A final answer ends the loop. Exhausting a budget is a distinct result status,
+never reported as completion. Tool batches exceeding the remaining tool budget
+are rejected before any call in that batch executes. See the
+[harness guide](docs/harness.md) for detailed semantics and examples.
 
-# Global override
-set_system_message_builder(my_builder)
+## Files and commands: opt in
 
-# Or per-agent
-ag = Agent(system_message_builder=my_builder)
-```
+`Harness` starts with **zero tools** and creates no workspace. Bind `Runtime`
+methods explicitly when an application needs file or shell access. The
+[workspace example](examples/workspace_harness.py) shows a write tool with approval.
 
-Passing `None` restores the default prompt generation.
-
-### Using OpenAI and other providers
-
-Set your OpenAI key:
+For the interactive coding CLI:
 
 ```bash
-export OPENAI_API_KEY="sk-..."
+python -m pip install -e '.[docker]'
+pygent --docker
 ```
 
-To use a different provider, set `OPENAI_BASE_URL` to the provider
-endpoint and keep `OPENAI_API_KEY` pointing to the correct key:
+Docker must be installed and running. Failure to start Docker raises an error.
+Trusted local execution must be selected explicitly:
 
 ```bash
-export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
-export OPENAI_API_KEY="your-provider-key"
+pygent --no-docker
 ```
 
-## Development
+Local shell commands have the invoking user's permissions. A working directory
+and command denylist do not create a sandbox. Docker limits network access,
+memory and process count, but the mounted workspace remains writable. Read the
+[execution boundaries](docs/security.md) before enabling shell tools.
 
-1. Install the test dependencies:
+## Scope and limits
+
+This candidate provides a synchronous, in-process harness. Use independent model
+and tool instances per concurrent worker unless they are thread-safe. Deadlines
+and cancellation are checked **between calls**; configure I/O timeouts on models
+and tools. POSIX shell process groups and Docker's `timeout` bound runtime commands.
+
+There is no native MCP client/server, durable workflow engine, distributed queue,
+token/cost accounting, native async streaming, or exactly-once side-effect guarantee.
+Use an existing orchestrator for those requirements. The
+[technical assessment and roadmap](docs/assessment.md) explain the intended niche
+and the remaining work. The legacy HTTP server is not a public multi-tenant service.
+
+## Develop and contribute
 
 ```bash
-pip install -e .[test]
+python -m pip install -e '.[test,docs,dev]'
+python -m pytest -q
+python -m ruff check pygent tests
+python -m mkdocs build --strict
+python -m build
 ```
 
-2. Run the test suite:
-
-```bash
-pytest
-```
-
-Use `mkdocs serve` to build the documentation locally and serve it on a local webserver.
-
-## License
-
-This project is released under the MIT license. See the `LICENSE` file for details.
+See [CONTRIBUTING.md](CONTRIBUTING.md), [CHANGELOG.md](CHANGELOG.md),
+[API reference](docs/api-reference.md) and [LICENSE](LICENSE).

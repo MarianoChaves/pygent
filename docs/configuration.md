@@ -9,7 +9,7 @@ Pygent reads settings from environment variables and optionally from `pygent.tom
 | `OPENAI_API_KEY` | API key for OpenAI or compatible provider. | – |
 | `OPENAI_BASE_URL` | Base URL for OpenAI-compatible API. | `https://api.openai.com/v1` |
 | `PYGENT_MODEL` | Model name used by the agent. | `gpt-4.1-mini` |
-| `PYGENT_USE_DOCKER` | Set `0` to force local execution. | auto |
+| `PYGENT_USE_DOCKER` | Set `0` to explicitly permit trusted local execution. | Docker required |
 | `PYGENT_IMAGE` | Docker image for sandbox execution. | `python:3.12-slim` |
 | `PYGENT_HISTORY_FILE` | Persisted conversation history file. | – |
 | `PYGENT_WORKSPACE` | Persistent workspace directory. | – |

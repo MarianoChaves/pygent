@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from typing import Any, Callable, Dict, List, Optional
 import mimetypes
-import imghdr
+import base64
 from pathlib import Path
 from copy import deepcopy
 
@@ -58,6 +58,9 @@ def execute_tool(call: Any, rt: Runtime) -> str:  # pragma: no cover
         args: Dict[str, Any] = json.loads(call.function.arguments or "{}")
     except Exception as exc:  # pragma: no cover - defensive
         return f"[error] invalid arguments for {name}: {exc}"
+
+    if not isinstance(args, dict):
+        return f"[error] arguments for {name} must be a JSON object"
 
     func = TOOLS.get(name)
     if func is None:
@@ -209,12 +212,17 @@ def _read_image(rt: Runtime, path: str) -> str:
         return data
     mime, _ = mimetypes.guess_type(path)
     if not mime or not mime.startswith("image/"):
-        guessed = imghdr.what(rt.base_dir / path)
-        if guessed:
-            mime = f"image/{guessed}"
+        raw = base64.b64decode(data)
+        if raw.startswith(b"\x89PNG\r\n"):
+            mime = "image/png"
+        elif raw.startswith(b"\xff\xd8\xff"):
+            mime = "image/jpeg"
+        elif raw.startswith((b"GIF87a", b"GIF89a")):
+            mime = "image/gif"
+        elif raw.startswith(b"RIFF") and raw[8:12] == b"WEBP":
+            mime = "image/webp"
         else:
-            ext = Path(path).suffix.lstrip(".") or "png"
-            mime = f"image/{ext}"
+            return "[error] unsupported image format"
     return f"data:{mime};base64,{data}"
 
 # snapshot of the default built-in registry

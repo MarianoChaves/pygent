@@ -4,6 +4,10 @@ repo_url: https://github.com/marianochaves/pygent
 nav:
   - Overview: index.md
   - Getting Started: getting-started.md
+  - Harness API: harness.md
+  - Migration to v2: migration-v2.md
+  - Execution Boundaries: security.md
+  - Assessment and Roadmap: assessment.md
   - Command Line Interface (CLI): cli.md
   - Configuration: configuration.md
   - Tools: tools.md
