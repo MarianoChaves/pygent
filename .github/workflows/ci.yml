@@ -68,7 +68,7 @@ jobs:
           PYGENT_TEST_DOCKER: '1'
 
   release:
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
     needs: [test, quality, docker]
     runs-on: ubuntu-latest
     environment:
@@ -76,24 +76,49 @@ jobs:
       url: https://pypi.org/p/pygent
     permissions:
       id-token: write
+      contents: write
+    concurrency:
+      group: pypi-release
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Check tag matches package version
+      - name: Select authorized candidate or validate release tag
+        id: release
         run: |
-          python - <<'PY'
-          import os, tomllib
+          python - <<'PYCODE'
+          import os, subprocess, tomllib
           with open('pyproject.toml', 'rb') as f:
               version = tomllib.load(f)['project']['version']
-          assert os.environ['GITHUB_REF_NAME'] == f'v{version}'
-          PY
+          tag = f'v{version}'
+          publish = False
+          if os.environ['GITHUB_REF'].startswith('refs/tags/'):
+              assert os.environ['GITHUB_REF_NAME'] == tag
+              publish = True
+          elif version == '2.0.0rc1':
+              existing = subprocess.check_output(
+                  ['git', 'ls-remote', '--tags', 'origin', f'refs/tags/{tag}'], text=True)
+              publish = not existing.strip()
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'publish={str(publish).lower()}\n')
+              f.write(f'tag={tag}\n')
+          PYCODE
       - uses: actions/download-artifact@v4
+        if: steps.release.outputs.publish == 'true'
         with:
           name: distributions
           path: dist/
       - uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.release.outputs.publish == 'true'
+      - name: Record candidate tag after successful publication
+        if: steps.release.outputs.publish == 'true' && github.ref == 'refs/heads/main'
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          git tag "$RELEASE_TAG" "$GITHUB_SHA"
+          git push origin "refs/tags/$RELEASE_TAG"
 
   docs:
     if: github.ref == 'refs/heads/main'
