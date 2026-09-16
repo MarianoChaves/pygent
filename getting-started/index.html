@@ -14,14 +14,14 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../cli/">
+        <link rel="next" href="../harness/">
       
       
         
       
       
       <link rel="icon" href="../file_00000000b9e861f88eb06edc1f30e443.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -327,43 +327,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#coding-cli" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#first-interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        First interactive session
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#programmatic-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Programmatic usage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
+        Coding CLI
       
     </span>
   </a>
@@ -374,6 +341,114 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../harness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harness API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration-v2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migration to v2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Execution Boundaries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assessment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assessment and Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -636,10 +711,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
         
           
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
             
   
   
@@ -657,8 +732,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -786,43 +861,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#coding-cli" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#first-interactive-session" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        First interactive session
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#programmatic-usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Programmatic usage
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
+        Coding CLI
       
     </span>
   </a>
@@ -849,54 +891,24 @@
   
 
 
-<h1 id="getting-started">Getting Started</h1>
-<p>Pygent is a simple agentic CLI for coding tasks.
-It executes commands in Docker when available, and locally when Docker is not available.</p>
-<h2 id="installation">Installation</h2>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pygent
+<h1 id="getting-started">Getting started</h1>
+<p>Python 3.10+ is required. Install the release candidate from a source checkout:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+python<span class="w"> </span>examples/offline_harness.py
+python<span class="w"> </span>examples/workspace_harness.py
 </code></pre></div>
-<p>If you want Docker SDK integration:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pygent<span class="o">[</span>docker<span class="o">]</span>
+<p>The examples execute real Python tools with a deterministic scripted model and do
+not need credentials, network access or Docker. See the <a href="../harness/">Harness API</a>
+for real-model integration, approvals, limits and continuation.</p>
+<h2 id="coding-cli">Coding CLI</h2>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">'.[docker]'</span>
+pygent<span class="w"> </span>--docker
 </code></pre></div>
-<p>From source:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-<span class="c1"># optional</span>
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>docker<span class="o">]</span>
-</code></pre></div>
-<h2 id="first-interactive-session">First interactive session</h2>
-<div class="highlight"><pre><span></span><code>pygent
-</code></pre></div>
-<p>Useful startup options:</p>
-<ul>
-<li><code>--docker</code> / <code>--no-docker</code></li>
-<li><code>--config path/to/pygent.toml</code></li>
-<li><code>--cwd</code> (use current directory as workspace)</li>
-<li><code>--confirm-bash</code> / <code>--no-confirm-bash</code></li>
-<li><code>--ban-cmd CMD</code> (repeatable)</li>
-<li><code>--load DIR</code> (resume snapshot)</li>
-</ul>
-<p>Inside the session:</p>
-<ul>
-<li><code>/help</code> and <code>/help &lt;cmd&gt;</code></li>
-<li><code>/cmd &lt;command&gt;</code></li>
-<li><code>/cp &lt;source&gt; [destination]</code></li>
-<li><code>/tools</code>, <code>/banned</code>, <code>/confirm-bash on|off</code></li>
-<li><code>/save &lt;dir&gt;</code> and <code>/exit</code></li>
-</ul>
-<h2 id="programmatic-usage">Programmatic usage</h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pygent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
-
-<span class="n">ag</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">()</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="s2">&quot;echo &#39;Hello World&#39;&quot;</span><span class="p">)</span>
-<span class="n">ag</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
-</code></pre></div>
-<h2 id="next-steps">Next steps</h2>
-<ul>
-<li>Configuration variables: <a href="../configuration/">Configuration</a></li>
-<li>Tool registry and custom tools: <a href="../tools/">Tools</a></li>
-<li>Custom model integration: <a href="../custom-models/">Custom Models</a></li>
-<li>Full API docs: <a href="../api-reference/">API Reference</a></li>
-</ul>
+<p>Configure <code>OPENAI_API_KEY</code> and <code>PYGENT_MODEL</code> for your provider. Docker must be
+installed and running. To explicitly run trusted commands on the host, use
+<code>pygent --no-docker</code>. Read <a href="../security/">execution boundaries</a> first.</p>
+<p>Use <code>/help</code> inside the session. Additional options, configuration and snapshots are
+covered in <a href="../cli/">CLI</a> and <a href="../configuration/">Configuration</a>.</p>
 
 
 
@@ -949,7 +961,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="../extra.js"></script>
       

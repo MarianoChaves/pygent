@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://pygent-ai.com/custom-system-message/">
+        <link rel="canonical" href="https://pygent-ai.com/migration-v2/">
       
       
-        <link rel="prev" href="../custom-models/">
+        <link rel="prev" href="../harness/">
       
       
-        <link rel="next" href="../prompt-library/">
+        <link rel="next" href="../security/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Custom System Message - Pygent</title>
+        <title>Migration to v2 - Pygent</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#custom-system-message" class="md-skip">
+        <a href="#migrating-from-1x-to-200rc1" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Custom System Message
+              Migration to v2
             
           </span>
         </div>
@@ -318,10 +318,19 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../migration-v2/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -337,6 +346,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -507,19 +517,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../custom-system-message/" class="md-nav__link">
         
   
   
@@ -535,7 +536,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -824,32 +824,61 @@
   
 
 
-<h1 id="custom-system-message">Custom System Message</h1>
-<p>Pygent builds the initial system prompt dynamically based on the persona
-and the currently active tools. If you want full control over this
-message you can supply your own builder function.</p>
-<p>Use <code>set_system_message_builder</code> to register a callable that returns the
-system prompt. A convenient place to do this is in a <code>config.py</code> file
-loaded on start-up.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># config.py</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pygent</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_system_message_builder</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">my_system_builder</span><span class="p">(</span><span class="n">persona</span><span class="p">,</span> <span class="n">disabled_tools</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: ready to work"</span>
-
-<span class="n">set_system_message_builder</span><span class="p">(</span><span class="n">my_system_builder</span><span class="p">)</span>
-</code></pre></div>
-<p>You can also supply a builder for individual agents:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pygent</span><span class="w"> </span><span class="kn">import</span> <span class="n">Agent</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">my_system_builder</span><span class="p">(</span><span class="n">persona</span><span class="p">,</span> <span class="n">disabled_tools</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">persona</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: ready to work"</span>
-
-<span class="n">ag</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">system_message_builder</span><span class="o">=</span><span class="n">my_system_builder</span><span class="p">)</span>
-</code></pre></div>
-<p>Pass <code>None</code> to <code>set_system_message_builder</code> to restore the default
-prompt generation logic.</p>
+<h1 id="migrating-from-1x-to-200rc1">Migrating from 1.x to 2.0.0rc1</h1>
+<p>This release candidate changes execution boundaries. Test your integration before
+upgrading production workloads.</p>
+<table>
+<thead>
+<tr>
+<th>1.x behavior</th>
+<th>2.x behavior / action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker errors silently select local execution</td>
+<td>Docker errors raise; use <code>Runtime(use_docker=False)</code>, <code>--no-docker</code>, or <code>PYGENT_USE_DOCKER=0</code> only for trusted local use</td>
+</tr>
+<tr>
+<td>Python 3.9 advertised</td>
+<td>Python 3.10+ supported; newer Python no longer depends on removed <code>imghdr</code></td>
+</tr>
+<tr>
+<td>Workspace methods accept absolute/escaping paths</td>
+<td>Supply workspace-relative paths; symlinks in file/copy paths are rejected</td>
+</tr>
+<tr>
+<td>A disabled tool is only hidden from the model</td>
+<td><code>Agent</code> now blocks it at dispatch too</td>
+</tr>
+<tr>
+<td>Unbounded command output capture</td>
+<td><code>Runtime.bash</code> retains up to 64,000 characters by default; <code>max_output_chars</code> configures it</td>
+</tr>
+<tr>
+<td>Local timeout kills only the shell</td>
+<td>On POSIX, the process group is killed; background children do not survive ordinary command completion</td>
+</tr>
+<tr>
+<td>First agent sets a process-wide log-file default</td>
+<td>Each agent selects its own log path; explicit <code>PYGENT_LOG_FILE</code> still applies</td>
+</tr>
+<tr>
+<td>History rewrites can leave partial JSON; restored tool IDs are lost</td>
+<td>Atomic replacement and preserved tool-call IDs; interrupted/incomplete turns are not automatically recovered</td>
+</tr>
+</tbody>
+</table>
+<p><code>Agent.step</code>, its mixed legacy history representation, <code>run_until_stop</code>, and CLI
+commands remain available. <code>Harness</code> is the recommended API for new integrations:
+its tools are explicit, it has no interactive terminal behavior, and it returns
+<code>RunResult</code> with a termination reason.</p>
+<p><code>Harness</code> does not reuse global <code>register_tool</code> entries. Construct <code>Tool</code> objects
+explicitly. Tool functions take validated keyword arguments, with no automatically
+injected <code>Runtime</code> parameter; use bound runtime methods or closures.</p>
+<p>The legacy autonomous loop still has its older stop-tool semantics and cooperative
+post-step timeout checks. Do not confuse it with the new harness's final-answer
+termination and per-batch budgeting.</p>
 
 
 
