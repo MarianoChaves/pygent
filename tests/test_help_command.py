@@ -28,11 +28,12 @@ def test_help_lists_commands(capsys):
     captured = capsys.readouterr().out
     assert "/cmd" in captured
     assert "/cp" in captured
-    assert "quit the session" in captured
+    assert "/exit" in captured
 
 
 def test_help_specific_command(capsys):
     cmd_help(None, "/cmd")
     captured = capsys.readouterr().out
-    assert "/cmd -" in captured
+    assert "/cmd" in captured
+    assert "Run a raw shell command" in captured
 

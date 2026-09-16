@@ -4,6 +4,8 @@ import json
 import os
 import pathlib
 import time
+import tempfile
+from copy import deepcopy
 from contextlib import nullcontext
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional
@@ -107,9 +109,12 @@ class Agent:
         try:
             with self.history_file.open("r", encoding="utf-8") as fh:
                 data = json.load(fh)
-        except Exception:
-            data = []
-        self.history = [openai_compat.parse_message(m) if isinstance(m, dict) else m for m in data]
+        except (OSError, ValueError) as exc:
+            raise ValueError(f"Cannot restore history from {self.history_file}") from exc
+        if not isinstance(data, list) or not all(isinstance(m, dict) for m in data):
+            raise ValueError("history must be a JSON array of messages")
+        self.history = [openai_compat.parse_message(m) if m.get("role") == "assistant" else m
+                        for m in data]
 
     def _init_log_file(self) -> None:
         if self.log_file is None:
@@ -118,7 +123,6 @@ class Agent:
         if not isinstance(self.log_file, (str, pathlib.Path)):
             return
         self.log_file = pathlib.Path(self.log_file)
-        os.environ.setdefault("PYGENT_LOG_FILE", str(self.log_file))
         self.log_file.parent.mkdir(parents=True, exist_ok=True)
         try:
             self._log_fp = self.log_file.open("a", encoding="utf-8")
@@ -139,11 +143,20 @@ class Agent:
         if not self.history_file:
             return
         self.history_file.parent.mkdir(parents=True, exist_ok=True)
-        with self.history_file.open("w", encoding="utf-8") as fh:
-            json.dump([self._message_dict(m) for m in self.history], fh)
+        path = self.history_file
+        fd, temporary = tempfile.mkstemp(dir=path.parent, prefix=".pygent-history-")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as fh:
+                json.dump([self._message_dict(m) for m in self.history], fh)
+                fh.flush()
+                os.fsync(fh.fileno())
+            os.replace(temporary, path)
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
 
     def append_history(self, msg: Any) -> None:
-        self.history.append(msg)
+        self.history.append(deepcopy(msg))
         self._save_history()
         if self._log_fp:
             try:
@@ -235,6 +248,18 @@ class Agent:
         )
 
     def _execute_tool_call(self, call: openai_compat.ToolCall) -> None:
+        if call.function.name in self.disabled_tools:
+            self.append_history({"role": "tool", "content": "[error] tool disabled",
+                                 "tool_call_id": call.id})
+            return
+        try:
+            args = json.loads(call.function.arguments or "{}")
+            if not isinstance(args, dict):
+                raise ValueError("arguments must be a JSON object")
+        except (ValueError, TypeError) as exc:
+            self.append_history({"role": "tool", "content": f"[error] invalid arguments: {exc}",
+                                 "tool_call_id": call.id})
+            return
         if not self._confirm_bash_call(call):
             return
         with _status(f"[green]Running {call.function.name}...", spinner="line"):

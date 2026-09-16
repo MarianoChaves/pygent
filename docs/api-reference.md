@@ -45,3 +45,11 @@ This section documents the main classes and helpers exposed by **Pygent**.
 ### Task tools module
 
 ::: pygent.task_tools
+
+## Harness
+
+::: pygent.harness
+
+## Offline testing
+
+::: pygent.testing

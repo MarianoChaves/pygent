@@ -1,64 +1,27 @@
-# Getting Started
+# Getting started
 
-Pygent is a simple agentic CLI for coding tasks.
-It executes commands in Docker when available, and locally when Docker is not available.
-
-## Installation
+Python 3.10+ is required. Install the release candidate from a source checkout:
 
 ```bash
-pip install pygent
+python -m pip install -e .
+python examples/offline_harness.py
+python examples/workspace_harness.py
 ```
 
-If you want Docker SDK integration:
+The examples execute real Python tools with a deterministic scripted model and do
+not need credentials, network access or Docker. See the [Harness API](harness.md)
+for real-model integration, approvals, limits and continuation.
+
+## Coding CLI
 
 ```bash
-pip install pygent[docker]
+python -m pip install -e '.[docker]'
+pygent --docker
 ```
 
-From source:
+Configure `OPENAI_API_KEY` and `PYGENT_MODEL` for your provider. Docker must be
+installed and running. To explicitly run trusted commands on the host, use
+`pygent --no-docker`. Read [execution boundaries](security.md) first.
 
-```bash
-pip install -e .
-# optional
-pip install -e .[docker]
-```
-
-## First interactive session
-
-```bash
-pygent
-```
-
-Useful startup options:
-
-* `--docker` / `--no-docker`
-* `--config path/to/pygent.toml`
-* `--cwd` (use current directory as workspace)
-* `--confirm-bash` / `--no-confirm-bash`
-* `--ban-cmd CMD` (repeatable)
-* `--load DIR` (resume snapshot)
-
-Inside the session:
-
-* `/help` and `/help <cmd>`
-* `/cmd <command>`
-* `/cp <source> [destination]`
-* `/tools`, `/banned`, `/confirm-bash on|off`
-* `/save <dir>` and `/exit`
-
-## Programmatic usage
-
-```python
-from pygent import Agent
-
-ag = Agent()
-ag.step("echo 'Hello World'")
-ag.runtime.cleanup()
-```
-
-## Next steps
-
-* Configuration variables: [Configuration](configuration.md)
-* Tool registry and custom tools: [Tools](tools.md)
-* Custom model integration: [Custom Models](custom-models.md)
-* Full API docs: [API Reference](api-reference.md)
+Use `/help` inside the session. Additional options, configuration and snapshots are
+covered in [CLI](cli.md) and [Configuration](configuration.md).

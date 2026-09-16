@@ -6,62 +6,134 @@ on:
     tags: ['v*']
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.11', '3.12', '3.13', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e '.[test]'
+      - run: python -m pytest -q -m 'not docker'
+      - run: python examples/offline_harness.py
+      - run: python examples/workspace_harness.py
+
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Install dependencies
+          python-version: '3.12'
+      - run: python -m pip install -e '.[docs,dev]'
+      - run: python -m ruff check pygent tests
+      - run: python -m mkdocs build --strict
+      - run: python -m build
+      - run: python -m twine check dist/*
+      - name: Verify wheel contents
         run: |
-          pip install --upgrade pip
-          pip install .[test]
-      - name: Run tests
-        run: pytest -v
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          with ZipFile(next(Path('dist').glob('*.whl'))) as wheel:
+              names = wheel.namelist()
+              assert 'pygent/py.typed' in names
+              assert 'pygent/harness.py' in names
+              assert not any(name.startswith(('tests/', 'examples/', 'docs/')) for name in names)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[test,docker]'
+      - run: docker pull python:3.12-slim
+      - run: python -m pytest -q -m docker
+        env:
+          PYGENT_TEST_DOCKER: '1'
 
   release:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: test
+    if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+    needs: [test, quality, docker]
     runs-on: ubuntu-latest
     environment:
       name: pypi
       url: https://pypi.org/p/pygent
     permissions:
-      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
+      contents: write
+    concurrency:
+      group: pypi-release
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Build package
+          python-version: '3.12'
+      - name: Select authorized candidate or validate release tag
+        id: release
         run: |
-          pip install --upgrade pip setuptools wheel build
-          python -m build
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+          python - <<'PYCODE'
+          import os, subprocess, tomllib
+          with open('pyproject.toml', 'rb') as f:
+              version = tomllib.load(f)['project']['version']
+          tag = f'v{version}'
+          publish = False
+          if os.environ['GITHUB_REF'].startswith('refs/tags/'):
+              assert os.environ['GITHUB_REF_NAME'] == tag
+              publish = True
+          elif version == '2.0.0rc1':
+              existing = subprocess.check_output(
+                  ['git', 'ls-remote', '--tags', 'origin', f'refs/tags/{tag}'], text=True)
+              publish = not existing.strip()
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'publish={str(publish).lower()}\n')
+              f.write(f'tag={tag}\n')
+          PYCODE
+      - uses: actions/download-artifact@v4
+        if: steps.release.outputs.publish == 'true'
+        with:
+          name: distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.release.outputs.publish == 'true'
+      - name: Record candidate tag after successful publication
+        if: steps.release.outputs.publish == 'true' && github.ref == 'refs/heads/main'
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          git tag "$RELEASE_TAG" "$GITHUB_SHA"
+          git push origin "refs/tags/$RELEASE_TAG"
 
   docs:
     if: github.ref == 'refs/heads/main'
-    needs: test
+    needs: [test, quality, docker]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Install docs deps
-        run: |
-          pip install --upgrade pip
-          pip install .[docs]
-      - name: Build docs
-        run: mkdocs build
-      - name: Deploy docs
-        uses: peaceiris/actions-gh-pages@v4
+          python-version: '3.12'
+      - run: python -m pip install -e '.[docs]'
+      - run: python -m mkdocs build --strict
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site

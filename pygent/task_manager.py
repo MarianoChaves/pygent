@@ -41,6 +41,7 @@ class TaskManager:
 
         env_max = os.getenv("PYGENT_MAX_TASKS")
         self.max_tasks = max_tasks if max_tasks is not None else int(env_max or "3")
+        self._default_factory = agent_factory is None
         if agent_factory is None:
             self.agent_factory = lambda p=None: Agent(persona=p)
         else:
@@ -74,9 +75,24 @@ class TaskManager:
         self.personas = personas
         self._persona_idx = 0
         self.tasks: Dict[str, Task] = {}
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
     def start_task(
+        self,
+        prompt: str,
+        parent_rt: Runtime,
+        files: Optional[list[str]] = None,
+        parent_depth: int = 0,
+        step_timeout: Optional[float] = None,
+        task_timeout: Optional[float] = None,
+        persona: Union[Persona, str, None] = None,
+    ) -> str:
+        """Atomically enforce admission limits and register a background task."""
+        with self._lock:
+            return self._start_task(prompt, parent_rt, files, parent_depth,
+                                    step_timeout, task_timeout, persona)
+
+    def _start_task(
         self,
         prompt: str,
         parent_rt: Runtime,
@@ -112,19 +128,30 @@ class TaskManager:
         elif isinstance(persona, str):
             match = next((p for p in self.personas if p.name == persona), None)
             persona = match or Persona(persona, "")
-        try:
-            agent = self.agent_factory(persona)
-        except TypeError:
-            agent = self.agent_factory()
-
-        from .runtime import Runtime
-        if getattr(agent, "runtime", None) is not None:
-            try:
-                agent.runtime.cleanup()
-            except Exception:
-                pass
+        # Validate every requested input before allocating a child runtime.
+        for fp in files or []:
+            Runtime.check_copy_tree(parent_rt.resolve_path(fp))
         task_dir = parent_rt.base_dir / f"task_{uuid.uuid4().hex[:8]}"
-        agent.runtime = Runtime(use_docker=parent_rt.use_docker, workspace=task_dir)
+        runtime = Runtime(
+            image=parent_rt.image, use_docker=parent_rt.use_docker, workspace=task_dir,
+            banned_commands=list(parent_rt.banned_commands),
+            banned_apps=list(parent_rt.banned_apps),
+        )
+        try:
+            if self._default_factory:
+                from .agent import Agent
+                agent = Agent(runtime=runtime, persona=persona)
+            else:
+                try:
+                    agent = self.agent_factory(persona)
+                except TypeError:
+                    agent = self.agent_factory()
+                if getattr(agent, "runtime", None) is not None:
+                    agent.runtime.cleanup()
+                agent.runtime = runtime
+        except Exception:
+            runtime.cleanup()
+            raise
         setattr(agent, "persona", persona)
         if not getattr(agent, "system_msg", None):
             from .system_message import build_system_msg  # lazy import
@@ -133,8 +160,10 @@ class TaskManager:
         setattr(agent.runtime, "task_depth", parent_depth + 1)
         if files:
             for fp in files:
-                src = parent_rt.base_dir / fp
-                dest = agent.runtime.base_dir / fp
+                src = parent_rt.resolve_path(fp)
+                dest = agent.runtime.resolve_path(fp)
+                Runtime.check_copy_tree(src)
+                Runtime.check_copy_tree(dest)
                 if src.is_dir():
                     shutil.copytree(src, dest, dirs_exist_ok=True)
                 elif src.exists():
@@ -180,10 +209,12 @@ class TaskManager:
             task = self.tasks.get(task_id)
         if not task:
             return f"Task {task_id} not found"
-        src = task.agent.runtime.base_dir / path
+        src = task.agent.runtime.resolve_path(path)
         if not src.exists():
             return f"file {path} not found"
-        dest_path = rt.base_dir / (dest or path)
+        dest_path = rt.resolve_path(dest or path)
+        Runtime.check_copy_tree(src)
+        Runtime.check_copy_tree(dest_path)
         if src.is_dir():
             shutil.copytree(src, dest_path, dirs_exist_ok=True)
         else:

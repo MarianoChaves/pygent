@@ -25,18 +25,21 @@ class Model(Protocol):
 class OpenAIModel:
     """Default model using the OpenAI-compatible API."""
 
+    def __init__(self, client: Any = None) -> None:
+        """Optionally inject a configured client (credentials, timeout and retries)."""
+        self.client = client
+
     def chat(self, messages: List[Dict[str, Any]], model: str, tools: Any) -> Message:
         try:
             serialized = [
                 asdict(m) if is_dataclass(m) else m
                 for m in messages
             ]
-            resp = openai.chat.completions.create(
-                model=model,
-                messages=serialized,
-                tools=tools,
-                tool_choice="auto",
-            )
+            kwargs = {"model": model, "messages": serialized}
+            if tools:
+                kwargs.update(tools=tools, tool_choice="auto")
+            client = self.client if self.client is not None else openai
+            resp = client.chat.completions.create(**kwargs)
             return resp.choices[0].message
         except Exception as exc:
             raise APIError(str(exc)) from exc

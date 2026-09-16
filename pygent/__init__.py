@@ -50,3 +50,7 @@ __all__ = [
     "reset_tools",
     "remove_tool",
 ]
+
+from .harness import Harness, RunLimits, RunResult, RunEvent, Tool
+
+__all__ += ["Harness", "RunLimits", "RunResult", "RunEvent", "Tool"]
